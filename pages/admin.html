@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>SVCDA Admin Panel</title>
+<link rel="shortcut icon" href="../assets/images/LOGO.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/main.css">
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../supabase-config.js"></script>
+<script src="../twilio-integration.js"></script>
+<style>
+.admin-shell{max-width:1200px;margin:0 auto;padding:24px}
+.admin-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.admin-title{font-size:1.8rem;font-weight:800;color:var(--n)}
+.admin-sub{color:var(--sm);font-size:.92rem}
+.admin-grid{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr));gap:14px;margin:18px 0 24px}
+.admin-card{background:var(--w);border:1px solid var(--bdr);border-radius:14px;padding:16px}
+.admin-k{font-size:.8rem;color:var(--sm);margin-bottom:6px}
+.admin-v{font-size:1.5rem;font-weight:800;color:var(--n)}
+.admin-panel{background:var(--w);border:1px solid var(--bdr);border-radius:14px;padding:16px;margin-bottom:18px}
+.admin-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.admin-row input{padding:10px 12px;border:1px solid var(--bdr);border-radius:10px;min-width:220px;outline:none}
+.admin-row button{padding:10px 14px;border:none;border-radius:10px;background:var(--a);color:#fff;font-weight:700;cursor:pointer}
+.admin-row button.alt{background:var(--n)}
+.admin-table-wrap{overflow:auto}
+.admin-table{width:100%;border-collapse:collapse;min-width:860px}
+.admin-table th,.admin-table td{padding:10px;border-bottom:1px solid var(--bdr);text-align:left;font-size:.88rem}
+.admin-table th{font-size:.8rem;color:var(--sm);text-transform:uppercase;letter-spacing:.5px}
+#panelWrap{display:none}
+#loginWrap{max-width:420px;margin:60px auto;background:var(--w);border:1px solid var(--bdr);border-radius:16px;padding:24px}
+.err{color:#b91c1c;font-size:.85rem;margin-top:8px;min-height:20px}
+@media(max-width:900px){.admin-grid{grid-template-columns:repeat(2,minmax(140px,1fr))}}
+.admin-panel button {margin-left:4px;}
+</style>
+</head>
+<body style="background:var(--bg2)">
+<div class="admin-shell">
+  <div id="loginWrap">
+    <div class="admin-title">SVCDA Admin Panel</div>
+    <p class="admin-sub">Enter admin PIN to view members and service usage.</p>
+    <div class="admin-row" style="margin-top:14px">
+      <input type="password" id="adminPin" placeholder="Enter admin PIN">
+      <button id="loginBtn">Login</button>
+    </div>
+    <div class="err" id="loginError"></div>
+    <p class="admin-sub">Default PIN: admin123 (change after login).</p>
+  </div>
+
+  <div id="panelWrap">
+    <div class="admin-top">
+      <div>
+        <div class="admin-title">SVCDA Admin Dashboard</div>
+        <div class="admin-sub">Monitor member registrations, service usage, and premium activity.</div>
+      </div>
+      <div class="admin-row" style="margin-bottom:0">
+        <button class="alt" id="refreshData">Refresh</button>
+        <a href="employee-login.html" class="ncta" style="text-decoration:none;background:var(--n)">Employee Login</a>
+        <a href="../index.html" class="ncta" style="text-decoration:none">Go to Website</a>
+      </div>
+    </div>
+
+    <div class="admin-grid">
+      <div class="admin-card"><div class="admin-k">Total Members</div><div class="admin-v" id="totalMembers">0</div></div>
+      <div class="admin-card"><div class="admin-k">Premium Members</div><div class="admin-v" id="premiumMembers">0</div></div>
+      <div class="admin-card"><div class="admin-k">Service Requests</div><div class="admin-v" id="serviceRequests">0</div></div>
+      <div class="admin-card"><div class="admin-k">Today's Activity</div><div class="admin-v" id="todayActivity">0</div></div>
+      <div class="admin-card"><div class="admin-k">Active Employees</div><div class="admin-v" id="totalEmployees">0</div></div>
+    </div>
+
+    <div class="admin-panel">
+      <h3 style="margin:0 0 10px;color:var(--n)">Member List</h3>
+      <div class="admin-row">
+        <input type="text" id="memberSearch" placeholder="Search by name / phone / plan / employee">
+        <button id="exportMembers">Export Members CSV</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Plan</th>
+              <th>Card Number</th>
+              <th>Amount</th>
+              <th>Payment ID</th>
+              <th>Added By</th>
+              <th>Joined</th>
+              <th>Last Active</th>
+            </tr>
+          </thead>
+          <tbody id="membersBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="admin-panel">
+      <h3 style="margin:0 0 10px;color:var(--n)">Service and Membership Activity</h3>
+      <div class="admin-row">
+        <input type="text" id="activitySearch" placeholder="Search by type / member / service / payment / employee">
+        <button id="exportActivity">Export Activity CSV</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Type</th>
+              <th>Member</th>
+              <th>Phone</th>
+              <th>Service</th>
+              <th>Payment/Card</th>
+              <th>Added By</th>
+            </tr>
+          </thead>
+          <tbody id="activityBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="admin-panel">
+      <h3 style="margin:0 0 10px;color:var(--n)">Twilio Integration Settings</h3>
+      <p class="admin-sub" style="margin:0 0 15px;color:#666">Configure Twilio to automatically send SMS and WhatsApp notifications to premium members after payment.</p>
+      
+      <div class="admin-row">
+        <input type="text" id="twilioAccountSid" placeholder="Twilio Account SID (ACxxxxxxxxxxxxxxxxx)">
+      </div>
+      <div class="admin-row">
+        <input type="password" id="twilioAuthToken" placeholder="Twilio Auth Token">
+      </div>
+      <div class="admin-row">
+        <input type="tel" id="twilioPhoneNumber" placeholder="Twilio Phone Number (+1234567890)">
+      </div>
+      <div class="admin-row">
+        <input type="tel" id="twilioWhatsAppNumber" placeholder="Twilio WhatsApp Number (whatsapp:+14155238886)">
+      </div>
+      <div class="admin-row">
+        <button id="saveTwilioConfig" style="background:var(--p);margin-right:10px">Save Twilio Configuration</button>
+        <button id="testTwilioConfig" style="background:#28a745">Test Connection</button>
+      </div>
+      <p class="admin-sub" style="margin:10px 0 0;color:#666;font-size:13px">
+        💡 <strong>Get Twilio Credentials:</strong> Sign up at <a href="https://www.twilio.com/try-twilio" target="_blank" style="color:var(--p)">twilio.com/try-twilio</a><br>
+        📱 <strong>WhatsApp Sandbox:</strong> For testing, use: <code>whatsapp:+14155238886</code><br>
+        💰 <strong>Cost:</strong> SMS ₹0.50-1/message • WhatsApp ₹0.35-1.65/message<br>
+        📖 <strong>Setup Guide:</strong> See TWILIO-SETUP.md for complete instructions
+      </p>
+
+      <div class="admin-row" style="margin-top:20px;padding-top:20px;border-top:1px solid #eee">
+        <input type="password" id="newPin" placeholder="New admin PIN">
+        <button id="savePin">Update Admin PIN</button>
+      </div>
+      <p class="admin-sub" style="margin:6px 0 0">Change the admin dashboard PIN (default: admin123)</p>
+
+    <div class="admin-panel">
+      <h3 style="margin:0 0 10px;color:var(--n)">Employee Management</h3>
+      <div class="admin-row">
+        <input type="text" id="newEmpName" placeholder="Employee Name">
+        <input type="email" id="newEmpEmail" placeholder="Employee Email">
+        <input type="password" id="newEmpPassword" placeholder="Password (default: emp123)">
+        <button id="addEmployee">Add Employee</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Employee ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Users Added</th>
+              <th>Premium Converted</th>
+              <th>Last Login</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="employeesBody"></tbody>
+        </table>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/main.js"></script>
+<script src="../assets/js/admin-supabase.js"></script>
+</body>
+</html>

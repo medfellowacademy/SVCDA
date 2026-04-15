@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Login - SVCDA</title>
+    <link rel="shortcut icon" href="../assets/images/LOGO.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .login-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-logo img {
+            height: 60px;
+            margin-bottom: 10px;
+        }
+        
+        .login-logo h1 {
+            font-size: 24px;
+            color: #1a202c;
+            margin-bottom: 5px;
+        }
+        
+        .login-logo p {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .login-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 5px;
+        }
+        
+        .login-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            color: #718096;
+            transition: all 0.3s;
+            border: none;
+            background: transparent;
+        }
+        
+        .login-tab.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .login-form {
+            display: none;
+        }
+        
+        .login-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .login-help {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #718096;
+        }
+        
+        .login-help a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .login-help a:hover {
+            text-decoration: underline;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 10000;
+            display: none;
+            max-width: 350px;
+        }
+        
+        .notification.success { background: #10b981; }
+        .notification.error { background: #ef4444; }
+        .notification.info { background: #3b82f6; }
+        
+        .otp-info {
+            background: #eef2ff;
+            border: 1px solid #c7d2fe;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #4338ca;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-logo">
+                <img src="../assets/images/LOGO.png" alt="SVCDA Logo">
+                <h1>Member Login</h1>
+                <p>Access your SVCDA membership</p>
+            </div>
+            
+            <div class="login-tabs">
+                <button class="login-tab active" onclick="switchTab('phone')">Phone Number</button>
+                <button class="login-tab" onclick="switchTab('card')">Card Number</button>
+            </div>
+            
+            <!-- Phone Login Form -->
+            <form id="phoneLoginForm" class="login-form active" onsubmit="loginWithPhone(event)">
+                <div class="otp-info">
+                    📱 We'll verify your phone number to login
+                </div>
+                
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="tel" id="phoneNumber" placeholder="+91 XXXXXXXXXX" required>
+                </div>
+                
+                <button type="submit" class="login-btn">Continue with Phone</button>
+            </form>
+            
+            <!-- Card Login Form -->
+            <form id="cardLoginForm" class="login-form" onsubmit="loginWithCard(event)">
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" id="cardNumber" placeholder="SVCDA123456789" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="memberPhone">Phone Number (for verification)</label>
+                    <input type="tel" id="memberPhone" placeholder="+91 XXXXXXXXXX" required>
+                </div>
+                
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+            
+            <div class="login-help">
+                Don't have a membership?<br>
+                <a href="register.html">Register Now</a> or 
+                <a href="premium-card.html">Get Premium Card</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../supabase-config.js"></script>
+    
+    <script>
+        // Switch between login tabs
+        function switchTab(tab) {
+            // Update tabs
+            document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update forms
+            document.querySelectorAll('.login-form').forEach(f => f.classList.remove('active'));
+            
+            if (tab === 'phone') {
+                document.getElementById('phoneLoginForm').classList.add('active');
+            } else {
+                document.getElementById('cardLoginForm').classList.add('active');
+            }
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notif = document.getElementById('notification');
+            notif.textContent = message;
+            notif.className = 'notification ' + type;
+            notif.style.display = 'block';
+            
+            setTimeout(() => {
+                notif.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Format phone number
+        function formatPhoneNumber(phone) {
+            let cleaned = phone.replace(/\D/g, '');
+            
+            if (cleaned.startsWith('91') && cleaned.length === 12) {
+                return '+' + cleaned;
+            }
+            
+            if (cleaned.length === 10) {
+                return '+91' + cleaned;
+            }
+            
+            if (phone.startsWith('+')) {
+                return phone;
+            }
+            
+            return '+91' + cleaned.slice(-10);
+        }
+        
+        // Login with phone number
+        async function loginWithPhone(event) {
+            event.preventDefault();
+            
+            const phoneInput = document.getElementById('phoneNumber');
+            const phone = formatPhoneNumber(phoneInput.value.trim());
+            const btn = event.target.querySelector('.login-btn');
+            
+            // Disable button
+            btn.disabled = true;
+            btn.textContent = 'Checking...';
+            
+            try {
+                // Check if member exists
+                const members = await db.members.getByPhone(phone);
+                
+                if (!members || members.length === 0) {
+                    showNotification('No member found with this phone number. Please register first.', 'error');
+                    return;
+                }
+                
+                const member = members[0];
+                
+                // Store member data in session
+                sessionStorage.setItem('memberData', JSON.stringify(member));
+                
+                // Show success and redirect
+                showNotification('✅ Login successful! Redirecting...', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'member-dashboard.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                showNotification('Login failed: ' + error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Continue with Phone';
+            }
+        }
+        
+        // Login with card number
+        async function loginWithCard(event) {
+            event.preventDefault();
+            
+            const cardNumber = document.getElementById('cardNumber').value.trim().toUpperCase();
+            const phone = formatPhoneNumber(document.getElementById('memberPhone').value.trim());
+            const btn = event.target.querySelector('.login-btn');
+            
+            // Disable button
+            btn.disabled = true;
+            btn.textContent = 'Verifying...';
+            
+            try {
+                // Get member by card number
+                const member = await db.members.getByCardNumber(cardNumber);
+                
+                if (!member) {
+                    showNotification('Invalid card number or phone number', 'error');
+                    return;
+                }
+                
+                // Verify phone matches
+                if (member.phone !== phone) {
+                    showNotification('Phone number does not match this card', 'error');
+                    return;
+                }
+                
+                // Store member data in session
+                sessionStorage.setItem('memberData', JSON.stringify(member));
+                
+                // Show success and redirect
+                showNotification('✅ Login successful! Redirecting...', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'member-dashboard.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                showNotification('Login failed: ' + error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Login';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grocery Products | SVCDA</title>
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+.products-hero{background:linear-gradient(135deg,#4facfe,#00f2fe);padding:80px 0 60px;color:#fff;text-align:center}
+.products-hero h1{font-size:2.5rem;margin-bottom:1rem}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:30px;padding:60px 20px 100px}
+.product-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1);transition:all .3s;border:3px solid transparent}
+.product-card.selected{border-color:#007bff;background:#f0f8ff;transform:translateY(-5px);box-shadow:0 8px 20px rgba(0,123,255,.2)}
+.product-img{width:100%;height:200px;object-fit:cover}
+.product-info{padding:20px}
+.product-name{font-size:1.25rem;font-weight:600;margin-bottom:8px;color:#1a1a1a}
+.product-desc{color:#666;font-size:.95rem;margin-bottom:12px;line-height:1.5}
+.product-price{font-size:1.1rem;color:#ff6b2c;font-weight:600;margin-bottom:15px}
+.product-actions{display:flex;gap:10px}
+.btn-select{flex:1;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;transition:all .3s;background:#f0f0f0;color:#333}
+.btn-select.selected{background:#007bff;color:#fff}
+.btn-inquire{padding:12px 20px;background:#25d366;color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .3s}
+.btn-inquire:hover{background:#1fb855}
+.selection-bar{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#4facfe,#00f2fe);color:#fff;padding:20px;display:none;justify-content:space-between;align-items:center;box-shadow:0 -4px 12px rgba(0,0,0,.2);z-index:1000}
+.selection-bar.active{display:flex}
+.selection-info{font-size:1.1rem;font-weight:600}
+.btn-send-bulk{padding:15px 30px;background:#25d366;color:#fff;border:none;border-radius:8px;font-weight:600;font-size:1rem;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .3s}
+.btn-send-bulk:hover{background:#1fb855;transform:scale(1.05)}
+.btn-clear{padding:15px 25px;background:rgba(255,255,255,.2);color:#fff;border:2px solid #fff;border-radius:8px;font-weight:600;cursor:pointer;transition:all .3s}
+.btn-clear:hover{background:rgba(255,255,255,.3)}
+</style>
+</head>
+<body>
+<div class="pl" id="pl"><div><div class="pl-t">SV<b>CDA</b></div><div class="pl-d"><i></i><i></i><i></i></div></div></div>
+
+<header id="hdr"><div class="htop"><div class="htop-i"><span>One Platform for Small Village & City Development</span><div class="htop-r"><a href="tel:+918978210705">+91 8978210705</a><a href="mailto:info@svcdaservicehub.com">info@svcdaservicehub.com</a></div></div></div>
+<div class="nw"><a href="../index.html" class="logo"><img src="../assets/images/LOGO.png" alt="SVCDA" style="height:44px"><div><div class="ln">SVCDA</div><div class="lt2">Development Agency</div></div></a>
+<nav class="mn"><div class="ni"><a href="../index.html">Home</a></div><div class="ni"><a href="about.html">About</a></div><div class="ni"><a href="order-service.html" style="color:var(--a)">Order / Service</a></div><div class="ni"><a href="contact.html">Contact</a></div></nav>
+<div class="h-ctas"><a href="employee-login.html" class="ncta" style="background:var(--n)"><i class="fa fa-user"></i> Employee</a><a href="tel:+918978210705" class="ncta"><i class="fa fa-phone"></i> Call</a><button class="mbtn" id="mb"><span></span><span></span><span></span></button></div></div></header>
+
+<div class="mov" id="mo"></div><nav class="mpn" id="mp"><div class="mph"><a href="../index.html" class="logo"><img src="../assets/images/LOGO.png" alt="SVCDA" style="height:44px"><div><div class="ln">SVCDA</div></div></a><button class="mx" id="mx">X</button></div>
+<a href="../index.html">Home</a><a href="about.html">About</a><a href="order-service.html">Order / Service</a><a href="contact.html">Contact</a><a href="register.html">Register</a></nav>
+
+<section class="products-hero">
+  <div class="container">
+    <h1>🛒 Home Grocery Products</h1>
+    <p>Select products and send inquiry via WhatsApp</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+</section>
+
+<div class="selection-bar" id="selectionBar">
+  <div class="selection-info"><span id="selectionCount">0</span> items selected</div>
+  <div style="display:flex;gap:15px">
+    <button class="btn-clear" onclick="clearSelection()">Clear All</button>
+    <button class="btn-send-bulk" onclick="sendBulkInquiry()"><i class="fab fa-whatsapp"></i> Send Inquiry via WhatsApp</button>
+  </div>
+</div>
+
+<footer class="footer-dark"><div class="fd-bottom">&copy; 2026 SVCDA - Small Village and City Development Agency</div></footer>
+
+<script src="../assets/js/main.js"></script>
+<script>
+const products=[
+  {name:'Daily Essentials Pack',desc:'Rice, dal, oil, spices combo',price:'₹800-1200',img:'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400'},
+  {name:'Fruits & Vegetables',desc:'Fresh produce delivered daily',price:'₹200-800',img:'https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=400'},
+  {name:'Monthly Grocery Pack',desc:'Complete month grocery at discount',price:'₹3000-5000',img:'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400'},
+  {name:'Dairy Products',desc:'Milk, curd, butter, cheese',price:'₹150-600',img:'https://images.unsplash.com/photo-1628088062854-d1870b4553da?w=400'},
+  {name:'Snacks & Beverages',desc:'Tea, coffee, biscuits, chips',price:'₹100-500',img:'https://images.unsplash.com/photo-1599490659213-e2b9527bd087?w=400'},
+  {name:'Personal Care',desc:'Soap, shampoo, toothpaste',price:'₹200-800',img:'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400'},
+  {name:'Cleaning Supplies',desc:'Detergents, disinfectants, cleaners',price:'₹150-600',img:'https://images.unsplash.com/photo-1563453392212-326f5e854473?w=400'},
+  {name:'Organic Products',desc:'Chemical-free groceries',price:'₹300-1500',img:'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=400'},
+  {name:'Baby Products',desc:'Diapers, baby food, care items',price:'₹200-1000',img:'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=400'},
+  {name:'Festival Special',desc:'Special combo for festivals',price:'₹1500-3000',img:'https://images.unsplash.com/photo-1607082349566-187342175e2f?w=400'}
+];
+let selectedItems=new Set();
+function renderProducts(){
+  document.getElementById('productsGrid').innerHTML=products.map((p,i)=>`
+    <div class="product-card" id="card-${i}">
+      <img src="${p.img}" alt="${p.name}" class="product-img">
+      <div class="product-info">
+        <h3 class="product-name">${p.name}</h3>
+        <p class="product-desc">${p.desc}</p>
+        <div class="product-price">${p.price}</div>
+        <div class="product-actions">
+          <button class="btn-select" id="btn-${i}" onclick="toggleSelect(${i})"><i class="far fa-square"></i> Select</button>
+          <button class="btn-inquire" onclick="singleInquiry('${p.name}','${p.price}')"><i class="fab fa-whatsapp"></i> Inquire</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+function toggleSelect(i){
+  const card=document.getElementById(`card-${i}`),btn=document.getElementById(`btn-${i}`);
+  if(selectedItems.has(i)){
+    selectedItems.delete(i);
+    card.classList.remove('selected');
+    btn.classList.remove('selected');
+    btn.innerHTML='<i class="far fa-square"></i> Select';
+  }else{
+    selectedItems.add(i);
+    card.classList.add('selected');
+    btn.classList.add('selected');
+    btn.innerHTML='<i class="fas fa-check-square"></i> Selected';
+  }
+  updateSelectionBar();
+}
+function updateSelectionBar(){
+  document.getElementById('selectionCount').textContent=selectedItems.size;
+  document.getElementById('selectionBar').classList.toggle('active',selectedItems.size>0);
+}
+function clearSelection(){
+  selectedItems.forEach(i=>{
+    document.getElementById(`card-${i}`).classList.remove('selected');
+    document.getElementById(`btn-${i}`).classList.remove('selected');
+    document.getElementById(`btn-${i}`).innerHTML='<i class="far fa-square"></i> Select';
+  });
+  selectedItems.clear();
+  updateSelectionBar();
+}
+function singleInquiry(name,price){
+  const msg=`Hi, I want to inquire about:\n\n📦 ${name}\n💰 Price: ${price}\n\nPlease provide more details.`;
+  window.open(`https://wa.me/918978210705?text=${encodeURIComponent(msg)}`,'_blank');
+}
+function sendBulkInquiry(){
+  let msg='Hi, I want to inquire about the following grocery products:\n\n';
+  selectedItems.forEach(i=>{
+    const p=products[i];
+    msg+=`${i+1}. ${p.name} - ${p.price}\n`;
+  });
+  msg+='\nPlease provide complete details and availability.';
+  window.open(`https://wa.me/918978210705?text=${encodeURIComponent(msg)}`,'_blank');
+}
+renderProducts();
+</script>
+</body>
+</html>

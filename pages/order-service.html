@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Order services from SVCDA - Health, Education, Grocery and more with WhatsApp inquiry">
+<title>Order / Service - SVCDA</title>
+<link rel="shortcut icon" href="../assets/images/LOGO.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/main.css">
+<style>
+.service-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin:40px 0}
+.service-card{background:var(--w);border:2px solid var(--bdr);border-radius:16px;padding:24px;cursor:pointer;transition:.3s;position:relative;overflow:hidden}
+.service-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.12);border-color:var(--a)}
+.service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--a)}
+.service-icon{width:72px;height:72px;background:linear-gradient(135deg,var(--a),var(--s));border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.service-icon svg{width:36px;height:36px;stroke:#fff;fill:none}
+.service-title{font-size:1.4rem;font-weight:700;color:var(--n);margin-bottom:8px}
+.service-desc{color:var(--sm);font-size:.92rem;line-height:1.5;margin-bottom:16px}
+.service-count{display:inline-block;background:var(--bg2);padding:6px 12px;border-radius:20px;font-size:.85rem;font-weight:600;color:var(--a)}
+
+.modal{display:none;position:fixed;top:0;left:0;right0;bottom:0;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.modal.active{display:flex}
+.modal-content{background:var(--w);border-radius:20px;max-width:1200px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.modal-header{padding:28px 32px;border-bottom:2px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--w);z-index:10}
+.modal-close{width:40px;height:40px;border:none;background:var(--bg2);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+.modal-close:hover{background:var(--a);color:var(--w);transform:rotate(90deg)}
+.modal-body{padding:32px}
+
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.product-card{border:2px solid var(--bdr);border-radius:12px;padding:20px;background:var(--w);transition:.3s;position:relative}
+.product-card:hover{border-color:var(--a);box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+.product-card.selected{border-color:var(--a);background:#f0f9ff}
+.product-select{position:absolute;top:12px;right:12px;width:24px;height:24px}
+.product-img{width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;background:var(--bg2)}
+.product-name{font-size:1.1rem;font-weight:700;color:var(--n);margin-bottom:6px}
+.product-desc{font-size:.88rem;color:var(--sm);line-height:1.4;margin-bottom:12px;min-height:40px}
+.product-price{font-size:1.3rem;font-weight:700;color:var(--a);margin-bottom:12px}
+.product-actions{display:flex;gap:8px}
+.product-btn{flex:1;padding:10px;border-radius:8px;font-weight:600;font-size:.88rem;cursor:pointer;transition:.2s;border:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.product-btn-wa{background:#25D366;color:#fff}
+.product-btn-wa:hover{background:#1fa855}
+.product-btn-select{background:var(--a);color:#fff}
+.product-btn-select:hover{background:var(--s)}
+
+.selection-bar{position:fixed;bottom:0;left:0;right:0;background:var(--n);color:var(--w);padding:16px 24px;display:none;align-items:center;justify-content:space-between;box-shadow:0 -4px 12px rgba(0,0,0,0.2);z-index:9998}
+.selection-bar.active{display:flex}
+.selection-info{font-weight:600}
+.selection-actions{display:flex;gap:12px}
+.selection-btn{padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;border:none;transition:.2s}
+.selection-btn-clear{background:transparent;color:var(--w);border:2px solid var(--w)}
+.selection-btn-send{background:#25D366;color:#fff;display:flex;align-items:center;gap:8px}
+.selection-btn-send:hover{background:#1fa855}
+
+@media(max-width:768px){
+  .product-grid{grid-template-columns:1fr}
+  .service-grid{grid-template-columns:1fr}
+  .modal-body{padding:20px}
+  .selection-bar{flex-direction:column;gap:12px;padding:16px}
+  .selection-actions{width:100%;flex-direction:column}
+  .selection-btn{width:100%}
+}
+</style>
+</head>
+<body>
+<div class="pl" id="pl"><div><div class="pl-t">SV<b>CDA</b></div><div class="pl-d"><i></i><i></i><i></i></div></div></div>
+
+<header id="hdr">
+  <div class="htop"><div class="htop-i"><span>One Platform for Small Village & City Development</span><div class="htop-r"><a href="tel:+918978210705">+91 8978210705</a><a href="mailto:info@svcdaservicehub.com">info@svcdaservicehub.com</a></div></div></div>
+  <div class="nw"><a href="../index.html" class="logo"><img src="../assets/images/LOGO.png" alt="SVCDA Logo" style="height:44px;width:auto;margin-right:8px;"><div><div class="ln">SVCDA</div><div class="lt2">Development Agency</div></div></a>
+    <nav class="mn">
+      <div class="ni"><a href="../index.html">Home</a></div>
+      <div class="ni"><a href="about.html">About</a></div>
+      <div class="ni"><a href="sectors.html">Sectors</a></div>
+      <div class="ni"><a href="women-empowerment.html">Women Empowerment</a></div>
+      <div class="ni"><a href="vision.html">Mission & Vision</a></div>
+      <div class="ni"><a href="premium-card.html">Digital Card</a></div>
+      <div class="ni"><a href="order-service.html" style="color:var(--a)">Order / Service</a></div>
+      <div class="ni"><a href="contact.html">Contact</a></div>
+    </nav>
+    <div class="h-ctas"><a href="employee-login.html" class="ncta" style="background:var(--n)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Employee</a><a href="tel:+918978210705" class="ncta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.11 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> Call Now</a><button class="mbtn" id="mb"><span></span><span></span><span></span></button></div>
+  </div>
+</header>
+
+<div class="mov" id="mo"></div>
+<nav class="mpn" id="mp">
+  <div class="mph"><a href="../index.html" class="logo"><img src="../assets/images/LOGO.png" alt="SVCDA Logo" style="height:44px;width:auto;margin-right:8px;"><div><div class="ln" style="color:var(--n)">SVCDA</div></div></a><button class="mx" id="mx">X</button></div>
+  <a href="../index.html">Home</a><a href="about.html">About</a><div class="mlab">Sectors</div><a href="education.html">Education</a><a href="grocery.html">Grocery</a><a href="business.html">Business</a><a href="health.html">Health</a><a href="electronics.html">Electronics</a><a href="agriculture.html">Agriculture</a><a href="services.html">Services</a><a href="skill-development.html">Skill Training</a><a href="employment.html">Employment</a><div class="mlab">More</div><a href="women-empowerment.html">Women Empowerment</a><a href="vision.html">Vision & Mission</a><a href="contact.html">Contact</a><a href="premium-card.html">Premium Card</a><a href="register.html">Register</a>
+</nav>
+
+<section class="phero" style="background:linear-gradient(135deg,#667eea,#764ba2)">
+  <div class="phero-content">
+    <div class="phero-ey"><i></i> Order Services</div>
+    <h1>Browse & Order <em>Services</em></h1>
+    <p class="phero-sub">Select products, add to your inquiry list, and send WhatsApp inquiry in one click.</p>
+  </div>
+</section>
+
+<section class="section" style="background:var(--w);padding:60px 0 100px">
+  <div class="container">
+    <div class="rv" style="text-align:center;margin-bottom:20px">
+      <div class="ey" style="justify-content:center"><span class="ey-b"></span> Service Categories</div>
+      <h2 class="sh">Choose Your Service Sector</h2>
+      <p class="sht" style="max-width:680px;margin:12px auto 0">Click on any sector to explore products and services. Select multiple items and inquire via WhatsApp.</p>
+    </div>
+
+    <div class="service-grid">
+      <!-- Health Sector -->
+      <div class="service-card" onclick="window.location.href='health-products.html'">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h3 class="service-title">🏥 Health Sector</h3>
+        <p class="service-desc">Medicine orders, doctor consultations, lab tests, health checkups in your locality.</p>
+        <span class="service-count">8 Services Available</span>
+      </div>
+
+      <!-- Education Sector -->
+      <div class="service-card" onclick="window.location.href='education-products.html'">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <h3 class="service-title">📚 Education Sector</h3>
+        <p class="service-desc">Stationery orders, books, admission inquiry, skill development programs.</p>
+        <span class="service-count">6 Services Available</span>
+      </div>
+
+      <!-- Grocery Sector -->
+      <div class="service-card" onclick="window.location.href='grocery-products.html'">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        </div>
+        <h3 class="service-title">🛒 Home Grocery</h3>
+        <p class="service-desc">Daily essentials, monthly packs, free home delivery, discounts up to 80%.</p>
+        <span class="service-count">10 Products Available</span>
+      </div>
+
+      <!-- Ayurvedic Services -->
+      <div class="service-card" onclick="window.location.href='ayurvedic-products.html'">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3c0 1.5.5 3 2 4.5M12 8c.5-1.5 2-3 4-3s3 1 3 3-1.5 3-3 4.5"/><path d="M5 21c0-2.5 1.5-6 8-6s8 3.5 8 6"/></svg>
+        </div>
+        <h3 class="service-title">🌿 Ayurvedic Services</h3>
+        <p class="service-desc">Traditional ayurvedic treatments, herbal medicines, consultations.</p>
+        <span class="service-count">5 Services Available</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer-dark">
+  <div class="fd-bottom">&copy; 2026 SVCDA - Small Village and City Development Agency</div>
+</footer>
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

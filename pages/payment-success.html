@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - SVCDA</title>
+    <link rel="shortcut icon" href="../assets/images/LOGO.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .success-container {
+            background: white;
+            border-radius: 24px;
+            padding: 50px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.5s ease;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .success-icon svg {
+            width: 50px;
+            height: 50px;
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        
+        h1 {
+            font-size: 32px;
+            color: #1a202c;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #718096;
+            margin-bottom: 30px;
+        }
+        
+        .card-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 30px;
+            color: white;
+            margin: 30px 0;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-preview::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+        
+        .card-info {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .card-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .card-value {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .card-number {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin: 20px 0;
+        }
+        
+        .next-steps {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .next-steps h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+        
+        .step {
+            display: flex;
+            align-items: start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 3px;
+        }
+        
+        .step-desc {
+            font-size: 14px;
+            color: #718096;
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-secondary:hover {
+            background: #f7fafc;
+        }
+        
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+        
+        .btn-whatsapp:hover {
+            background: #20BA5A;
+            transform: translateY(-2px);
+        }
+        
+        .support-info {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 14px;
+            color: #718096;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M20 6L9 17l-5-5"/>
+            </svg>
+        </div>
+        
+        <h1>Payment Successful! 🎉</h1>
+        <p class="subtitle">Your SVCDA Premium Membership is now active</p>
+        
+        <div class="card-preview">
+            <div class="card-info">
+                <div class="card-label">CARD NUMBER</div>
+                <div class="card-number" id="cardNumber">●●●● ●●●● ●●●● ●●●●</div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                    <div>
+                        <div class="card-label">MEMBER NAME</div>
+                        <div class="card-value" id="memberName">Loading...</div>
+                    </div>
+                    <div>
+                        <div class="card-label">VALID TILL</div>
+                        <div class="card-value" id="validTill">--/--/----</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="next-steps">
+            <h3>📋 What's Next?</h3>
+            
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">Check Your Messages</div>
+                    <div class="step-desc">SMS and WhatsApp with card details sent to your registered phone</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">Login to Member Portal</div>
+                    <div class="step-desc">Access your digital card and manage your membership</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">Start Using Benefits</div>
+                    <div class="step-desc">Priority support, 20% discounts, free health camps & more!</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="member-login.html" class="btn btn-primary">
+                🎫 View My Card
+            </a>
+            <button onclick="downloadCard()" class="btn btn-secondary">
+                📥 Download Card
+            </button>
+            <button onclick="shareWhatsApp()" class="btn btn-whatsapp">
+                💬 Share on WhatsApp
+            </button>
+        </div>
+        
+        <div class="support-info">
+            Need help? Call <strong>+91 8978210705</strong> or email <strong>info@svcdaservicehub.com</strong>
+        </div>
+    </div>
+    
+    <!-- Enhanced Features -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../supabase-config.js"></script>
+    <script src="../payment-system.js"></script>
+    <script src="../enhanced-features.js"></script>
+    
+    <script>
+        // Load data from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const cardNumber = urlParams.get('card');
+        const memberName = urlParams.get('name');
+        const validTill = urlParams.get('valid');
+        
+        if (cardNumber) {
+            document.getElementById('cardNumber').textContent = formatCardNumber(cardNumber);
+        }
+        
+        if (memberName) {
+            document.getElementById('memberName').textContent = memberName.toUpperCase();
+        }
+        
+        if (validTill) {
+            document.getElementById('validTill').textContent = validTill;
+        }
+        
+        // Try to load from session storage if params not available
+        if (!cardNumber) {
+            const pendingData = sessionStorage.getItem('pendingMemberData');
+            if (pendingData) {
+                try {
+                    const data = JSON.parse(pendingData);
+                    document.getElementById('cardNumber').textContent = formatCardNumber(data.card_number);
+                    document.getElementById('memberName').textContent = data.name.toUpperCase();
+                    document.getElementById('validTill').textContent = data.valid_till || 'Lifetime';
+                    sessionStorage.removeItem('pendingMemberData');
+                } catch (e) {
+                    console.error('Error loading data:', e);
+                }
+            }
+        }
+        
+        function formatCardNumber(cardNumber) {
+            if (!cardNumber) return '●●●● ●●●● ●●●● ●●●●';
+            return cardNumber.replace(/(.{4})/g, '$1 ').trim();
+        }
+        
+        async function downloadCard() {
+            const data = {
+                card_number: cardNumber,
+                name: memberName,
+                valid_till: validTill
+            };
+            
+            if (typeof downloadDigitalCard !== 'undefined') {
+                await downloadDigitalCard(data);
+            } else {
+                alert('Card download will be available soon!\n\nCard: ' + cardNumber);
+            }
+        }
+        
+        function shareWhatsApp() {
+            const message = `🎉 I just became a SVCDA Premium Member!
+
+Card No: ${cardNumber}
+Name: ${memberName}
+
+✨ Premium Benefits:
+• Priority Support
+• 20% Discounts on all services
+• Free Health Camps
+• Exclusive Skill Training
+
+Join SVCDA today! Visit: https://svcda.in
+📞 +91 8978210705`;
+
+            const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
