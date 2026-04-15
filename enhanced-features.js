@@ -11,13 +11,19 @@
 /**
  * EmailJS Configuration (Get FREE at https://www.emailjs.com/)
  * NO backend needed! Works directly from browser
+ * Uses environment variables for secure credential management
  */
 const EMAILJS_CONFIG = {
-  SERVICE_ID: 'service_xxxxxx',      // Your EmailJS Service ID
-  TEMPLATE_ID: 'template_xxxxxx',    // Your EmailJS Template ID
-  PUBLIC_KEY: 'xxxxxxxxxxxxxx',      // Your EmailJS Public Key
-  ENABLED: false                      // Set to true after configuration
+  SERVICE_ID: import.meta.env.VITE_EMAILJS_SERVICE || 'service_xxxxxx',
+  TEMPLATE_ID: import.meta.env.VITE_EMAILJS_TEMPLATE || 'template_xxxxxx',
+  PUBLIC_KEY: import.meta.env.VITE_EMAILJS_KEY || 'xxxxxxxxxxxxxx',
+  ENABLED: import.meta.env.VITE_EMAILJS_ENABLED === 'true' || false
 };
+
+// Validate EmailJS credentials
+if (EMAILJS_CONFIG.ENABLED && !import.meta.env.VITE_EMAILJS_SERVICE) {
+  console.warn('⚠️ EmailJS enabled but not configured. Set VITE_EMAILJS_SERVICE, VITE_EMAILJS_TEMPLATE, and VITE_EMAILJS_KEY.');
+}
 
 /**
  * Initialize EmailJS (call once on page load)

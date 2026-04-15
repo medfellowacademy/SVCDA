@@ -1,18 +1,20 @@
 /**
  * Supabase Configuration for SVCDA Platform
  * 
- * Setup Instructions:
- * 1. Go to https://supabase.com and create a free account
- * 2. Create a new project (name: svcda-platform)
- * 3. Wait 2-3 minutes for project to initialize
- * 4. Go to Settings > API
- * 5. Copy your Project URL and anon/public key
- * 6. Replace the values below
+ * Uses Vite environment variables for secure credential management.
+ * Set these in Vercel dashboard or .env file:
+ * - VITE_SUPABASE_URL
+ * - VITE_SUPABASE_KEY
  */
 
-// ✅ SUPABASE CREDENTIALS CONFIGURED
-const SUPABASE_URL = 'https://ugpnumgppmhtnozskxdq.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVncG51bWdwcG1odG5venNreGRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyMzQyMDMsImV4cCI6MjA5MTgxMDIwM30.K3L88HprTX52J_xK_JmPzKCMQRCW07hhRDOHqNIxPW4';
+// Load from environment variables
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_KEY;
+
+// Validate credentials
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  console.error('⚠️ Missing Supabase credentials! Set VITE_SUPABASE_URL and VITE_SUPABASE_KEY in environment variables.');
+}
 
 // Initialize Supabase client
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);

@@ -15,25 +15,34 @@
 
 // ==================== CONFIGURATION ====================
 
-// Razorpay Configuration
+// Razorpay Configuration (from environment variables)
 const RAZORPAY_CONFIG = {
-  KEY_ID: 'rzp_test_xxxxxxxxxxxxxx', // Replace with your Razorpay Key ID from https://dashboard.razorpay.com/app/keys
-  KEY_SECRET: 'xxxxxxxxxxxxxxxxxxxxxx', // Keep this secret, never expose in frontend
+  KEY_ID: import.meta.env.VITE_RAZORPAY_KEY || 'rzp_test_xxxxxxxxxxxxxx',
   CURRENCY: 'INR',
   COMPANY_NAME: 'SVCDA',
   COMPANY_LOGO: 'https://svcda.in/assets/images/LOGO.png',
   THEME_COLOR: '#0B1120'
 };
 
-// MSG91 Configuration (Get from https://control.msg91.com/signup/)
+// Validate Razorpay key
+if (!import.meta.env.VITE_RAZORPAY_KEY) {
+  console.warn('⚠️ Using test Razorpay key. Set VITE_RAZORPAY_KEY for production.');
+}
+
+// MSG91 Configuration (from environment variables)
 const MSG91_CONFIG = {
-  AUTH_KEY: 'xxxxxxxxxxxxxxxxxxxxxxxx', // Your MSG91 Auth Key
-  SENDER_ID: 'SVCDA', // Your approved Sender ID (6 characters)
+  AUTH_KEY: import.meta.env.VITE_MSG91_AUTH_KEY || 'xxxxxxxxxxxxxxxxxxxxxxxx',
+  SENDER_ID: import.meta.env.VITE_MSG91_SENDER_ID || 'SVCDA',
   ROUTE: '4', // 4 = Transactional, 1 = Promotional
   COUNTRY_CODE: '91', // India country code
   WHATSAPP_NUMBER: '', // Your MSG91 WhatsApp number (optional)
-  DLT_TE_ID: '' // DLT Template ID (required for India)
+  DLT_TE_ID: import.meta.env.VITE_MSG91_DLT_ID || ''
 };
+
+// Validate MSG91 credentials
+if (!import.meta.env.VITE_MSG91_AUTH_KEY) {
+  console.warn('⚠️ MSG91 not configured. Set VITE_MSG91_AUTH_KEY, VITE_MSG91_SENDER_ID, and VITE_MSG91_DLT_ID.');
+}
 
 // ==================== HELPER FUNCTIONS ====================
 

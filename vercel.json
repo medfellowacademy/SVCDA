@@ -1,0 +1,43 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "installCommand": "npm install",
+  "devCommand": "npm run dev",
+  "env": {
+    "VITE_SUPABASE_URL": "@vite-supabase-url",
+    "VITE_SUPABASE_KEY": "@vite-supabase-key",
+    "VITE_RAZORPAY_KEY": "@vite-razorpay-key",
+    "VITE_MSG91_AUTH_KEY": "@vite-msg91-auth-key",
+    "VITE_MSG91_SENDER_ID": "@vite-msg91-sender-id",
+    "VITE_MSG91_DLT_ID": "@vite-msg91-dlt-id",
+    "VITE_EMAILJS_SERVICE": "@vite-emailjs-service",
+    "VITE_EMAILJS_TEMPLATE": "@vite-emailjs-template",
+    "VITE_EMAILJS_KEY": "@vite-emailjs-key"
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/$1"
+    }
+  ]
+}
