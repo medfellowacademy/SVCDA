@@ -7,6 +7,8 @@
     <link rel="shortcut icon" href="../assets/images/LOGO.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/main.css">
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <!-- Razorpay -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <!-- Supabase SDK -->
@@ -605,15 +607,15 @@ async function saveUserAfterPayment(userData, paymentResponse) {
             added_by_name: currentEmployee.name
         });
     
-        // Send notifications via Twilio (SMS + WhatsApp)
+        // Send notifications via MSG91 (SMS) + WhatsApp Click-to-Chat
         const notifications = await notifyPremiumCardComplete(member);
         
         let notificationStatus = '';
         if (notifications.sms?.success) {
-            notificationStatus += '✓ SMS sent\n';
+            notificationStatus += '✓ SMS sent via MSG91\n';
         }
         if (notifications.whatsapp?.success) {
-            notificationStatus += '✓ WhatsApp sent via Twilio\n';
+            notificationStatus += '✓ WhatsApp Click-to-Chat\n';
         } else if (notifications.directLink) {
             notificationStatus += '✓ WhatsApp opened (direct link)\n';
         }
@@ -625,7 +627,7 @@ async function saveUserAfterPayment(userData, paymentResponse) {
             'Card Number: ' + cardNumber + '\n' +
             'Payment ID: ' + paymentResponse.razorpay_payment_id + '\n' +
             'Amount: ₹' + userData.amount + '\n\n' +
-            'Notifications:\n' + (notificationStatus || '⚠ Configure Twilio in admin panel for SMS/WhatsApp');
+            'Notifications:\n' + (notificationStatus || '⚠ Configure MSG91 in environment variables for SMS');
         successMsg.style.display = 'block';
         
         // Reset form

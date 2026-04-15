@@ -55,11 +55,29 @@
         return String(timestamp).slice(0, 10) === todayKey;
       }).length;
 
+      // Calculate revenue
+      const totalRevenue = members.reduce((sum, m) => sum + (parseFloat(m.amount) || 0), 0);
+      const today = new Date();
+      const thisMonth = today.getMonth();
+      const thisYear = today.getFullYear();
+      
+      const monthRevenue = members.filter(m => {
+        const created = new Date(m.created_at);
+        return created.getMonth() === thisMonth && created.getFullYear() === thisYear;
+      }).reduce((sum, m) => sum + (parseFloat(m.amount) || 0), 0);
+      
+      const todayRevenue = members.filter(m => {
+        return String(m.created_at || '').slice(0, 10) === todayKey;
+      }).reduce((sum, m) => sum + (parseFloat(m.amount) || 0), 0);
+
       byId('totalMembers').textContent = members.length;
       byId('premiumMembers').textContent = premium;
       byId('serviceRequests').textContent = activity.filter(a => a.type === 'Service Request').length;
       byId('todayActivity').textContent = todayActive;
       byId('totalEmployees').textContent = employees.length;
+      byId('totalRevenue').textContent = '₹' + totalRevenue.toLocaleString('en-IN');
+      byId('monthRevenue').textContent = '₹' + monthRevenue.toLocaleString('en-IN');
+      byId('todayRevenue').textContent = '₹' + todayRevenue.toLocaleString('en-IN');
     } catch (error) {
       console.error('Error rendering stats:', error);
     }
@@ -176,9 +194,10 @@
       renderStats(),
       renderMembers(),
       renderActivity(),
-      renderEmployees(),
-      loadTwilioSettings()
+      renderEmployees()
     ]);
+    // Render charts after data is loaded
+    await renderAdvancedAnalytics();
   }
 
   // Initialize authentication
@@ -211,20 +230,211 @@
     }
   }
 
-  // Load Twilio configuration into form fields
-  async function loadTwilioSettings() {
+  // Advanced Analytics with Charts
+  let chartInstances = {};
+
+  async function renderAdvancedAnalytics() {
     try {
-      const config = await loadTwilioConfig();
-      if (config && config.accountSid) {
-        byId('twilioAccountSid').value = config.accountSid || '';
-        byId('twilioAuthToken').value = config.authToken || '';
-        byId('twilioPhoneNumber').value = config.phoneNumber || '';
-        byId('twilioWhatsAppNumber').value = config.whatsappNumber || '';
-      }
+      const members = await db.members.getAll();
+      const employees = await db.employees.getAll();
+      
+      // Monthly Trends Chart
+      renderMonthlyTrendsChart(members);
+      
+      // Plan Distribution Chart
+      renderPlanDistributionChart(members);
+      
+      // Employee Performance Chart
+      renderEmployeePerformanceChart(members, employees);
+      
     } catch (error) {
-      console.error('Error loading Twilio settings:', error);
+      console.error('Error rendering advanced analytics:', error);
     }
   }
+
+  function renderMonthlyTrendsChart(members) {
+    const monthlyData = {};
+    const last6Months = [];
+    const today = new Date();
+    
+    // Generate last 6 months
+    for (let i = 5; i >= 0; i--) {
+      const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      const key = date.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+      monthlyData[key] = 0;
+      last6Months.push(key);
+    }
+    
+    // Count members per month
+    members.forEach(m => {
+      const created = new Date(m.created_at);
+      const key = created.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+      if (monthlyData.hasOwnProperty(key)) {
+        monthlyData[key]++;
+      }
+    });
+    
+    const counts = last6Months.map(month => monthlyData[month]);
+    
+    // Destroy existing chart
+    if (chartInstances.monthlyTrends) {
+      chartInstances.monthlyTrends.destroy();
+    }
+    
+    const canvas = document.createElement('canvas');
+    canvas.style.maxHeight = '200px';
+    const container = byId('monthlyTrendsChart');
+    container.innerHTML = '';
+    container.appendChild(canvas);
+    
+    chartInstances.monthlyTrends = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: last6Months,
+        datasets: [{
+          label: 'New Members',
+          data: counts,
+          borderColor: '#0B1120',
+          backgroundColor: 'rgba(11, 17, 32, 0.1)',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+  }
+
+  function renderPlanDistributionChart(members) {
+    const planCounts = {};
+    members.forEach(m => {
+      const plan = m.plan || 'Basic';
+      planCounts[plan] = (planCounts[plan] || 0) + 1;
+    });
+    
+    const labels = Object.keys(planCounts);
+    const data = Object.values(planCounts);
+    const colors = ['#0B1120', '#4F46E5', '#10B981', '#F59E0B', '#EF4444'];
+    
+    // Destroy existing chart
+    if (chartInstances.planDistribution) {
+      chartInstances.planDistribution.destroy();
+    }
+    
+    const canvas = document.createElement('canvas');
+    canvas.style.maxHeight = '200px';
+    const container = byId('planDistributionChart');
+    container.innerHTML = '';
+    container.appendChild(canvas);
+    
+    chartInstances.planDistribution = new Chart(canvas, {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: colors.slice(0, labels.length),
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              boxWidth: 12,
+              font: {
+                size: 11
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  function renderEmployeePerformanceChart(members, employees) {
+    const empPerformance = {};
+    
+    employees.forEach(emp => {
+      empPerformance[emp.name] = 0;
+    });
+    
+    members.forEach(m => {
+      const empName = m.added_by_name;
+      if (empName && empName !== 'Website' && empName !== 'Direct/Website') {
+        empPerformance[empName] = (empPerformance[empName] || 0) + 1;
+      }
+    });
+    
+    // Sort and get top 5
+    const sorted = Object.entries(empPerformance)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+    
+    const labels = sorted.map(e => e[0]);
+    const data = sorted.map(e => e[1]);
+    
+    // Destroy existing chart
+    if (chartInstances.employeePerformance) {
+      chartInstances.employeePerformance.destroy();
+    }
+    
+    const canvas = document.createElement('canvas');
+    canvas.style.maxHeight = '200px';
+    const container = byId('employeePerformanceChart');
+    container.innerHTML = '';
+    container.appendChild(canvas);
+    
+    chartInstances.employeePerformance = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Members Added',
+          data: data,
+          backgroundColor: '#0B1120'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Make renderAdvancedAnalytics available globally
+  window.renderAdvancedAnalytics = renderAdvancedAnalytics;
 
   // Initialize actions and event listeners
   function initActions() {
@@ -248,48 +458,7 @@
       }
 
       const config = {
-        accountSid: accountSid,
-        authToken: authToken,
-        phoneNumber: phoneNumber,
-        whatsappNumber: whatsappNumber
-      };
-
-      try {
-        await saveTwilioConfig(config);
-        alert('✅ Twilio configuration saved successfully!\n\nYou can now test the connection or send notifications.');
-      } catch (error) {
-        console.error('Error saving Twilio config:', error);
-        alert('❌ Error saving Twilio configuration: ' + error.message);
-      }
-    });
-
-    // Test Twilio Connection
-    byId('testTwilioConfig').addEventListener('click', async function () {
-      try {
-        const result = await verifyTwilioConfig();
-        if (result.success) {
-          alert('✅ Twilio connection successful!\n\nAccount: ' + result.accountName + '\nStatus: ' + result.status);
-        } else {
-          alert('❌ Twilio connection failed: ' + result.error);
-        }
-      } catch (error) {
-        console.error('Error testing Twilio:', error);
-        alert('❌ Error testing Twilio: ' + error.message + '\n\nMake sure you have saved your Twilio credentials first.');
-      }
-    });
-
-    // Update admin PIN
-    byId('savePin').addEventListener('click', async function () {
-      const newPin = byId('newPin').value.trim();
-      if (!newPin || newPin.length < 4) {
-        alert('PIN must be at least 4 characters.');
-        return;
-      }
-      
-      try {
-        await db.settings.set(ADMIN_PIN_KEY, newPin);
-        alert('Admin PIN updated successfully');
-        byId('newPin').value = '';
+ byId('newPin').value = '';
       } catch (error) {
         console.error('Error updating PIN:', error);
         alert('Error updating PIN: ' + error.message);
