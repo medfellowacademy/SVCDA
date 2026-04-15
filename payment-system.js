@@ -1,19 +1,22 @@
 /**
  * SVCDA Complete Payment & Notification System
- * Integrates: Razorpay + Supabase + Twilio (SMS & WhatsApp)
+ * Integrates: Razorpay + Supabase + MSG91 (SMS & WhatsApp)
  * 
  * WORKFLOW:
  * 1. User fills premium card form
- * 2. Razorpay payment gateway opens
+ * 2. Razorpay payment gateway opens (or bypass for testing)
  * 3. On successful payment:
  *    - Save member to Supabase
- *    - Send SMS notification
- *    - Send WhatsApp message with card details
+ *    - Send SMS notification via MSG91
+ *    - Send WhatsApp Click-to-Chat
  *    - Log activity
  *    - Redirect to success page
  */
 
 // ==================== CONFIGURATION ====================
+
+// Payment Bypass for Testing (set to true to skip Razorpay)
+const BYPASS_PAYMENT = true; // Set to false for production
 
 // Razorpay Configuration (from environment variables)
 const RAZORPAY_CONFIG = {
@@ -282,6 +285,108 @@ async function processPremiumPayment(memberData) {
     const validTill = new Date();
     validTill.setFullYear(validTill.getFullYear() + 1);
     const validTillStr = validTill.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+
+    // ========== BYPASS PAYMENT FOR TESTING ==========
+    if (BYPASS_PAYMENT) {
+      console.log('🧪 TEST MODE: Bypassing Razorpay payment gateway');
+      showNotification('🧪 Test Mode - Processing without payment...', 'info');
+
+      // Simulate payment success with fake payment ID
+      const fakePaymentId = 'TEST_' + Date.now();
+      
+      // Prepare member data for database
+      const dbMemberData = {
+        name: memberData.name,
+        phone: memberData.phone,
+        email: memberData.email,
+        plan: memberData.plan,
+        amount: memberData.amount,
+        card_number: cardNumber,
+        payment_id: fakePaymentId,
+        payment_status: 'Success (Test)',
+        valid_till: validTillStr,
+        added_by: memberData.added_by || null,
+        added_by_name: memberData.added_by_name || 'Website'
+      };
+
+      // 1. Save to Supabase database
+      console.log('💾 Saving to database...');
+      const savedMember = await db.members.create(dbMemberData);
+      console.log('✅ Member saved:', savedMember.id);
+
+      // 2. Log activity
+      await db.activity.create({
+        type: 'Premium Registration (Test)',
+        member_name: memberData.name,
+        phone: memberData.phone,
+        service: memberData.plan + ' Membership',
+        payment: '₹' + memberData.amount + ' (Test)',
+        added_by: memberData.added_by,
+        added_by_name: memberData.added_by_name || 'Website'
+      });
+
+      // 3. Send SMS notification
+      console.log('📱 Sending SMS...');
+      const smsMessage = createSMSMessage({
+        ...dbMemberData,
+        valid_till: validTillStr
+      });
+      const smsResult = await sendSMS(memberData.phone, smsMessage);
+      
+      if (smsResult.success) {
+        console.log('✅ SMS sent successfully');
+      } else {
+        console.warn('⚠️ SMS failed:', smsResult.error);
+      }
+
+      // 4. Send Email notification (if configured)
+      if (memberData.email && typeof sendWelcomeEmail !== 'undefined') {
+        console.log('📧 Sending email...');
+        const emailResult = await sendWelcomeEmail({
+          ...dbMemberData,
+          valid_till: validTillStr
+        });
+        if (emailResult.success) {
+          console.log('✅ Email sent successfully');
+        }
+      }
+
+      // 5. Generate WhatsApp message
+      console.log('💬 Opening WhatsApp...');
+      const whatsappMessage = createWhatsAppMessage({
+        ...dbMemberData,
+        valid_till: validTillStr
+      });
+      const whatsappResult = await sendWhatsApp(memberData.phone, whatsappMessage);
+      
+      if (whatsappResult.success) {
+        console.log('✅ WhatsApp link opened');
+        setTimeout(() => {
+          showNotification('📱 WhatsApp opened. Please send the message!', 'info');
+        }, 2000);
+      }
+
+      // 6. Show success message
+      showNotification(
+        `🎉 Test Registration Successful! Card: ${cardNumber}`,
+        'success'
+      );
+
+      // Save for success page
+      sessionStorage.setItem('pendingMemberData', JSON.stringify({
+        card_number: cardNumber,
+        name: memberData.name,
+        valid_till: validTillStr
+      }));
+
+      // 7. Redirect to success page
+      setTimeout(() => {
+        window.location.href = `payment-success.html?card=${cardNumber}&name=${encodeURIComponent(memberData.name)}&valid=${encodeURIComponent(validTillStr)}&test=true`;
+      }, 2000);
+
+      return; // Exit function after test mode processing
+    }
+    // ========== END BYPASS MODE ==========
 
     // Prepare Razorpay options
     const options = {

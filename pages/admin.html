@@ -11,7 +11,6 @@
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="module" src="../supabase-config.js"></script>
-<script type="module" src="../twilio-integration.js"></script>
 <style>
 .admin-shell{max-width:1200px;margin:0 auto;padding:24px}
 .admin-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
@@ -122,30 +121,27 @@
     </div>
 
     <div class="admin-panel">
-      <h3 style="margin:0 0 10px;color:var(--n)">Twilio Integration Settings</h3>
-      <p class="admin-sub" style="margin:0 0 15px;color:#666">Configure Twilio to automatically send SMS and WhatsApp notifications to premium members after payment.</p>
+      <h3 style="margin:0 0 10px;color:var(--n)">MSG91 Integration Settings</h3>
+      <p class="admin-sub" style="margin:0 0 15px;color:#666">Configure MSG91 to automatically send SMS notifications to members after registration and payment.</p>
       
       <div class="admin-row">
-        <input type="text" id="twilioAccountSid" placeholder="Twilio Account SID (ACxxxxxxxxxxxxxxxxx)">
+        <input type="password" id="msg91AuthKey" placeholder="MSG91 Auth Key">
       </div>
       <div class="admin-row">
-        <input type="password" id="twilioAuthToken" placeholder="Twilio Auth Token">
+        <input type="text" id="msg91SenderId" placeholder="Sender ID (e.g., SVCDA)">
       </div>
       <div class="admin-row">
-        <input type="tel" id="twilioPhoneNumber" placeholder="Twilio Phone Number (+1234567890)">
+        <input type="text" id="msg91DltId" placeholder="DLT Template ID">
       </div>
       <div class="admin-row">
-        <input type="tel" id="twilioWhatsAppNumber" placeholder="Twilio WhatsApp Number (whatsapp:+14155238886)">
-      </div>
-      <div class="admin-row">
-        <button id="saveTwilioConfig" style="background:var(--p);margin-right:10px">Save Twilio Configuration</button>
-        <button id="testTwilioConfig" style="background:#28a745">Test Connection</button>
+        <button id="saveMsg91Config" style="background:var(--p);margin-right:10px">Save MSG91 Configuration</button>
+        <button id="testMsg91Config" style="background:#28a745">Test SMS</button>
       </div>
       <p class="admin-sub" style="margin:10px 0 0;color:#666;font-size:13px">
-        💡 <strong>Get Twilio Credentials:</strong> Sign up at <a href="https://www.twilio.com/try-twilio" target="_blank" style="color:var(--p)">twilio.com/try-twilio</a><br>
-        📱 <strong>WhatsApp Sandbox:</strong> For testing, use: <code>whatsapp:+14155238886</code><br>
-        💰 <strong>Cost:</strong> SMS ₹0.50-1/message • WhatsApp ₹0.35-1.65/message<br>
-        📖 <strong>Setup Guide:</strong> See TWILIO-SETUP.md for complete instructions
+        💡 <strong>Get MSG91 Credentials:</strong> Sign up at <a href="https://control.msg91.com/signup/" target="_blank" style="color:var(--p)">control.msg91.com/signup</a><br>
+        📱 <strong>Indian SMS Service:</strong> DLT compliant, no international charges<br>
+        💰 <strong>Cost:</strong> SMS ₹0.15-0.25/message (much cheaper than Twilio)<br>
+        📖 <strong>Setup Guide:</strong> Dashboard → API → Auth Key
       </p>
 
       <div class="admin-row" style="margin-top:20px;padding-top:20px;border-top:1px solid #eee">
@@ -153,6 +149,17 @@
         <button id="savePin">Update Admin PIN</button>
       </div>
       <p class="admin-sub" style="margin:6px 0 0">Change the admin dashboard PIN (default: admin123)</p>
+    </div>
+
+    <div class="admin-panel">
+      <h3 style="margin:0 0 10px;color:var(--n)">Advanced Member Actions</h3>
+      <div class="admin-row">
+        <button id="bulkDeleteBtn" style="background:#dc2626">Delete Selected Members</button>
+        <button id="exportFilteredBtn" style="background:#059669">Export Filtered Data</button>
+        <button id="sendBulkSMSBtn" style="background:#7c3aed">Send Bulk SMS</button>
+      </div>
+      <p class="admin-sub" style="margin:6px 0 0">Bulk actions for selected members. Use checkboxes in member table.</p>
+    </div>
 
     <div class="admin-panel">
       <h3 style="margin:0 0 10px;color:var(--n)">Employee Management</h3>
