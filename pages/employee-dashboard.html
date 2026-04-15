@@ -322,12 +322,41 @@
             <h3>This Month</h3>
             <div class="number" id="thisMonthCount">0</div>
         </div>
+        <div class="emp-stat-card">
+            <h3>This Week</h3>
+            <div class="number" id="thisWeekMetric">0</div>
+        </div>
+        <div class="emp-stat-card">
+            <h3>Total Revenue</h3>
+            <div class="number" id="totalRevenueMetric" style="font-size: 24px;">₹0</div>
+        </div>
+        <div class="emp-stat-card">
+            <h3>Avg Deal Value</h3>
+            <div class="number" id="avgDealMetric" style="font-size: 24px;">₹0</div>
+        </div>
+    </div>
+
+    <!-- Commission Display -->
+    <div style="margin: 20px 0;" id="commissionDisplay"></div>
+
+    <!-- Weekly Trend -->
+    <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+      <h3 style="margin: 0 0 15px; font-size: 16px; color: #333;">📈 Last 7 Days Activity</h3>
+      <div id="weeklyTrendChart"></div>
+    </div>
+
+    <!-- Plan Breakdown -->
+    <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+      <h3 style="margin: 0 0 15px; font-size: 16px; color: #333;">📊 Plan Breakdown</h3>
+      <div id="planBreakdownChart"></div>
     </div>
 
     <!-- Tabs -->
     <div class="emp-tabs">
         <button class="emp-tab active" onclick="switchTab('add')">Add Premium Member</button>
         <button class="emp-tab" onclick="switchTab('users')">My Users</button>
+        <button class="emp-tab" onclick="switchTab('timeline')">Activity Timeline</button>
+        <button class="emp-tab" onclick="switchTab('leaderboard')">Leaderboard</button>
     </div>
 
     <!-- Add User Tab -->
@@ -411,14 +440,32 @@
                         <th>Payment ID</th>
                         <th>Status</th>
                         <th>Added On</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="usersTableBody">
                     <tr>
-                        <td colspan="8" class="emp-no-data">No users added yet</td>
+                        <td colspan="9" class="emp-no-data">No users added yet</td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <!-- Activity Timeline Tab -->
+    <div class="emp-tab-content" id="timelineTab">
+        <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <h2 style="margin: 0 0 20px; font-size: 20px; color: #333;">📜 My Activity Timeline</h2>
+            <div id="activityTimeline"></div>
+        </div>
+    </div>
+
+    <!-- Leaderboard Tab -->
+    <div class="emp-tab-content" id="leaderboardTab">
+        <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <h2 style="margin: 0 0 20px; font-size: 20px; color: #333;">🏆 Employee Leaderboard</h2>
+            <p style="color: #666; margin-bottom: 20px;">See how you rank against other employees!</p>
+            <div id="leaderboardContainer"></div>
         </div>
     </div>
 </div>
@@ -671,6 +718,44 @@ function handleLogout() {
         auth.logout();
     }
 }
+</script>
+
+<script type="module" src="../employee-advanced.js"></script>
+<script type="module" src="../payment-system.js"></script>
+<script>
+  // Initialize advanced employee features
+  window.addEventListener('DOMContentLoaded', async function() {
+    // Wait for auth to load
+    setTimeout(async function() {
+      const currentEmp = checkLogin();
+      if (!currentEmp) return;
+      
+      // Load advanced metrics
+      if (typeof window.renderEmployeeMetrics === 'function') {
+        await window.renderEmployeeMetrics(currentEmp.id);
+      }
+      
+      // Load activity timeline
+      if (typeof window.renderActivityTimeline === 'function') {
+        await window.renderActivityTimeline(currentEmp.id);
+      }
+      
+      // Load leaderboard
+      if (typeof window.renderLeaderboard === 'function') {
+        await window.renderLeaderboard();
+      }
+      
+      // Display commission
+      if (typeof window.displayCommission === 'function') {
+        const stats = await loadStats(); // Get current stats
+        const totalMembers = parseInt(document.getElementById('myUsersCount')?.textContent || '0');
+        const totalRevenue = document.getElementById('totalRevenueMetric')?.textContent;
+        const revenue = totalRevenue ? parseFloat(totalRevenue.replace(/[₹,]/g, '')) : 0;
+        window.displayCommission(totalMembers, revenue);
+      }
+      
+    }, 1500);
+  });
 </script>
 
 </body>

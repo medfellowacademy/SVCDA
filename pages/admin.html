@@ -68,10 +68,41 @@
       <div class="admin-card"><div class="admin-k">Service Requests</div><div class="admin-v" id="serviceRequests">0</div></div>
       <div class="admin-card"><div class="admin-k">Today's Activity</div><div class="admin-v" id="todayActivity">0</div></div>
       <div class="admin-card"><div class="admin-k">Active Employees</div><div class="admin-v" id="totalEmployees">0</div></div>
+      <div class="admin-card"><div class="admin-k">Total Revenue</div><div class="admin-v" id="totalRevenue">₹0</div></div>
+      <div class="admin-card"><div class="admin-k">This Month</div><div class="admin-v" id="monthRevenue">₹0</div></div>
+      <div class="admin-card"><div class="admin-k">Today</div><div class="admin-v" id="todayRevenue">₹0</div></div>
+    </div>
+
+    <!-- Advanced Analytics -->
+    <div class="admin-panel">
+      <h3 style="margin:0 0 15px;color:var(--n)">📊 Analytics Dashboard</h3>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; margin-bottom: 20px;">
+        
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">
+          <h4 style="margin: 0 0 10px; color: #333; font-size: 14px;">Monthly Registration Trends</h4>
+          <div id="monthlyTrendsChart"></div>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">
+          <h4 style="margin: 0 0 10px; color: #333; font-size: 14px;">Plan Distribution</h4>
+          <div id="planDistributionChart"></div>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">
+          <h4 style="margin: 0 0 10px; color: #333; font-size: 14px;">Top Performing Employees</h4>
+          <div id="employeePerformanceChart"></div>
+        </div>
+        
+      </div>
     </div>
 
     <div class="admin-panel">
       <h3 style="margin:0 0 10px;color:var(--n)">Member List</h3>
+      
+      <!-- Advanced Filters -->
+      <div id="advancedFilters"></div>
+      
       <div class="admin-row">
         <input type="text" id="memberSearch" placeholder="Search by name / phone / plan / employee">
         <button id="exportMembers">Export Members CSV</button>
@@ -80,6 +111,7 @@
         <table class="admin-table">
           <thead>
             <tr>
+              <th><input type="checkbox" id="selectAllMembers"></th>
               <th>Name</th>
               <th>Phone</th>
               <th>Plan</th>
@@ -88,7 +120,7 @@
               <th>Payment ID</th>
               <th>Added By</th>
               <th>Joined</th>
-              <th>Last Active</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody id="membersBody"></tbody>
@@ -192,5 +224,43 @@
 
 <script type="module" src="../assets/js/main.js"></script>
 <script type="module" src="../assets/js/admin-supabase.js"></script>
+<script type="module" src="../admin-advanced.js"></script>
+<script>
+  // Initialize advanced features after page load
+  window.addEventListener('DOMContentLoaded', async function() {
+    // Wait for auth, then load advanced features
+    setTimeout(async function() {
+      if (typeof window.renderAdvancedAnalytics === 'function') {
+        await window.renderAdvancedAnalytics();
+      }
+      if (typeof window.addAdvancedFilters === 'function') {
+        window.addAdvancedFilters();
+      }
+    }, 1000);
+    
+    // Setup bulk action buttons
+    const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+    if (bulkDeleteBtn) {
+      bulkDeleteBtn.onclick = window.bulkDeleteMembers;
+    }
+    
+    const exportFilteredBtn = document.getElementById('exportFilteredBtn');
+    if (exportFilteredBtn) {
+      exportFilteredBtn.onclick = window.exportFilteredMembers;
+    }
+    
+    const sendBulkSMSBtn = document.getElementById('sendBulkSMSBtn');
+    if (sendBulkSMSBtn) {
+      sendBulkSMSBtn.onclick = window.bulkSendSMS;
+    }
+    
+    // Refresh analytics every 5 minutes
+    setInterval(async function() {
+      if (typeof window.renderAdvancedAnalytics === 'function') {
+        await window.renderAdvancedAnalytics();
+      }
+    }, 5 * 60 * 1000);
+  });
+</script>
 </body>
 </html>
