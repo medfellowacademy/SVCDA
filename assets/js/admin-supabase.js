@@ -445,24 +445,53 @@
     // Refresh button
     byId('refreshData').addEventListener('click', renderAll);
 
-    // Save Twilio Configuration
-    byId('saveTwilioConfig').addEventListener('click', async function () {
-      const accountSid = byId('twilioAccountSid').value.trim();
-      const authToken = byId('twilioAuthToken').value.trim();
-      const phoneNumber = byId('twilioPhoneNumber').value.trim();
-      const whatsappNumber = byId('twilioWhatsAppNumber').value.trim();
-
-      if (!accountSid || !authToken) {
-        alert('Please enter at least Account SID and Auth Token');
+    // Update admin PIN
+    byId('savePin').addEventListener('click', async function () {
+      const newPin = byId('newPin').value.trim();
+      if (!newPin || newPin.length < 4) {
+        alert('PIN must be at least 4 characters.');
         return;
       }
-
-      const config = {
- byId('newPin').value = '';
+      
+      try {
+        await db.settings.set(ADMIN_PIN_KEY, newPin);
+        alert('Admin PIN updated successfully');
+        byId('newPin').value = '';
       } catch (error) {
         console.error('Error updating PIN:', error);
         alert('Error updating PIN: ' + error.message);
       }
+    });
+
+    // Save MSG91 Configuration
+    byId('saveMsg91Config').addEventListener('click', async function () {
+      const authKey = byId('msg91AuthKey').value.trim();
+      const senderId = byId('msg91SenderId').value.trim();
+      const dltId = byId('msg91DltId').value.trim();
+
+      if (!authKey || !senderId) {
+        alert('Please enter at least Auth Key and Sender ID');
+        return;
+      }
+
+      const config = {
+        authKey: authKey,
+        senderId: senderId,
+        dltId: dltId
+      };
+
+      try {
+        await db.settings.set('msg91_config', JSON.stringify(config));
+        alert('✅ MSG91 configuration saved successfully!');
+      } catch (error) {
+        console.error('Error saving MSG91 config:', error);
+        alert('❌ Error saving MSG91 configuration: ' + error.message);
+      }
+    });
+
+    // Test MSG91 Configuration
+    byId('testMsg91Config').addEventListener('click', async function () {
+      alert('ℹ️ SMS testing requires MSG91 environment variables to be set in your .env file.\n\nPlease use the actual registration flow to test SMS notifications.');
     });
 
     // Export members CSV
@@ -525,10 +554,17 @@
       }
     });
 
-    // Load SMS webhook value
-    db.settings.get('sms_webhook').then(webhook => {
-      if (webhook) {
-        byId('smsWebhook').value = webhook;
+    // Load MSG91 configuration
+    db.settings.get('msg91_config').then(config => {
+      if (config) {
+        try {
+          const parsed = JSON.parse(config);
+          if (byId('msg91AuthKey')) byId('msg91AuthKey').value = parsed.authKey || '';
+          if (byId('msg91SenderId')) byId('msg91SenderId').value = parsed.senderId || '';
+          if (byId('msg91DltId')) byId('msg91DltId').value = parsed.dltId || '';
+        } catch (e) {
+          console.error('Error loading MSG91 config:', e);
+        }
       }
     });
   }
