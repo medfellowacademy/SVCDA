@@ -258,7 +258,15 @@ const auth = {
   }
 };
 
-// Export for use in other files
+// Make available globally for inline scripts in HTML
+window.supabaseClient = supabase;
+window.db = db;
+window.auth = auth;
+
+// Export for ES modules
+export { supabase, db, auth };
+
+// Export for CommonJS (if needed)
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { supabase, db, auth };
 }
