@@ -1,5 +1,5 @@
 /**
- * Supabase Configuration for SVCDA Platform
+ * Supabase Configuration for GVCDA Platform
  * 
  * Uses Vite environment variables for secure credential management.
  * Set these in Vercel dashboard or .env file:

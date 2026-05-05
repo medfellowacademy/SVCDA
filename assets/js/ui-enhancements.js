@@ -1,5 +1,5 @@
 /**
- * SVCDA Platform - UI Enhancements Library
+ * GVCDA Platform - UI Enhancements Library
  * Toast notifications, form validation, and loading states
  */
 

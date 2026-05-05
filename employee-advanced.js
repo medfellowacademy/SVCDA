@@ -1,6 +1,6 @@
 /**
  * Advanced Employee Dashboard Features
- * SVCDA Platform - Enhanced Employee Experience
+ * GVCDA Platform - Enhanced Employee Experience
  * 
  * Features:
  * - Performance metrics and leaderboard
@@ -289,7 +289,7 @@
    * Quick action: Send WhatsApp to member
    */
   function quickWhatsAppMember(phone, name) {
-    const message = `Hello ${name}, Thank you for joining SVCDA! 🎉`;
+    const message = `Hello ${name}, Thank you for joining GVCDA! 🎉`;
     const whatsappUrl = `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   }

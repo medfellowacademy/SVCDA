@@ -1,10 +1,10 @@
-# SVCDA Platform
+# GVCDA Platform
 
 **State Village Community Development Association** - Complete digital platform for member management, services, and premium card system.
 
 ## 🎯 Project Overview
 
-A modern web platform for SVCDA to manage:
+A modern web platform for GVCDA to manage:
 - Member registrations (Free & Premium)
 - Employee management system
 - Service requests tracking
@@ -15,7 +15,7 @@ A modern web platform for SVCDA to manage:
 ## 📁 Project Structure
 
 ```
-SVCDA/
+GVCDA/
 ├── index.html                  # Homepage
 ├── sitemap.xml                 # SEO sitemap
 │
@@ -156,7 +156,7 @@ SVCDA/
 
 ### Employee Login
 - **URL**: `/pages/employee-login.html`
-- **Email**: `default@svcda.org`
+- **Email**: `default@gvcda.org`
 - **Password**: `emp123`
 - **Note**: Create new employees in admin panel
 
@@ -216,4 +216,4 @@ For issues:
 
 **Last Updated**: April 15, 2026  
 **Version**: 2.0  
-**Built with**: ❤️ for SVCDA
+**Built with**: ❤️ for GVCDA

@@ -1,4 +1,4 @@
-# 🚀 SVCDA Vercel Deployment Guide
+# 🚀 GVCDA Vercel Deployment Guide
 
 ## ✅ Prerequisites Complete
 
@@ -15,7 +15,7 @@
 ### Step 1: Go to Vercel Dashboard
 
 1. Visit https://vercel.com/new
-2. Import your GitHub repository: `medfellowacademy/SVCDA`
+2. Import your GitHub repository: `medfellowacademy/GVCDA`
 3. **Before deploying**, click "Environment Variables"
 
 ### Step 2: Add These Variables
@@ -28,7 +28,7 @@ Copy and paste each variable name and value:
 | `VITE_SUPABASE_KEY` | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVncG51bWdwcG1odG5venNreGRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyMzQyMDMsImV4cCI6MjA5MTgxMDIwM30.K3L88HprTX52J_xK_JmPzKCMQRCW07hhRDOHqNIxPW4` | ✅ Yes |
 | `VITE_RAZORPAY_KEY` | Your Razorpay key (e.g., `rzp_live_xxxxx`) | ✅ Yes |
 | `VITE_MSG91_AUTH_KEY` | Your MSG91 Auth Key | ✅ Yes |
-| `VITE_MSG91_SENDER_ID` | `SVCDA` | ✅ Yes |
+| `VITE_MSG91_SENDER_ID` | `GVCDA` | ✅ Yes |
 | `VITE_MSG91_DLT_ID` | Your DLT Template ID | ✅ Yes |
 | `VITE_EMAILJS_SERVICE` | Your EmailJS Service ID | ⚪ Optional |
 | `VITE_EMAILJS_TEMPLATE` | Your EmailJS Template ID | ⚪ Optional |
@@ -47,7 +47,7 @@ Copy and paste each variable name and value:
 #### 📱 MSG91 Credentials (REQUIRED)
 1. Login to https://control.msg91.com
 2. **Auth Key**: Settings → API Keys → Auth Key
-3. **Sender ID**: Settings → Sender ID (use `SVCDA` if approved)
+3. **Sender ID**: Settings → Sender ID (use `GVCDA` if approved)
 4. **DLT Template ID**: DLT → Templates → Copy Template ID
 
 #### 📧 EmailJS Credentials (OPTIONAL - FREE Emails)
@@ -73,7 +73,7 @@ Copy and paste each variable name and value:
 2. **Import to Vercel**
    - Go to https://vercel.com/new
    - Click **Import Git Repository**
-   - Select `medfellowacademy/SVCDA`
+   - Select `medfellowacademy/GVCDA`
 
 3. **Configure Build**
    - Framework Preset: **Vite** (auto-detected)
@@ -100,14 +100,14 @@ npm install -g vercel
 vercel login
 
 # Deploy (from project directory)
-cd /Users/guneswaribokam/Downloads/SVCDA
+cd /Users/guneswaribokam/Downloads/GVCDA
 vercel
 
 # Follow prompts:
 # - Set up and deploy? Yes
 # - Which scope? Select your account
 # - Link to existing project? No
-# - Project name? svcda
+# - Project name? gvcda
 # - Directory? ./
 # - Override settings? No
 
@@ -158,7 +158,7 @@ npm run preview
 ## 📂 Project Structure
 
 ```
-SVCDA/
+GVCDA/
 ├── .env                    # Local environment variables (gitignored)
 ├── .env.example            # Example env vars for reference
 ├── .gitignore              # Git ignore rules
@@ -233,7 +233,7 @@ All frontend environment variables are visible in the browser. This is normal an
 - Check `WHATSAPP-SOLUTION.md` for WhatsApp integration
 
 **Contact:**
-- Email: info@svcdaservicehub.com
+- Email: info@gvcdaservicehub.com
 - Phone: +91 8978210705
 
 ---
@@ -268,4 +268,4 @@ After successful deployment:
 
 ---
 
-**Your SVCDA platform is production-ready!** 🎉
+**Your GVCDA platform is production-ready!** 🎉

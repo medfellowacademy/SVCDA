@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Dashboard - SVCDA</title>
+    <title>Employee Dashboard - GVCDA</title>
     <link rel="shortcut icon" href="../assets/images/LOGO.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/main.css">
@@ -551,7 +551,7 @@ function openPaymentGateway(userData) {
         key: key,
         amount: userData.amount * 100, // Convert to paise
         currency: 'INR',
-        name: 'SVCDA Premium Membership',
+        name: 'GVCDA Premium Membership',
         description: 'Premium Card Registration',
         image: '../assets/images/LOGO.png',
         handler: function(response) {
@@ -579,7 +579,7 @@ function openPaymentGateway(userData) {
 
 // Save user after successful payment
 async function saveUserAfterPayment(userData, paymentResponse) {
-    const cardNumber = 'SVCDA' + String(Date.now()).slice(-8);
+    const cardNumber = 'GVCDA' + String(Date.now()).slice(-8);
     const location = (userData.city ? userData.city + ', ' : '') + (userData.district || '');
     
     try {

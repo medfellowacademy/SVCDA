@@ -396,7 +396,7 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
 .fd-col h4 { color: #fdfdfd; font-size: 1.15rem; font-weight: 700; margin-bottom: 24px; position: relative; padding-bottom: 12px; }
 .fd-col h4::after { content:''; position:absolute; left:0; bottom:0; width:45px; height:2px; background:var(--p, #0D9488); }
 .fd-logo { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 24px; text-decoration: none; }
-.fd-logo img { height: 48px; width: auto; object-fit: contain; }
+.fd-logo img { height: 64px; width: auto; object-fit: contain; }
 .fd-ln { font-weight: 800; font-size: 1.25rem; color: #fff; line-height:1.1; margin-top: 4px; }
 .fd-lt { font-size: .55rem; letter-spacing: 1.5px; text-transform: uppercase; color: #94a3b8; }
 .fd-pay { display: flex; gap: 8px; margin-bottom: 26px; }
@@ -8160,3 +8160,31 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
 .sc-top-bg, .sc-top::before { font-size: 0 !important; color: transparent !important; }
 .sc-top-bg { mix-blend-mode: multiply; opacity: 0.85; filter: grayscale(20%); transition: all .3s; }
 .sca:hover .sc-top-bg { opacity: 1; filter: grayscale(0%); transform: scale(1.05); mix-blend-mode: normal; }
+
+/* ==================== MOBILE OPTIMIZATIONS ==================== */
+@media (max-width: 860px) {
+  .logo img { height: 50px !important; }
+  .ln { font-size: 1.05rem !important; }
+  .lt2 { font-size: 0.48rem !important; }
+  .nw { padding: 0 18px !important; }
+}
+
+@media (max-width: 480px) {
+  .logo img { height: 44px !important; }
+  .ln { font-size: 0.95rem !important; }
+  .lt2 { font-size: 0.45rem !important; }
+  .nw { padding: 0 12px !important; }
+  .section { padding: 48px 12px !important; }
+  .stats-in { grid-template-columns: 1fr !important; }
+  .fd-logo img { height: 50px !important; }
+  .hero-home { min-height: 500px !important; }
+  .phero { padding: 110px 12px 50px !important; }
+}
+
+@media (max-width: 360px) {
+  .logo img { height: 38px !important; }
+  .ln { font-size: 0.85rem !important; }
+  .lt2 { display: none; }
+  .nw { padding: 0 10px !important; height: 52px !important; }
+  .mbtn { width: 32px !important; height: 32px !important; }
+}

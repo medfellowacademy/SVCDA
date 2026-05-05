@@ -1,10 +1,10 @@
-# 🔄 SVCDA SYSTEM FLOW DIAGRAM
+# 🔄 GVCDA SYSTEM FLOW DIAGRAM
 
 ## Complete System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                         SVCDA PRODUCTION SYSTEM                           │
+│                         GVCDA PRODUCTION SYSTEM                           │
 │                     (End-to-End Integration Complete)                     │
 └─────────────────────────────────────────────────────────────────────────┘
 
@@ -51,8 +51,8 @@
          │📲│  (SMS)               │💬│  (Message)
          └──┘                      └──┘
          
-    "Welcome to SVCDA!"     "🌟 Premium Activated!"
-    Card: SVCDA123456       Card Details + Benefits
+    "Welcome to GVCDA!"     "🌟 Premium Activated!"
+    Card: GVCDA123456       Card Details + Benefits
     Name: User Name         Valid Till: Date
     Plan: Premium           Payment ID: pay_xxx
     
@@ -111,7 +111,7 @@
                           ↓ Create session       ↓ Benefits
     OPTION 2:                                     ↓ Profile info
     Card Number                                   ↓ Download card
-    SVCDA123456789                                ↓ Share WhatsApp
+    GVCDA123456789                                ↓ Share WhatsApp
     + Phone verify
     
     ┌──────────────────────────────────────────────────────────────┐
@@ -211,7 +211,7 @@ USER JOURNEY:
    
 6. PAYMENT SUCCESS HANDLER
    └─> payment-system.js → processPremiumPayment()
-   └─> Generate card number: SVCDA + timestamp + random
+   └─> Generate card number: GVCDA + timestamp + random
    └─> Calculate valid_till: +1 year from today
    
 7. SAVE TO DATABASE
@@ -236,7 +236,7 @@ USER JOURNEY:
     
 11. SHOW SUCCESS
     └─> User sees success notification
-    └─> "Payment successful! Card: SVCDAxxxxxx"
+    └─> "Payment successful! Card: GVCDAxxxxxx"
     └─> Redirect to premium-card.html?success=true&card=...
     
 12. USER CAN LOGIN
@@ -321,7 +321,7 @@ External APIs:
 ┃ FILE STRUCTURE                                                          ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-SVCDA/
+GVCDA/
 ├── payment-system.js           ⭐ PAYMENT + SMS + WHATSAPP
 ├── registration-handler.js     ⭐ USER REGISTRATION
 ├── supabase-config.js          ⭐ DATABASE CONNECTION

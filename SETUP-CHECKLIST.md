@@ -1,4 +1,4 @@
-# ✅ SVCDA SETUP CHECKLIST
+# ✅ GVCDA SETUP CHECKLIST
 
 ## Before You Can Go Live - Quick Checklist
 
@@ -15,7 +15,7 @@
 - [ ] **Configure MSG91 (SMS & WhatsApp)**
   - [ ] Sign up at https://control.msg91.com/signup/
   - [ ] Get Auth Key from Settings → API Keys
-  - [ ] Get Sender ID (6 characters, e.g., SVCDA)
+  - [ ] Get Sender ID (6 characters, e.g., GVCDA)
   - [ ] Register DLT Template (for India compliance)
   - [ ] Edit `payment-system.js` lines 25-32
   - [ ] Replace AUTH_KEY, SENDER_ID, DLT_TE_ID
@@ -76,7 +76,7 @@ Go to: https://ugpnumgppmhtnozskxdq.supabase.co
 ```javascript
 const MSG91_CONFIG = {
   AUTH_KEY: 'xxxxxxxx',          // Replace this
-  SENDER_ID: 'SVCDA',            // Replace this
+  SENDER_ID: 'GVCDA',            // Replace this
   ROUTE: '4',                    // 4 = Transactional
   DLT_TE_ID: 'xxxxxxxxx'         // Replace this
 };
@@ -158,7 +158,7 @@ const RAZORPAY_CONFIG = {
 
 - **Read**: `PRODUCTION-SYSTEM-GUIDE.md` (full documentation)
 - **Phone**: +91 8978210705
-- **Email**: info@svcdaservicehub.com
+- **Email**: info@gvcdaservicehub.com
 
 ---
 

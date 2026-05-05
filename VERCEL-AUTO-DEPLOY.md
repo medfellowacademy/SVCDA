@@ -23,14 +23,14 @@ You need to **connect GitHub to Vercel** for auto-deployment.
 
 1. After login, click **"Add New..."** → **"Project"**
 2. You'll see **"Import Git Repository"** section
-3. Find **`medfellowacademy/SVCDA`** in the list
+3. Find **`medfellowacademy/GVCDA`** in the list
 4. Click **"Import"** next to it
 
 **If you don't see your repo:**
 - Click "Adjust GitHub App Permissions"
 - Select your organization: `medfellowacademy`
 - Click "Install" or "Configure"
-- Select "All repositories" or just "SVCDA"
+- Select "All repositories" or just "GVCDA"
 - Click "Install"
 
 ---
@@ -62,7 +62,7 @@ Click **"Environment Variables"** section and add:
 | `VITE_SUPABASE_KEY` | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVncG51bWdwcG1odG5venNreGRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyMzQyMDMsImV4cCI6MjA5MTgxMDIwM30.K3L88HprTX52J_xK_JmPzKCMQRCW07hhRDOHqNIxPW4` | Production, Preview, Development |
 | `VITE_RAZORPAY_KEY` | `rzp_test_xxxxxxxxxxxxxx` | Production, Preview, Development |
 | `VITE_MSG91_AUTH_KEY` | `your_msg91_key` | Production, Preview, Development |
-| `VITE_MSG91_SENDER_ID` | `SVCDA` | Production, Preview, Development |
+| `VITE_MSG91_SENDER_ID` | `GVCDA` | Production, Preview, Development |
 | `VITE_MSG91_DLT_ID` | `your_dlt_id` | Production, Preview, Development |
 
 **Optional (EmailJS):**
@@ -88,7 +88,7 @@ Click **"Environment Variables"** section and add:
 2. Wait 2-3 minutes for build
 3. **Done!** 🎉
 
-Your site will be live at: `https://svcda.vercel.app` (or similar)
+Your site will be live at: `https://gvcda.vercel.app` (or similar)
 
 ---
 
@@ -127,10 +127,10 @@ git push      Webhook   Auto Build
 Make a small change and test:
 
 ```bash
-cd /Users/guneswaribokam/Downloads/SVCDA
+cd /Users/guneswaribokam/Downloads/GVCDA
 
 # Make a small change (e.g., update README)
-echo "# SVCDA - Auto Deploy Test" >> test.txt
+echo "# GVCDA - Auto Deploy Test" >> test.txt
 
 # Commit and push
 git add .
@@ -160,7 +160,7 @@ After connecting, you can:
 - Configure build settings
 
 ### Domains Tab:
-- Add custom domain (e.g., svcda.com)
+- Add custom domain (e.g., gvcda.com)
 - Free SSL certificate
 
 ---
@@ -219,7 +219,7 @@ VITE_RAZORPAY_KEY=rzp_test_xxxxxxxxxxxxxx
 
 # MSG91 (Update with your keys)
 VITE_MSG91_AUTH_KEY=xxxxxxxxxxxxxxxxxxxxxxxx
-VITE_MSG91_SENDER_ID=SVCDA
+VITE_MSG91_SENDER_ID=GVCDA
 VITE_MSG91_DLT_ID=xxxxxxxxxxxxxxxx
 
 # EmailJS (Optional)
@@ -274,7 +274,7 @@ Before going live:
 
 **Need help?**
 - Vercel Docs: https://vercel.com/docs
-- Email: info@svcdaservicehub.com
+- Email: info@gvcdaservicehub.com
 - Phone: +91 8978210705
 
 ---
@@ -285,7 +285,7 @@ Before going live:
 
 1. Go to https://vercel.com
 2. Sign in with GitHub
-3. Import `medfellowacademy/SVCDA` repository
+3. Import `medfellowacademy/GVCDA` repository
 4. Add environment variables (copy from `.env` file)
 5. Click "Deploy"
 6. **Done!** Every `git push` now auto-deploys 🚀

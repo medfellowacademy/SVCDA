@@ -1,5 +1,5 @@
 /**
- * SVCDA Complete Payment & Notification System
+ * GVCDA Complete Payment & Notification System
  * Integrates: Razorpay + Supabase + MSG91 (SMS & WhatsApp)
  * 
  * WORKFLOW:
@@ -22,8 +22,8 @@ const BYPASS_PAYMENT = true; // Set to false for production
 const RAZORPAY_CONFIG = {
   KEY_ID: import.meta.env.VITE_RAZORPAY_KEY || 'rzp_test_xxxxxxxxxxxxxx',
   CURRENCY: 'INR',
-  COMPANY_NAME: 'SVCDA',
-  COMPANY_LOGO: 'https://svcda.in/assets/images/LOGO.png',
+  COMPANY_NAME: 'GVCDA',
+  COMPANY_LOGO: 'https://gvcda.in/assets/images/LOGO.png',
   THEME_COLOR: '#0B1120'
 };
 
@@ -35,7 +35,7 @@ if (!import.meta.env.VITE_RAZORPAY_KEY) {
 // MSG91 Configuration (from environment variables)
 const MSG91_CONFIG = {
   AUTH_KEY: import.meta.env.VITE_MSG91_AUTH_KEY || 'xxxxxxxxxxxxxxxxxxxxxxxx',
-  SENDER_ID: import.meta.env.VITE_MSG91_SENDER_ID || 'SVCDA',
+  SENDER_ID: import.meta.env.VITE_MSG91_SENDER_ID || 'GVCDA',
   ROUTE: '4', // 4 = Transactional, 1 = Promotional
   COUNTRY_CODE: '91', // India country code
   WHATSAPP_NUMBER: '', // Your MSG91 WhatsApp number (optional)
@@ -55,7 +55,7 @@ if (!import.meta.env.VITE_MSG91_AUTH_KEY) {
 function generateCardNumber() {
   const timestamp = Date.now().toString().slice(-8);
   const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-  return `SVCDA${timestamp}${random}`;
+  return `GVCDA${timestamp}${random}`;
 }
 
 /**
@@ -149,10 +149,10 @@ async function sendWhatsApp(phone, message) {
     // Option 1: Auto-open WhatsApp in new tab (works immediately)
     window.open(whatsappURL, '_blank');
     
-    // Option 2: Send via SVCDA WhatsApp number (business account)
+    // Option 2: Send via GVCDA WhatsApp number (business account)
     // This sends from your business WhatsApp to the customer
-    const svcda_whatsapp = '918978210705'; // Your SVCDA WhatsApp number
-    const adminURL = `https://wa.me/${svcda_whatsapp}?text=${encodeURIComponent(
+    const gvcda_whatsapp = '918978210705'; // Your GVCDA WhatsApp number
+    const adminURL = `https://wa.me/${gvcda_whatsapp}?text=${encodeURIComponent(
       `🤖 AUTO-SEND TO: ${phone}\n\n${message}`
     )}`;
     
@@ -212,7 +212,7 @@ async function notifyWhatsAppPending(memberData) {
  * Create SMS message template
  */
 function createSMSMessage(memberData) {
-  return `🎉 Welcome to SVCDA Premium!
+  return `🎉 Welcome to GVCDA Premium!
 
 Name: ${memberData.name}
 Card No: ${memberData.card_number}
@@ -220,17 +220,17 @@ Plan: ${memberData.plan}
 Valid Till: ${memberData.valid_till}
 
 Access your digital card anytime at:
-https://svcda.in/premium-card.html
+https://gvcda.in/premium-card.html
 
-Thank you for joining SVCDA!
-- Team SVCDA`;
+Thank you for joining GVCDA!
+- Team GVCDA`;
 }
 
 /**
  * Create WhatsApp message template with card details
  */
 function createWhatsAppMessage(memberData) {
-  return `🌟 *SVCDA Premium Membership Activated!*
+  return `🌟 *GVCDA Premium Membership Activated!*
 
 Congratulations ${memberData.name}! Your premium membership is now active.
 
@@ -252,14 +252,14 @@ Payment ID: ${memberData.payment_id}
 • Fast-track service processing
 
 📱 *Access Your Digital Card:*
-Visit: https://svcda.in/premium-card.html
+Visit: https://gvcda.in/premium-card.html
 Login with your phone number
 
 Need help? Call: +91 8978210705
 WhatsApp: wa.me/918978210705
 
-Thank you for choosing SVCDA!
-*Team SVCDA* 🙏`;
+Thank you for choosing GVCDA!
+*Team GVCDA* 🙏`;
 }
 
 // ==================== MAIN PAYMENT HANDLER ====================
@@ -604,10 +604,10 @@ function showNotification(message, type = 'info') {
   const icon = styles[type] || styles.info;
   
   // Create notification element if it doesn't exist
-  let notif = document.getElementById('svcda-notification');
+  let notif = document.getElementById('gvcda-notification');
   if (!notif) {
     notif = document.createElement('div');
-    notif.id = 'svcda-notification';
+    notif.id = 'gvcda-notification';
     notif.style.cssText = `
       position: fixed;
       top: 20px;
@@ -641,4 +641,4 @@ window.sendSMS = sendSMS;
 window.sendWhatsApp = sendWhatsApp;
 window.showNotification = showNotification;
 
-console.log('✅ SVCDA Payment System Loaded');
+console.log('✅ GVCDA Payment System Loaded');

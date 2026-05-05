@@ -1,4 +1,4 @@
-# Supabase Setup Guide for SVCDA Platform
+# Supabase Setup Guide for GVCDA Platform
 
 ## Step 1: Create Supabase Account & Project
 
@@ -10,7 +10,7 @@
 2. **Create New Project:**
    - Click "New Project"
    - Organization: Create new or use existing
-   - Name: `svcda-platform`
+   - Name: `gvcda-platform`
    - Database Password: Create a strong password (save it!)
    - Region: Choose `South Asia (Mumbai)` for India
    - Click "Create new project"
@@ -136,8 +136,8 @@ CREATE POLICY "Allow all operations on settings" ON settings
 ```sql
 -- Insert default employee accounts
 INSERT INTO employees (name, email, password, role) VALUES
-  ('Default Employee', 'employee@svcda.in', 'emp123', 'employee'),
-  ('Sarah Johnson', 'sarah@svcda.in', 'emp123', 'employee');
+  ('Default Employee', 'employee@gvcda.in', 'emp123', 'employee'),
+  ('Sarah Johnson', 'sarah@gvcda.in', 'emp123', 'employee');
 
 -- Insert admin PIN setting
 INSERT INTO settings (key, value) VALUES
@@ -173,7 +173,7 @@ For pages in root folder (index.html), use:
 
 2. **Test Employee Login:**
    - Go to `pages/employee-login.html`
-   - Login with: `employee@svcda.in` / `emp123`
+   - Login with: `employee@gvcda.in` / `emp123`
    - Should redirect to dashboard
 
 3. **Test Adding Member:**
@@ -213,14 +213,14 @@ WITH CHECK ( bucket_id = 'premium-cards' );
 ### Get MSG91 Credentials:
 1. Sign up at https://msg91.com
 2. Go to Dashboard → Get Auth Key
-3. Create Sender ID (e.g., "SVCDA")
+3. Create Sender ID (e.g., "GVCDA")
 4. Get Flow ID for SMS template
 
 ### Add to Supabase Settings:
 ```sql
 INSERT INTO settings (key, value) VALUES
   ('msg91_auth_key', 'YOUR_AUTH_KEY_HERE'),
-  ('msg91_sender_id', 'SVCDA'),
+  ('msg91_sender_id', 'GVCDA'),
   ('msg91_flow_id', 'YOUR_FLOW_ID');
 ```
 
@@ -232,7 +232,7 @@ If you have data in localStorage, run this in browser console on admin page:
 
 ```javascript
 // Get existing members from localStorage
-const oldMembers = JSON.parse(localStorage.getItem('svcda_members') || '[]');
+const oldMembers = JSON.parse(localStorage.getItem('gvcda_members') || '[]');
 
 // Migrate to Supabase
 async function migrateData() {

@@ -1,4 +1,4 @@
-# 📱 MSG91 Setup Guide for SVCDA
+# 📱 MSG91 Setup Guide for GVCDA
 
 ## ✅ Why MSG91 Instead of Twilio?
 
@@ -19,7 +19,7 @@
    - Name
    - Email
    - Mobile Number (+91 XXXXXXXXXX)
-   - Company Name: SVCDA
+   - Company Name: GVCDA
 3. **Verify** email and mobile
 4. **Login** to dashboard
 
@@ -40,7 +40,7 @@
 1. **Go to**: Settings → Sender ID
 2. **Click**: "Add New Sender ID"
 3. **Enter Details**:
-   - Sender ID: `SVCDA` (6 characters, uppercase)
+   - Sender ID: `GVCDA` (6 characters, uppercase)
    - Purpose: Transactional
    - Upload documents (GST certificate or company registration)
 4. **Submit** for approval
@@ -63,7 +63,7 @@
 2. **Click**: "Register New Template"
 3. **Template Content** (copy this exact format):
 ```
-Welcome to SVCDA Premium! Name: {#var#} Card No: {#var#} Plan: {#var#} Valid Till: {#var#} Access your card at: https://svcda.in - Team SVCDA
+Welcome to GVCDA Premium! Name: {#var#} Card No: {#var#} Plan: {#var#} Valid Till: {#var#} Access your card at: https://gvcda.in - Team GVCDA
 ```
 
 4. **Fill Details**:
@@ -87,7 +87,7 @@ Welcome to SVCDA Premium! Name: {#var#} Card No: {#var#} Plan: {#var#} Valid Til
 ```javascript
 const MSG91_CONFIG = {
   AUTH_KEY: 'your_auth_key_here',        // FROM STEP 2
-  SENDER_ID: 'SVCDA',                    // FROM STEP 3
+  SENDER_ID: 'GVCDA',                    // FROM STEP 3
   ROUTE: '4',                            // Keep as 4 (Transactional)
   COUNTRY_CODE: '91',                    // Keep as 91 (India)
   WHATSAPP_NUMBER: '',                   // Leave empty for now
@@ -99,7 +99,7 @@ const MSG91_CONFIG = {
 ```javascript
 const MSG91_CONFIG = {
   AUTH_KEY: '123456AbCdEf789GhIjK',
-  SENDER_ID: 'SVCDA',
+  SENDER_ID: 'GVCDA',
   ROUTE: '4',
   COUNTRY_CODE: '91',
   WHATSAPP_NUMBER: '',
@@ -130,7 +130,7 @@ const MSG91_CONFIG = {
 1. **Go to**: WhatsApp → Get Started
 2. **Apply** for WhatsApp Business API
 3. **Provide**:
-   - Business Name: SVCDA
+   - Business Name: GVCDA
    - Business Category: Community Service
    - Facebook Business Manager ID
 4. **Verification** takes 3-7 days
@@ -149,13 +149,13 @@ const MSG91_CONFIG = {
 2. **Run** test:
 ```javascript
 // Test SMS (after configuring MSG91)
-sendSMS('+919876543210', 'Test message from SVCDA!');
+sendSMS('+919876543210', 'Test message from GVCDA!');
 ```
 
 3. **Check**:
    - ✅ Console shows "SMS sent via MSG91"
    - ✅ You receive SMS on your phone
-   - ✅ Sender ID shows "SVCDA"
+   - ✅ Sender ID shows "GVCDA"
 
 ### Common Test Issues:
 
@@ -196,7 +196,7 @@ sendSMS('+919876543210', 'Test message from SVCDA!');
 | Item | Where to Get | Example |
 |------|--------------|---------|
 | **Auth Key** | Settings → API Keys | `123AbcDef456GhiJkl` |
-| **Sender ID** | Settings → Sender ID | `SVCDA` |
+| **Sender ID** | Settings → Sender ID | `GVCDA` |
 | **DLT Template ID** | DLT → Templates | `1207163928374821901` |
 | **Route** | Fixed value | `4` (Transactional) |
 
@@ -266,12 +266,12 @@ sendSMS('+919876543210', 'Message')
 
 **Your Template**:
 ```
-Welcome to SVCDA Premium! Name: {#var#} Card No: {#var#} Plan: {#var#} Valid Till: {#var#} Access your card at: https://svcda.in - Team SVCDA
+Welcome to GVCDA Premium! Name: {#var#} Card No: {#var#} Plan: {#var#} Valid Till: {#var#} Access your card at: https://gvcda.in - Team GVCDA
 ```
 
 **System sends** (replaces {#var#}):
 ```
-Welcome to SVCDA Premium! Name: Rajesh Kumar Card No: SVCDA123456 Plan: Premium Valid Till: 15/04/2027 Access your card at: https://svcda.in - Team SVCDA
+Welcome to GVCDA Premium! Name: Rajesh Kumar Card No: GVCDA123456 Plan: Premium Valid Till: 15/04/2027 Access your card at: https://gvcda.in - Team GVCDA
 ```
 
 ---
@@ -281,7 +281,7 @@ Welcome to SVCDA Premium! Name: Rajesh Kumar Card No: SVCDA123456 Plan: Premium 
 - [ ] Create MSG91 account
 - [ ] Verify email and mobile
 - [ ] Get Auth Key from dashboard
-- [ ] Register Sender ID (SVCDA)
+- [ ] Register Sender ID (GVCDA)
 - [ ] Create DLT Template
 - [ ] Wait for DLT approval (1-2 days)
 - [ ] Add credits to account (min ₹100)
@@ -301,7 +301,7 @@ Once you complete these steps:
 4. ✅ DLT compliant (legal requirement)
 5. ✅ Cost-effective solution
 
-**Your SVCDA platform is now ready with MSG91 integration!** 🎉
+**Your GVCDA platform is now ready with MSG91 integration!** 🎉
 
 ---
 

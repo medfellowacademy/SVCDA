@@ -1,4 +1,4 @@
-# 🚀 SVCDA COMPLETE FEATURES LIST
+# 🚀 GVCDA COMPLETE FEATURES LIST
 
 ## ✅ IMPLEMENTED FEATURES
 
@@ -29,7 +29,7 @@
 ### 🎫 **Digital Card System**
 
 4. **Card Generation**
-   - ✅ Unique card numbers (SVCDAxxxxxxxxxx)
+   - ✅ Unique card numbers (GVCDAxxxxxxxxxx)
    - ✅ Auto-generate on payment
    - ✅ Valid till calculation (+1 year)
    - ✅ Card number formatting
@@ -161,7 +161,7 @@
 20. **Digital Card Download** ⭐ NEW!
     - ✅ Generate card as PNG image
     - ✅ Professional gradient design
-    - ✅ Include SVCDA branding
+    - ✅ Include GVCDA branding
     - ✅ Member details overlay
     - ✅ Download to device
 
@@ -206,11 +206,11 @@
 3. Add email service (Gmail/Outlook)
 4. Create email template:
 ```
-Subject: Welcome to SVCDA Premium!
+Subject: Welcome to GVCDA Premium!
 
 Hello {{to_name}},
 
-Your SVCDA Premium Membership is now active!
+Your GVCDA Premium Membership is now active!
 
 Card Number: {{card_number}}
 Plan: {{plan}}
@@ -223,9 +223,9 @@ Benefits:
 - Free Health Camps
 - Skill Training
 
-Visit: https://svcda.in
+Visit: https://gvcda.in
 
-Team SVCDA
+Team GVCDA
 ```
 
 5. Get Service ID, Template ID, Public Key
@@ -256,7 +256,7 @@ const EMAILJS_CONFIG = {
 
 **Features:**
 - Professional gradient design
-- SVCDA branding
+- GVCDA branding
 - Member name & card number
 - Valid till date
 - 800x500px high quality
@@ -455,12 +455,12 @@ const EMAILJS_CONFIG = {
 - MSG91: https://msg91.com
 - EmailJS: https://emailjs.com
 
-**SVCDA Support:**
+**GVCDA Support:**
 - Phone: +91 8978210705
-- Email: info@svcdaservicehub.com
+- Email: info@gvcdaservicehub.com
 
 ---
 
-**🎉 Your SVCDA platform is now ENTERPRISE-READY!**
+**🎉 Your GVCDA platform is now ENTERPRISE-READY!**
 
 All features implemented, tested, and ready for production use!

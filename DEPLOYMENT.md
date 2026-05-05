@@ -1,4 +1,4 @@
-# SVCDA Platform - Complete Deployment Guide
+# GVCDA Platform - Complete Deployment Guide
 
 ## 🎯 What's Been Implemented
 
@@ -40,7 +40,7 @@
    ```
    • Go to https://supabase.com
    • Sign up (free account)
-   • Create new project: "svcda-platform"
+   • Create new project: "gvcda-platform"
    • Region: South Asia (Mumbai)
    • Wait 2-3 minutes for setup
    ```
@@ -76,7 +76,7 @@
 2. **Test Employee Login:**
    ```
    • Open pages/employee-login.html
-   • Email: employee@svcda.in
+   • Email: employee@gvcda.in
    • Password: emp123
    • Should redirect to dashboard
    ```
@@ -143,7 +143,7 @@
 
 2. **Deploy:**
    ```bash
-   cd /Users/guneswaribokam/Downloads/SVCDA
+   cd /Users/guneswaribokam/Downloads/GVCDA
    vercel
    ```
 
@@ -154,7 +154,7 @@
 
 4. **Your site will be live at:**
    ```
-   https://svcda-platform.vercel.app
+   https://gvcda-platform.vercel.app
    ```
 
 ### Option 2: Netlify (FREE)
@@ -166,13 +166,13 @@
 
 2. **Deploy:**
    ```bash
-   cd /Users/guneswaribokam/Downloads/SVCDA
+   cd /Users/guneswaribokam/Downloads/GVCDA
    netlify deploy
    ```
 
 3. **Or use Netlify Drop:**
    - Go to https://app.netlify.com/drop
-   - Drag and drop your SVCDA folder
+   - Drag and drop your GVCDA folder
    - Done!
 
 ### Option 3: GitHub Pages (FREE)
@@ -181,9 +181,9 @@
    ```bash
    git init
    git add .
-   git commit -m "SVCDA Platform with Supabase"
+   git commit -m "GVCDA Platform with Supabase"
    git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/svcda-platform.git
+   git remote add origin https://github.com/YOUR_USERNAME/gvcda-platform.git
    git push -u origin main
    ```
 
@@ -194,7 +194,7 @@
 
 3. **Site will be at:**
    ```
-   https://YOUR_USERNAME.github.io/svcda-platform/
+   https://YOUR_USERNAME.github.io/gvcda-platform/
    ```
 
 ---
@@ -229,7 +229,7 @@
   - [ ] Replace test keys in employee-dashboard.html
 
 - [ ] **Custom Domain:**
-  - [ ] Buy domain (e.g., svcda.in)
+  - [ ] Buy domain (e.g., gvcda.in)
   - [ ] Point to Vercel/Netlify
 
 ---

@@ -38,8 +38,8 @@ Your Supabase is **already configured** with the credentials! You just need to *
 #### 1. **employees** 
    - Stores employee/admin login data
    - Default employees created:
-     - **Email:** `default@svcda.org` | **Password:** `emp123`
-     - **Email:** `admin@svcda.org` | **Password:** `emp123` (admin)
+     - **Email:** `default@gvcda.org` | **Password:** `emp123`
+     - **Email:** `admin@gvcda.org` | **Password:** `emp123` (admin)
 
 #### 2. **members**
    - Stores premium card members
@@ -78,12 +78,12 @@ After running the SQL:
 ## 🔐 Default Credentials
 
 ### Employee Login
-- **URL:** https://svcda.vercel.app/pages/employee-login.html
-- **Email:** `default@svcda.org`
+- **URL:** https://gvcda.vercel.app/pages/employee-login.html
+- **Email:** `default@gvcda.org`
 - **Password:** `emp123`
 
 ### Admin Login
-- **URL:** https://svcda.vercel.app/pages/admin.html
+- **URL:** https://gvcda.vercel.app/pages/admin.html
 - **PIN:** `admin123`
 
 ---
@@ -122,7 +122,7 @@ VITE_SUPABASE_KEY=eyJhbGci...
 
 ### Test 3: Employee Login
 1. Go to `pages/employee-login.html`
-2. Login with `default@svcda.org` / `emp123`
+2. Login with `default@gvcda.org` / `emp123`
 3. Should redirect to employee dashboard
 
 ---
@@ -174,7 +174,7 @@ VITE_SUPABASE_KEY=eyJhbGci...
 ### Employee login not working
 - **Solution:** 
   1. Check **employees** table has data
-  2. Verify email: `default@svcda.org`
+  2. Verify email: `default@gvcda.org`
   3. Verify password: `emp123`
 
 ---
@@ -201,7 +201,7 @@ After Supabase setup is complete:
 ## 📞 Need Help?
 
 **Can't figure it out?**
-- Email: info@svcdaservicehub.com
+- Email: info@gvcdaservicehub.com
 - Phone: +91 8978210705
 
 **Reference Files:**

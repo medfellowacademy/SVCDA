@@ -1,5 +1,5 @@
 /**
- * SVCDA Registration Handler
+ * GVCDA Registration Handler
  * Handles user registration from register.html
  */
 
@@ -125,10 +125,10 @@ function formatPhoneNumber(phone) {
  * Show notification
  */
 function showNotification(message, type = 'info') {
-  let notif = document.getElementById('svcda-notification');
+  let notif = document.getElementById('gvcda-notification');
   if (!notif) {
     notif = document.createElement('div');
-    notif.id = 'svcda-notification';
+    notif.id = 'gvcda-notification';
     notif.style.cssText = `
       position: fixed;
       top: 20px;

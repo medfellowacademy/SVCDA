@@ -1,6 +1,6 @@
 /**
  * Admin Panel with Supabase Integration
- * SVCDA Platform - Admin Dashboard
+ * GVCDA Platform - Admin Dashboard
  */
 
 (function () {
@@ -499,7 +499,7 @@
       try {
         const members = await db.members.getAll();
         const csv = toCSV(members, ['id', 'name', 'phone', 'email', 'plan', 'card_number', 'amount', 'payment_id', 'added_by_name', 'location', 'created_at', 'updated_at']);
-        downloadCSV('svcda-members.csv', csv);
+        downloadCSV('gvcda-members.csv', csv);
       } catch (error) {
         console.error('Error exporting members:', error);
         alert('Error exporting data: ' + error.message);
@@ -511,7 +511,7 @@
       try {
         const activity = await db.activity.getAll();
         const csv = toCSV(activity, ['id', 'timestamp', 'type', 'member_name', 'phone', 'service', 'payment', 'added_by_name']);
-        downloadCSV('svcda-activity.csv', csv);
+        downloadCSV('gvcda-activity.csv', csv);
       } catch (error) {
         console.error('Error exporting activity:', error);
         alert('Error exporting data: ' + error.message);

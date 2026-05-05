@@ -1,4 +1,4 @@
-# SVCDA UI Enhancements - Usage Guide
+# GVCDA UI Enhancements - Usage Guide
 
 ## 🎨 New Features Added
 
@@ -185,7 +185,7 @@ async function registerMember(data) {
 ```html
 <!-- Fade in from bottom -->
 <div class="animate-fadeInUp">
-  <h1>Welcome to SVCDA</h1>
+  <h1>Welcome to GVCDA</h1>
 </div>
 
 <!-- Scale in -->
@@ -249,7 +249,7 @@ ScrollReveal.init('.my-custom-class');
 
 ### Copy to Clipboard:
 ```javascript
-Utils.copyToClipboard('SVCDA12345678');
+Utils.copyToClipboard('GVCDA12345678');
 // Shows toast: "Copied to clipboard!"
 ```
 
@@ -433,4 +433,4 @@ Utils.throttle(func, limit)
 
 ---
 
-**Ready to use!** Your SVCDA platform now has professional UI enhancements without any heavy frameworks! 🚀
+**Ready to use!** Your GVCDA platform now has professional UI enhancements without any heavy frameworks! 🚀

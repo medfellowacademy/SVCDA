@@ -1,6 +1,6 @@
 /**
  * Advanced Admin Panel Features
- * SVCDA Platform - Enhanced Analytics & Management
+ * GVCDA Platform - Enhanced Analytics & Management
  * 
  * Features:
  * - Real-time charts and analytics
@@ -361,7 +361,7 @@
     
     // Convert to CSV
     const csv = toCSV(data, Object.keys(data[0]));
-    downloadCSV(`svcda-members-filtered-${Date.now()}.csv`, csv);
+    downloadCSV(`gvcda-members-filtered-${Date.now()}.csv`, csv);
     
     alert(`✅ Exported ${data.length} members to CSV`);
   }

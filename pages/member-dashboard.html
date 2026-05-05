@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Dashboard - SVCDA</title>
+    <title>Member Dashboard - GVCDA</title>
     <link rel="shortcut icon" href="../assets/images/LOGO.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/main.css">
@@ -270,7 +270,7 @@
         <div class="header-content">
             <div class="header-title">
                 <h1 id="memberName">Loading...</h1>
-                <p>SVCDA Member Dashboard</p>
+                <p>GVCDA Member Dashboard</p>
             </div>
             <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
@@ -284,8 +284,8 @@
             <div class="digital-card">
                 <div class="card-top">
                     <div class="card-logo">
-                        <img src="../assets/images/LOGO.png" alt="SVCDA">
-                        <div class="card-logo-text">SVCDA</div>
+                        <img src="../assets/images/LOGO.png" alt="GVCDA">
+                        <div class="card-logo-text">GVCDA</div>
                     </div>
                     <div class="card-badge" id="membershipPlan">PREMIUM</div>
                 </div>
@@ -349,7 +349,7 @@
                     <div class="benefit-icon">💰</div>
                     <div class="benefit-text">
                         <div class="benefit-title">20% Discounts</div>
-                        <div class="benefit-desc">On all SVCDA services</div>
+                        <div class="benefit-desc">On all GVCDA services</div>
                     </div>
                 </div>
                 
@@ -464,7 +464,7 @@
             if (typeof shareCardOnWhatsApp !== 'undefined') {
                 shareCardOnWhatsApp(member);
             } else {
-                const message = `🌟 SVCDA Premium Member\n\nName: ${member.name}\nCard: ${member.card_number}\nPlan: ${member.plan}\n\nVisit: https://svcda.in`;
+                const message = `🌟 GVCDA Premium Member\n\nName: ${member.name}\nCard: ${member.card_number}\nPlan: ${member.plan}\n\nVisit: https://gvcda.in`;
                 const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
                 window.open(url, '_blank');
             }

@@ -1,5 +1,5 @@
 /**
- * SVCDA Enhanced Features
+ * GVCDA Enhanced Features
  * - Email notifications (FREE via EmailJS)
  * - OTP verification
  * - Digital card generation
@@ -178,10 +178,10 @@ async function generateDigitalCard(memberData) {
       ctx.roundRect(20, 20, 760, 460, 20);
       ctx.stroke();
 
-      // SVCDA Logo text
+      // GVCDA Logo text
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 48px Arial';
-      ctx.fillText('SVCDA', 50, 80);
+      ctx.fillText('GVCDA', 50, 80);
 
       // Premium badge
       ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
@@ -199,7 +199,7 @@ async function generateDigitalCard(memberData) {
       // Card number
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 32px Courier New';
-      const cardNum = memberData.card_number || 'SVCDA000000';
+      const cardNum = memberData.card_number || 'GVCDA000000';
       const formatted = cardNum.match(/.{1,4}/g)?.join(' ') || cardNum;
       ctx.fillText(formatted, 50, 260);
 
@@ -223,7 +223,7 @@ async function generateDigitalCard(memberData) {
       ctx.font = '14px Arial';
       ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
       ctx.fillText('Small Village & City Development Agency', 50, 430);
-      ctx.fillText('📞 +91 8978210705  |  🌐 svcda.in', 50, 455);
+      ctx.fillText('📞 +91 8978210705  |  🌐 gvcda.in', 50, 455);
 
       // Convert to blob
       canvas.toBlob((blob) => {
@@ -249,7 +249,7 @@ async function downloadDigitalCard(memberData) {
       // Create download link
       const link = document.createElement('a');
       link.href = result.imageURL;
-      link.download = `SVCDA_Card_${memberData.card_number}.png`;
+      link.download = `GVCDA_Card_${memberData.card_number}.png`;
       link.click();
       
       showNotification('✅ Card downloaded successfully!', 'success');
@@ -265,7 +265,7 @@ async function downloadDigitalCard(memberData) {
  * Share digital card on WhatsApp
  */
 async function shareCardOnWhatsApp(memberData) {
-  const message = `🌟 *SVCDA Premium Member*
+  const message = `🌟 *GVCDA Premium Member*
 
 Name: ${memberData.name}
 Card No: ${memberData.card_number}
@@ -278,7 +278,7 @@ Valid Till: ${memberData.valid_till || 'Lifetime'}
 • Free Health Camps
 • Skill Courses
 
-Visit: https://svcda.in
+Visit: https://gvcda.in
 📞 +91 8978210705`;
 
   const phone = memberData.phone || '';
@@ -346,7 +346,7 @@ Login to admin panel for details.`;
 function generateReferralCode(memberData) {
   const nameCode = memberData.name.substring(0, 3).toUpperCase();
   const phoneCode = memberData.phone.slice(-4);
-  return `SVCDA${nameCode}${phoneCode}`;
+  return `GVCDA${nameCode}${phoneCode}`;
 }
 
 /**
@@ -402,4 +402,4 @@ window.submitServiceRequest = submitServiceRequest;
 window.generateReferralCode = generateReferralCode;
 window.trackReferral = trackReferral;
 
-console.log('✅ SVCDA Enhanced Features Loaded');
+console.log('✅ GVCDA Enhanced Features Loaded');

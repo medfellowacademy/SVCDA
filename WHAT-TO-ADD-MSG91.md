@@ -5,7 +5,7 @@
 You need **3 things** from MSG91:
 
 1. **AUTH_KEY** - Your API authentication key
-2. **SENDER_ID** - Your brand name (6 characters, e.g., `SVCDA`)
+2. **SENDER_ID** - Your brand name (6 characters, e.g., `GVCDA`)
 3. **DLT_TE_ID** - DLT Template ID (for India SMS compliance)
 
 ---
@@ -20,7 +20,7 @@ Replace these values:
 ```javascript
 const MSG91_CONFIG = {
   AUTH_KEY: 'xxxxxxxxxxxxxxxxxxxxxxxx',  // ← ADD YOUR AUTH KEY HERE
-  SENDER_ID: 'SVCDA',                    // ← ADD YOUR SENDER ID HERE
+  SENDER_ID: 'GVCDA',                    // ← ADD YOUR SENDER ID HERE
   ROUTE: '4',                             // ← KEEP AS IS
   COUNTRY_CODE: '91',                     // ← KEEP AS IS
   WHATSAPP_NUMBER: '',                    // ← OPTIONAL (for WhatsApp)
@@ -51,7 +51,7 @@ const MSG91_CONFIG = {
 1. Login to MSG91
 2. Settings → Sender ID
 3. Click "Add New Sender ID"
-4. Enter: `SVCDA` (your brand name)
+4. Enter: `GVCDA` (your brand name)
 5. Upload: GST certificate or company registration
 6. Submit and wait for approval (2-4 hours)
 
@@ -68,7 +68,7 @@ const MSG91_CONFIG = {
 4. Copy this exact template:
 
 ```
-Welcome to SVCDA Premium! Name: {#var#} Card No: {#var#} Plan: {#var#} Valid Till: {#var#} Access your card at: https://svcda.in - Team SVCDA
+Welcome to GVCDA Premium! Name: {#var#} Card No: {#var#} Plan: {#var#} Valid Till: {#var#} Access your card at: https://gvcda.in - Team GVCDA
 ```
 
 5. Submit for approval

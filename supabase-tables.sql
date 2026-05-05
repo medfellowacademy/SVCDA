@@ -1,4 +1,4 @@
--- SVCDA Platform Database Schema
+-- GVCDA Platform Database Schema
 -- Run this in Supabase SQL Editor
 
 -- 1. Create Employees Table (FIRST - referenced by other tables)
@@ -86,8 +86,8 @@ CREATE POLICY "Allow all operations on settings" ON settings
 
 -- 5. Insert Default Data
 INSERT INTO employees (name, email, password, role) VALUES
-  ('Default Employee', 'default@svcda.org', 'emp123', 'employee'),
-  ('Admin Employee', 'admin@svcda.org', 'emp123', 'admin');
+  ('Default Employee', 'default@gvcda.org', 'emp123', 'employee'),
+  ('Admin Employee', 'admin@gvcda.org', 'emp123', 'admin');
 
 INSERT INTO settings (key, value) VALUES
   ('admin_pin', 'admin123'),

@@ -1,8 +1,8 @@
-# 🚀 SVCDA Complete Production System - Setup Guide
+# 🚀 GVCDA Complete Production System - Setup Guide
 
 ## 📋 Overview
 
-Your SVCDA platform now has a **complete end-to-end system** that connects:
+Your GVCDA platform now has a **complete end-to-end system** that connects:
 - ✅ User Registration → Payment Gateway → Database → SMS → WhatsApp → Digital Card
 - ✅ Employee Dashboard → Add Members → Trigger same workflow
 - ✅ Admin Panel → View all data, activity logs, export CSV
@@ -91,8 +91,8 @@ const RAZORPAY_CONFIG = {
   KEY_ID: 'rzp_test_xxxxxxxx', // Replace with your key
   KEY_SECRET: 'xxxxxxxxxx', // Keep this secure
   CURRENCY: 'INR',
-  COMPANY_NAME: 'SVCDA',
-  COMPANY_LOGO: 'https://svcda.in/assets/images/LOGO.png',
+  COMPANY_NAME: 'GVCDA',
+  COMPANY_LOGO: 'https://gvcda.in/assets/images/LOGO.png',
   THEME_COLOR: '#0B1120'
 };
 ```
@@ -144,33 +144,33 @@ const RAZORPAY_CONFIG = {
 - Razorpay `handler` callback triggers on payment success
 - Calls `db.members.create()` to save member
 - Calls `sendSMS()` and `sendWhatsApp()` for notifications
-- Card number auto-generated: `SVCDAxxxxxxxx`
+- Card number auto-generated: `GVCDAxxxxxxxx`
 
 **SMS Message Format**:
 ```
-🎉 Welcome to SVCDA Premium!
+🎉 Welcome to GVCDA Premium!
 
 Name: [Member Name]
-Card No: SVCDA123456789
+Card No: GVCDA123456789
 Plan: Premium
 Valid Till: [Date]
 
 Access your digital card anytime at:
-https://svcda.in/premium-card.html
+https://gvcda.in/premium-card.html
 
-Thank you for joining SVCDA!
-- Team SVCDA
+Thank you for joining GVCDA!
+- Team GVCDA
 ```
 
 **WhatsApp Message Format**:
 ```
-🌟 *SVCDA Premium Membership Activated!*
+🌟 *GVCDA Premium Membership Activated!*
 
 Congratulations [Name]! Your premium membership is now active.
 
 📇 *Card Details:*
 ━━━━━━━━━━━━━━━
-Card Number: *SVCDA123456789*
+Card Number: *GVCDA123456789*
 Member Name: [Name]
 Plan: *Premium Membership*
 Amount Paid: ₹1499
@@ -186,14 +186,14 @@ Payment ID: pay_xxxxx
 • Fast-track service processing
 
 📱 *Access Your Digital Card:*
-Visit: https://svcda.in/premium-card.html
+Visit: https://gvcda.in/premium-card.html
 Login with your phone number
 
 Need help? Call: +91 8978210705
 WhatsApp: wa.me/918978210705
 
-Thank you for choosing SVCDA!
-*Team SVCDA* 🙏
+Thank you for choosing GVCDA!
+*Team GVCDA* 🙏
 ```
 
 ---
@@ -432,7 +432,7 @@ Before going live:
 
 ```javascript
 // Send custom SMS to a member
-await sendSMS('+919876543210', 'Hello from SVCDA! Your appointment is confirmed.');
+await sendSMS('+919876543210', 'Hello from GVCDA! Your appointment is confirmed.');
 ```
 
 ### Example 2: Employee Adds Regular Member
@@ -475,9 +475,9 @@ console.log(`Found ${results.length} members`);
 - Review this guide's Troubleshooting section
 - Check Supabase and Twilio dashboards for errors
 
-**SVCDA Contact:**
+**GVCDA Contact:**
 - Phone: +91 8978210705
-- Email: info@svcdaservicehub.com
+- Email: info@gvcdaservicehub.com
 - WhatsApp: wa.me/918978210705
 
 ---
@@ -523,6 +523,6 @@ console.log(`Found ${results.length} members`);
 
 ---
 
-**🎉 Your SVCDA platform is now production-ready!**
+**🎉 Your GVCDA platform is now production-ready!**
 
 Follow the setup steps, test thoroughly, and you're ready to launch! 🚀

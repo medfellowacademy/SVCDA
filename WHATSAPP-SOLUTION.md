@@ -37,7 +37,7 @@ I've implemented **WhatsApp Click-to-Chat** which:
 **User pays ₹1499 for premium**
 
 → Database saves member data  
-→ SMS sent: "Welcome to SVCDA! Card: SVCDA123456..."  
+→ SMS sent: "Welcome to GVCDA! Card: GVCDA123456..."  
 → WhatsApp opens: https://wa.me/919876543210?text=🌟...  
 → You see pre-filled message  
 → Click "Send"  
@@ -129,7 +129,7 @@ I've implemented **WhatsApp Click-to-Chat** which:
 1. **MSG91 Account**
    - Sign up: https://control.msg91.com/signup/
    - Get Auth Key
-   - Register Sender ID: "SVCDA"
+   - Register Sender ID: "GVCDA"
    - Create DLT Template
    - **Time:** 30 min + 1-2 days approval
 
@@ -263,7 +263,7 @@ Open the detailed guides:
 
 Or contact:
 - Phone: +91 8978210705
-- Email: info@svcdaservicehub.com
+- Email: info@gvcdaservicehub.com
 
 ---
 

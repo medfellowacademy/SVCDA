@@ -1,4 +1,4 @@
-/* ======================== SVCDA Core Scripts ======================== */
+/* ======================== GVCDA Core Scripts ======================== */
 
 // 1. Preloader and scroll toggles
 window.addEventListener('load', () => { setTimeout(() => { var pl = document.getElementById('pl'); if(pl) pl.classList.add('h'); }, 500) });
@@ -17,10 +17,10 @@ if (mb) { mb.onclick = mO; if(mx) mx.onclick = mC; if(mo) mo.onclick = mC; if(mp
 document.querySelectorAll('a[href^="#"]').forEach(a => { a.addEventListener('click', function (e) { const t = document.querySelector(this.getAttribute('href')); if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }) } }) });
 
 // Data layer for member/admin tracking
-var SVCDA_STORE_KEYS = {
-  members: 'svcda_members',
-  activity: 'svcda_activity',
-  smsWebhook: 'svcda_sms_webhook'
+var GVCDA_STORE_KEYS = {
+  members: 'gvcda_members',
+  activity: 'gvcda_activity',
+  smsWebhook: 'gvcda_sms_webhook'
 };
 
 function sRead(key, fallback) {
@@ -49,15 +49,15 @@ function normalizePhone(v) {
 
 function genCardNumber() {
   var n = Math.floor(100000 + Math.random() * 900000);
-  return 'SVCDA-PREM-' + n;
+  return 'GVCDA-PREM-' + n;
 }
 
 function getMembers() {
-  return sRead(SVCDA_STORE_KEYS.members, []);
+  return sRead(GVCDA_STORE_KEYS.members, []);
 }
 
 function getActivity() {
-  return sRead(SVCDA_STORE_KEYS.activity, []);
+  return sRead(GVCDA_STORE_KEYS.activity, []);
 }
 
 function saveMember(member) {
@@ -75,7 +75,7 @@ function saveMember(member) {
     if (!member.cardNumber) member.cardNumber = list[idx].cardNumber || '';
     list[idx] = Object.assign({}, list[idx], member);
   }
-  sWrite(SVCDA_STORE_KEYS.members, list);
+  sWrite(GVCDA_STORE_KEYS.members, list);
   return member;
 }
 
@@ -83,11 +83,11 @@ function logActivity(entry) {
   var logs = getActivity();
   logs.unshift(Object.assign({ id: 'A' + Date.now(), at: new Date().toISOString() }, entry));
   if (logs.length > 1000) logs = logs.slice(0, 1000);
-  sWrite(SVCDA_STORE_KEYS.activity, logs);
+  sWrite(GVCDA_STORE_KEYS.activity, logs);
 }
 
 function sendSMSViaWebhook(payload) {
-  var url = localStorage.getItem(SVCDA_STORE_KEYS.smsWebhook);
+  var url = localStorage.getItem(GVCDA_STORE_KEYS.smsWebhook);
   if (!url) return Promise.resolve(false);
   return fetch(url, {
     method: 'POST',
@@ -98,7 +98,7 @@ function sendSMSViaWebhook(payload) {
 
 function sendMembershipNotifications(member, paymentId) {
   var card = member.cardNumber || genCardNumber();
-  var msg = 'Welcome to SVCDA Premium!\\n\\nName: ' + (member.name || 'Member') + '\\nPhone: ' + (member.phone || '-') + '\\nMembership: Premium\\nCard ID: ' + card + '\\nPayment ID: ' + (paymentId || '-') + '\\n\\nThanks for registering with SVCDA.';
+  var msg = 'Welcome to GVCDA Premium!\\n\\nName: ' + (member.name || 'Member') + '\\nPhone: ' + (member.phone || '-') + '\\nMembership: Premium\\nCard ID: ' + card + '\\nPayment ID: ' + (paymentId || '-') + '\\n\\nThanks for registering with GVCDA.';
   member.cardNumber = card;
   member.lastNotificationAt = new Date().toISOString();
   saveMember(member);
@@ -205,11 +205,11 @@ window.handleRegistration = handleRegistration;
 window.openPremiumApplication = openPremiumApplication;
 window.closePremiumApplication = closePremiumApplication;
 window.submitPremiumApplication = submitPremiumApplication;
-window.SVCDAAdminData = {
+window.GVCDAAdminData = {
   getMembers: getMembers,
   getActivity: getActivity,
-  setSMSWebhook: function (url) { localStorage.setItem(SVCDA_STORE_KEYS.smsWebhook, url || ''); },
-  getSMSWebhook: function () { return localStorage.getItem(SVCDA_STORE_KEYS.smsWebhook) || ''; }
+  setSMSWebhook: function (url) { localStorage.setItem(GVCDA_STORE_KEYS.smsWebhook, url || ''); },
+  getSMSWebhook: function () { return localStorage.getItem(GVCDA_STORE_KEYS.smsWebhook) || ''; }
 };
 
 // 3. Scroll to top button
@@ -313,7 +313,7 @@ function submitWA(e, sec) {
       });
     }
 
-    var t = "Hello SVCDA!\n\n*Name:* " + vn + "\n*Phone:* " + vp + "\n*Sector:* " + sec + "\n*Service:* " + sVal + "\n*Selected Items:* " + items + loc + "\n*Details:* " + msg + "\n\nLooking forward to your response!"; 
+    var t = "Hello GVCDA!\n\n*Name:* " + vn + "\n*Phone:* " + vp + "\n*Sector:* " + sec + "\n*Service:* " + sVal + "\n*Selected Items:* " + items + loc + "\n*Details:* " + msg + "\n\nLooking forward to your response!"; 
     window.open('https://wa.me/918978210705?text=' + encodeURIComponent(t), '_blank');
 }
 
@@ -326,12 +326,12 @@ function payGroceryAdvance() {
         key: key,
         amount: 19900,
         currency: 'INR',
-        name: 'SVCDA Grocery',
+        name: 'GVCDA Grocery',
         description: 'Advance payment for grocery order',
         image: (location.pathname.includes('/pages/') ? '../assets/images/LOGO.png' : 'assets/images/LOGO.png'),
         handler: function (resp) {
             alert('Payment successful. Payment ID: ' + resp.razorpay_payment_id);
-            window.open('https://wa.me/918978210705?text=' + encodeURIComponent('Hi SVCDA, I paid grocery advance. Payment ID: ' + resp.razorpay_payment_id), '_blank');
+            window.open('https://wa.me/918978210705?text=' + encodeURIComponent('Hi GVCDA, I paid grocery advance. Payment ID: ' + resp.razorpay_payment_id), '_blank');
         },
         prefill: { contact: '' },
         theme: { color: '#0D9488' }
@@ -349,7 +349,7 @@ function payPremiumCard(identityInput) {
         key: key,
         amount: 49900,
         currency: 'INR',
-        name: 'SVCDA Premium Card',
+        name: 'GVCDA Premium Card',
         description: 'Annual premium membership',
         image: (location.pathname.includes('/pages/') ? '../assets/images/LOGO.png' : 'assets/images/LOGO.png'),
         handler: function (resp) {
@@ -378,7 +378,7 @@ function payPremiumCard(identityInput) {
 
           sendMembershipNotifications(member, resp.razorpay_payment_id);
             alert('Payment successful. Payment ID: ' + resp.razorpay_payment_id);
-            window.open('https://wa.me/918978210705?text=' + encodeURIComponent('Hi SVCDA, I purchased Premium Card. Payment ID: ' + resp.razorpay_payment_id), '_blank');
+            window.open('https://wa.me/918978210705?text=' + encodeURIComponent('Hi GVCDA, I purchased Premium Card. Payment ID: ' + resp.razorpay_payment_id), '_blank');
         },
         prefill: { name: identity.name, contact: identity.phone },
         theme: { color: '#F97316' }
