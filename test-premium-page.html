@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Premium Card</title>
+</head>
+<body>
+    <h1>Testing Premium Card Page</h1>
+    <button onclick="testPayment()">Test Payment Button</button>
+    <div id="result"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
+    <script type="module" src="payment-system.js"></script>
+    <script type="module" src="supabase-config.js"></script>
+    
+    <script>
+        setTimeout(() => {
+            function testPayment() {
+                const result = document.getElementById('result');
+                result.innerHTML = '<p>Checking functions...</p>';
+                
+                if (typeof window.openPremiumApplication === 'function') {
+                    result.innerHTML += '<p style="color:green">✓ openPremiumApplication found</p>';
+                } else {
+                    result.innerHTML += '<p style="color:red">✗ openPremiumApplication NOT found</p>';
+                }
+                
+                if (typeof window.processPremiumPayment === 'function') {
+                    result.innerHTML += '<p style="color:green">✓ processPremiumPayment found</p>';
+                } else {
+                    result.innerHTML += '<p style="color:red">✗ processPremiumPayment NOT found</p>';
+                }
+                
+                if (typeof window.submitPremiumApplication === 'function') {
+                    result.innerHTML += '<p style="color:green">✓ submitPremiumApplication found</p>';
+                } else {
+                    result.innerHTML += '<p style="color:red">✗ submitPremiumApplication NOT found</p>';
+                }
+            }
+            window.testPayment = testPayment;
+        }, 2000);
+    </script>
+</body>
+</html>

@@ -223,7 +223,7 @@ async function generateDigitalCard(memberData) {
       ctx.font = '14px Arial';
       ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
       ctx.fillText('Small Village & City Development Agency', 50, 430);
-      ctx.fillText('📞 +91 8978210705  |  🌐 gvcda.in', 50, 455);
+      ctx.fillText('📞 +91 7981660705  |  🌐 gvcda.in', 50, 455);
 
       // Convert to blob
       canvas.toBlob((blob) => {
@@ -279,7 +279,7 @@ Valid Till: ${memberData.valid_till || 'Lifetime'}
 • Skill Courses
 
 Visit: https://gvcda.in
-📞 +91 8978210705`;
+📞 +91 7981660705`;
 
   const phone = memberData.phone || '';
   const url = `https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
@@ -317,7 +317,7 @@ async function submitServiceRequest(requestData) {
     });
 
     // Send SMS notification to admin
-    const adminPhone = '+918978210705';
+    const adminPhone = '+917981660705';
     const adminMessage = `🔔 New Service Request
 
 Member: ${request.member_name}

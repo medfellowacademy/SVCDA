@@ -234,7 +234,7 @@ All frontend environment variables are visible in the browser. This is normal an
 
 **Contact:**
 - Email: info@gvcdaservicehub.com
-- Phone: +91 8978210705
+- Phone: +91 7981660705
 
 ---
 

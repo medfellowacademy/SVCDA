@@ -84,7 +84,65 @@ ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow all operations on settings" ON settings
   FOR ALL USING (true);
 
--- 5. Insert Default Data
+-- 5. Create Job Applications Table
+CREATE TABLE job_applications (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  email TEXT NOT NULL,
+  age INTEGER,
+  qualification TEXT,
+  experience DECIMAL(4,1),
+  position TEXT NOT NULL,
+  district TEXT NOT NULL,
+  address TEXT NOT NULL,
+  skills TEXT,
+  message TEXT,
+  status TEXT DEFAULT 'pending',
+  reviewed_by UUID REFERENCES employees(id),
+  reviewed_by_name TEXT,
+  notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX idx_job_applications_created_at ON job_applications(created_at DESC);
+CREATE INDEX idx_job_applications_status ON job_applications(status);
+CREATE INDEX idx_job_applications_position ON job_applications(position);
+
+ALTER TABLE job_applications ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow all operations on job_applications" ON job_applications
+  FOR ALL USING (true);
+
+-- 6. Create Payments Table (for tracking all Razorpay payments)
+CREATE TABLE payments (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  member_id UUID REFERENCES members(id),
+  razorpay_payment_id TEXT UNIQUE NOT NULL,
+  razorpay_order_id TEXT,
+  razorpay_signature TEXT,
+  amount DECIMAL(10,2) NOT NULL,
+  currency TEXT DEFAULT 'INR',
+  status TEXT DEFAULT 'success',
+  method TEXT,
+  email TEXT,
+  phone TEXT,
+  name TEXT,
+  description TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX idx_payments_razorpay_payment_id ON payments(razorpay_payment_id);
+CREATE INDEX idx_payments_member_id ON payments(member_id);
+CREATE INDEX idx_payments_created_at ON payments(created_at DESC);
+
+ALTER TABLE payments ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow all operations on payments" ON payments
+  FOR ALL USING (true);
+
+-- 7. Insert Default Data
 INSERT INTO employees (name, email, password, role) VALUES
   ('Default Employee', 'default@gvcda.org', 'emp123', 'employee'),
   ('Admin Employee', 'admin@gvcda.org', 'emp123', 'admin');
@@ -95,4 +153,4 @@ INSERT INTO settings (key, value) VALUES
   ('twilio_config', '{}');
 
 -- Success message
-SELECT 'Database setup complete! 4 tables created, 2 employees added.' AS status;
+SELECT 'Database setup complete! 6 tables created (employees, members, activity, settings, job_applications, payments). 2 employees added.' AS status;

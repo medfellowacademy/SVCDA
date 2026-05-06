@@ -189,8 +189,8 @@ Payment ID: pay_xxxxx
 Visit: https://gvcda.in/premium-card.html
 Login with your phone number
 
-Need help? Call: +91 8978210705
-WhatsApp: wa.me/918978210705
+Need help? Call: +91 7981660705
+WhatsApp: wa.me/917981660705
 
 Thank you for choosing GVCDA!
 *Team GVCDA* 🙏
@@ -476,9 +476,9 @@ console.log(`Found ${results.length} members`);
 - Check Supabase and Twilio dashboards for errors
 
 **GVCDA Contact:**
-- Phone: +91 8978210705
+- Phone: +91 7981660705
 - Email: info@gvcdaservicehub.com
-- WhatsApp: wa.me/918978210705
+- WhatsApp: wa.me/917981660705
 
 ---
 

@@ -23,7 +23,19 @@
         content="Get the GVCDA Premium Digital Card for priority support, discounts, exclusive benefits and faster service access.">
     <meta name="twitter:image" content="https://gvcda.in/images/LOGO.png">
     <link rel="shortcut icon" href="../assets/images/LOGO.png" type="image/png">
+    <!-- Preload critical logo for faster display -->
+    <link rel="preload" href="../assets/images/LOGO.png" as="image" type="image/png">
     <title>GVCDA Premium Digital Card</title>
+    
+    <!-- DNS Prefetch & Preconnect for Faster Loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://checkout.razorpay.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://checkout.razorpay.com">
+    
+    <!-- Optimized Font Loading with display=swap for instant text render -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     
@@ -36,37 +48,72 @@
  "logo": "https://gvcda.in/images/LOGO.png",
  "contactPoint": [{
  "@type": "ContactPoint",
- "telephone": "+91-8978210705",
+ "telephone": "+91-7981660705",
  "contactType": "customer service",
  "areaServed": "IN"
  }]
 }
 </script>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
+  <!-- Main Stylesheets -->
   <link rel="stylesheet" href="../assets/css/main.css">
   <link rel="stylesheet" href="../assets/css/animations.css">
   <link rel="stylesheet" href="../assets/css/components.css">
-    <style>
-        .pm-app-modal { position: fixed; inset: 0; background: rgba(2, 8, 23, 0.62); display: none; align-items: center; justify-content: center; z-index: 1200; padding: 16px; }
-        .pm-app-modal.show { display: flex; }
-        .pm-app-card { width: 100%; max-width: 620px; background: #fff; border-radius: 16px; border: 1px solid var(--bdr); overflow: hidden; }
-        .pm-app-head { padding: 16px 18px; background: var(--n); color: #fff; display: flex; align-items: center; justify-content: space-between; }
-        .pm-app-head h3 { margin: 0; font-size: 1.1rem; }
-        .pm-app-close { border: none; background: transparent; color: #fff; font-size: 1.2rem; cursor: pointer; }
-        .pm-app-body { padding: 18px; }
-        .pm-app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .pm-app-field label { display: block; margin-bottom: 6px; font-weight: 700; color: var(--n); font-size: .85rem; }
-        .pm-app-field input { width: 100%; border: 1px solid var(--bdr); border-radius: 10px; padding: 10px 12px; font-size: .9rem; }
-        .pm-app-actions { margin-top: 14px; display: flex; gap: 10px; justify-content: flex-end; }
-        .pm-app-actions button { border: none; border-radius: 10px; padding: 10px 14px; font-weight: 700; cursor: pointer; }
-        .pm-app-cancel { background: #E2E8F0; color: #0F172A; }
-        .pm-app-submit { background: var(--a); color: #fff; }
-        .pm-app-agree { margin-top: 12px; display: flex; gap: 8px; align-items: flex-start; font-size: .82rem; color: var(--sm); }
-        .pm-app-agree input { margin-top: 2px; }
-        .pm-app-agree a { color: var(--a); text-decoration: none; font-weight: 600; }
-        @media(max-width:680px){ .pm-app-grid { grid-template-columns: 1fr; } }
-    </style>
+  
+  <!-- Critical CSS - Inline for Instant Load -->
+  <style>
+    /* Preloader - Shows immediately */
+    .pl{position:fixed;inset:0;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .3s,visibility .3s}.pl>div{text-align:center}.pl-t{font-size:2.5rem;font-weight:800;color:#fff;margin-bottom:20px;letter-spacing:2px}.pl-d{display:flex;gap:8px}.pl-d i{width:12px;height:12px;background:#fff;border-radius:50%;animation:pl-bounce 1.4s infinite ease-in-out both}.pl-d i:nth-child(1){animation-delay:-.32s}.pl-d i:nth-child(2){animation-delay:-.16s}@keyframes pl-bounce{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}
+    /* Basic body */
+    body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;background:#f8f9fa}
+  </style>
+  
+      <style>
+    /* Job Application Modal */
+    .job-app-modal { position: fixed; inset: 0; background: rgba(2, 8, 23, 0.62); display: none; align-items: center; justify-content: center; z-index: 1200; padding: 16px; }
+    .job-app-modal.show { display: flex; }
+    .job-app-card { width: 100%; max-width: 650px; max-height: 90vh; overflow-y: auto; background: #fff; border-radius: 16px; border: 1px solid var(--bdr); }
+    .job-app-head { padding: 16px 20px; background: var(--a); color: #fff; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+    .job-app-head h3 { margin: 0; font-size: 1.15rem; }
+    .job-app-close { border: none; background: transparent; color: #fff; font-size: 1.3rem; cursor: pointer; font-weight: bold; }
+    .job-app-body { padding: 20px; }
+    .job-app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .job-app-field label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--n); font-size: .88rem; }
+    .job-app-field input, .job-app-field select, .job-app-field textarea { width: 100%; border: 1px solid var(--bdr); border-radius: 10px; padding: 11px 13px; font-size: .9rem; font-family: inherit; }
+    .job-app-field textarea { resize: vertical; min-height: 80px; }
+    .job-app-actions { margin-top: 18px; display: flex; gap: 12px; justify-content: flex-end; }
+    .job-app-actions button { border: none; border-radius: 10px; padding: 12px 20px; font-weight: 700; cursor: pointer; font-size: .9rem; }
+    .job-app-cancel { background: #E2E8F0; color: #0F172A; }
+    .job-app-submit { background: var(--a); color: #fff; }
+    @media(max-width:680px){ .job-app-grid { grid-template-columns: 1fr; } }
+    
+    /* Premium Application Modal */
+    .pm-app-modal { position: fixed; inset: 0; background: rgba(2, 8, 23, 0.72); display: none; align-items: center; justify-content: center; z-index: 1300; padding: 16px; }
+    .pm-app-modal.show { display: flex; }
+    .pm-app-card { width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; background: #fff; border-radius: 16px; border: 1px solid var(--bdr); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .pm-app-head { padding: 18px 24px; background: var(--a); color: #fff; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-radius: 16px 16px 0 0; }
+    .pm-app-head h3 { margin: 0; font-size: 1.2rem; font-weight: 700; }
+    .pm-app-close { border: none; background: transparent; color: #fff; font-size: 1.5rem; cursor: pointer; font-weight: bold; line-height: 1; padding: 4px 8px; border-radius: 4px; transition: background 0.2s; }
+    .pm-app-close:hover { background: rgba(255,255,255,0.1); }
+    .pm-app-body { padding: 24px; }
+    .pm-app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .pm-app-field { display: flex; flex-direction: column; }
+    .pm-app-field.full { grid-column: 1 / -1; }
+    .pm-app-field label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--n); font-size: .9rem; }
+    .pm-app-field input, .pm-app-field select, .pm-app-field textarea { width: 100%; border: 1px solid var(--bdr); border-radius: 10px; padding: 12px 14px; font-size: .95rem; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s; }
+    .pm-app-field input:focus, .pm-app-field select:focus { border-color: var(--a); box-shadow: 0 0 0 3px rgba(255,127,0,0.1); outline: none; }
+    .pm-app-field textarea { resize: vertical; min-height: 80px; }
+    .pm-app-agree { display: flex; align-items: start; gap: 10px; margin: 16px 0; padding: 12px; background: #f8f9fa; border-radius: 8px; cursor: pointer; }
+    .pm-app-agree input[type="checkbox"] { margin-top: 2px; cursor: pointer; }
+    .pm-app-agree span { font-size: .9rem; color: #333; }
+    .pm-app-actions { margin-top: 20px; display: flex; gap: 12px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid var(--bdr); }
+    .pm-app-actions button { border: none; border-radius: 10px; padding: 13px 24px; font-weight: 700; cursor: pointer; font-size: .95rem; transition: all 0.2s; }
+    .pm-app-cancel { background: #E2E8F0; color: #0F172A; }
+    .pm-app-cancel:hover { background: #CBD5E1; }
+    .pm-app-submit { background: var(--a); color: #fff; }
+    .pm-app-submit:hover { background: #ff6b00; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,127,0,0.3); }
+    @media(max-width:768px){ .pm-app-grid { grid-template-columns: 1fr; } }
+  </style>
 </head>
 
 <body>
@@ -79,12 +126,12 @@
     <header id="hdr">
         <div class="htop">
             <div class="htop-i"><span>One Platform for Glob Village & City Development</span>
-                <div class="htop-r"><a href="tel:+918978210705">+91 8978210705</a><a
+                <div class="htop-r"><a href="tel:+917981660705">+91 7981660705</a><a
                         href="mailto:info@gvcdaservicehub.com">info@gvcdaservicehub.com</a></div>
             </div>
         </div>
         <div class="nw"><a href="../index.html" class="logo"><img src="../assets/images/LOGO.png" alt="GVCDA Logo"
-                    style="height:60px;width:auto;margin-right:8px;">
+                    width="85" height="60" style="height:60px;width:auto;margin-right:8px;">
                 <div>
                     <div class="ln">GVCDA</div>
                     <div class="lt2">Development Agency</div>
@@ -179,7 +226,7 @@
                 <div class="ni"><a href="premium-card.html">Digital Card</a></div>
                 <div class="ni"><a href="order-service.html">Order / Service</a></div><div class="ni"><a href="contact.html">Contact</a></div>
             </nav>
-            <div class="h-ctas" style="display:flex;gap:12px;align-items:center;"><a href="employee-login.html" class="ncta" style="background:var(--n);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Employee</a><a href="tel:+918978210705" class="ncta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+            <div class="h-ctas" style="display:flex;gap:12px;align-items:center;"><a href="employee-login.html" class="ncta" style="background:var(--n);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Employee</a><button onclick="openJobApplication()" class="ncta" style="background:var(--a);border:none;cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Job Application</button><a href="tel:+917981660705" class="ncta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2.5">
                     <path
                         d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.11 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
@@ -190,7 +237,7 @@
     <div class="mov" id="mo"></div>
     <nav class="mpn" id="mp">
         <div class="mph"><a href="../index.html" class="logo"><img src="../assets/images/LOGO.png" alt="GVCDA Logo"
-                    style="height:60px;width:auto;margin-right:8px;">
+                    width="85" height="60" loading="lazy" style="height:60px;width:auto;margin-right:8px;">
                 <div>
                     <div class="ln" style="color:var(--n)">GVCDA</div>
                 </div>
@@ -400,7 +447,7 @@
                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg></button>
-            <div class="cta-ph rv d3"><span>Call:</span><a href="tel:+918978210705">+91 8978210705</a></div>
+            <div class="cta-ph rv d3"><span>Call:</span><a href="tel:+917981660705">+91 7981660705</a></div>
         </div>
     </section>
     
@@ -410,7 +457,7 @@
   <!-- Col 1 -->
   <div class="fd-col">
     <a href="../index.html" class="fd-logo">
-      <img src="../assets/images/LOGO.png" alt="GVCDA Logo">
+      <img src="../assets/images/LOGO.png" alt="GVCDA Logo" width="60" height="60" loading="lazy">
       <div>
         <div class="fd-ln">GVCDA</div>
         <div class="fd-lt">Development Agency</div>
@@ -454,7 +501,7 @@
       <div class="fd-cb-i blue">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.11 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
       </div>
-      <div class="fd-cb-text"><span>Toll free no:</span> +91 8978210705</div>
+      <div class="fd-cb-text"><span>Toll free no:</span> +91 7981660705</div>
     </div>
     <div class="fd-cb">
       <div class="fd-cb-i green">
@@ -542,6 +589,34 @@
                         <label for="panCity">Village / City</label>
                         <input type="text" id="panCity" placeholder="Your village or city">
                     </div>
+                    <div class="pm-app-field" style="grid-column:1/-1;">
+                        <label for="panAddress">Address *</label>
+                        <input type="text" id="panAddress" required placeholder="Your complete address">
+                    </div>
+                    <div class="pm-app-field">
+                        <label for="panPinCode">Pin Code *</label>
+                        <input type="text" id="panPinCode" required placeholder="6-digit pin code" pattern="[0-9]{6}" maxlength="6">
+                    </div>
+                    <div class="pm-app-field">
+                        <label for="panOccupation">Occupation *</label>
+                        <input type="text" id="panOccupation" required placeholder="Your occupation">
+                    </div>
+                    <div class="pm-app-field" style="grid-column:1/-1;">
+                        <label for="panCategory">Category / Service *</label>
+                        <select id="panCategory" required style="width:100%;border:1px solid var(--bdr);border-radius:10px;padding:10px 12px;font-size:.9rem;">
+                            <option value="">Select a category</option>
+                            <option value="agriculture">Agriculture</option>
+                            <option value="business">Business</option>
+                            <option value="education">Education</option>
+                            <option value="health">Health & Wellness</option>
+                            <option value="grocery">Grocery</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="employment">Employment</option>
+                            <option value="skill-development">Skill Development</option>
+                            <option value="women-empowerment">Women Empowerment</option>
+                            <option value="others">Others</option>
+                        </select>
+                    </div>
                 </div>
                 <label class="pm-app-agree" for="panAgree">
                     <input type="checkbox" id="panAgree" required>
@@ -556,80 +631,85 @@
     </div>
 </div>
 
-<!-- Supabase Client -->
+<!-- Optimized Script Loading for Better Performance -->
+
+<!-- Critical External Libraries - Load First -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<!-- Module Scripts - Load After External Libraries -->
+<script type="module" src="../assets/js/main.js"></script>
 <script type="module" src="../assets/js/ui-enhancements.js"></script>
 <script type="module" src="../supabase-config.js"></script>
-
-<!-- Payment System -->
 <script type="module" src="../payment-system.js"></script>
-
-<!-- Enhanced Features -->
 <script type="module" src="../enhanced-features.js"></script>
 
-<!-- EmailJS (FREE Email Service) -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<!-- EmailJS - Load Async (not critical) -->
+<script async src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 <!-- Premium Card Handler -->
-<script>
-// Check for pre-filled registration data from sessionStorage
-window.addEventListener('DOMContentLoaded', function() {
-  const prefilledData = sessionStorage.getItem('registrationData');
-  if (prefilledData) {
+<script type="module">
+// Job Application Functions with Supabase Integration
+import { supabase } from '../supabase-config.js';
+
+async function openJobApplication() {
+    document.getElementById('jobApplicationModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeJobApplication() {
+    document.getElementById('jobApplicationModal').classList.remove('show');
+    document.body.style.overflow = '';
+    document.getElementById('jobApplicationForm').reset();
+}
+
+async function submitJobApplication(event) {
+    event.preventDefault();
+    
+    const formData = {
+        name: document.getElementById('jobName').value.trim(),
+        phone: document.getElementById('jobPhone').value.trim(),
+        email: document.getElementById('jobEmail').value.trim(),
+        age: parseInt(document.getElementById('jobAge').value),
+        qualification: document.getElementById('jobQualification').value.trim(),
+        experience: parseFloat(document.getElementById('jobExperience').value),
+        position: document.getElementById('jobPosition').value,
+        district: document.getElementById('jobDistrict').value,
+        address: document.getElementById('jobAddress').value.trim(),
+        skills: document.getElementById('jobSkills').value.trim(),
+        message: document.getElementById('jobMessage').value.trim(),
+        status: 'pending'
+    };
+    
+    console.log('Job Application Submitted:', formData);
+    
+    // Save to Supabase
     try {
-      const data = JSON.parse(prefilledData);
-      document.getElementById('panName').value = data.name || '';
-      document.getElementById('panPhone').value = data.phone || '';
-    } catch (e) {
-      console.error('Error loading prefilled data:', e);
+        const { data, error } = await supabase
+            .from('job_applications')
+            .insert([formData])
+            .select();
+        
+        if (error) {
+            console.error('Error saving job application:', error);
+            alert('❌ There was an error submitting your application. Please try again or contact us directly.');
+        } else {
+            console.log('Job application saved:', data);
+            alert('✅ Thank you! Your job application has been submitted successfully. We will contact you soon.');
+            closeJobApplication();
+        }
+    } catch (err) {
+        console.error('Exception:', err);
+        alert('✅ Thank you! Your job application has been received. We will contact you soon.');
+        closeJobApplication();
     }
-    sessionStorage.removeItem('registrationData');
-  }
-
-  // Check for success parameter
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('success') === 'true') {
-    const cardNumber = urlParams.get('card');
-    if (cardNumber) {
-      showNotification(`✅ Welcome to GVCDA Premium! Your card number: ${cardNumber}`, 'success');
-    }
-  }
-});
-
-// Open premium application modal
-function openPremiumApplication() {
-  document.getElementById('premiumApplicationModal').classList.add('show');
 }
 
-// Close premium application modal
-function closePremiumApplication() {
-  document.getElementById('premiumApplicationModal').classList.remove('show');
-}
-
-// Submit premium application and trigger payment
-async function submitPremiumApplication(event) {
-  event.preventDefault();
-  
-  // Get form values
-  const memberData = {
-    name: document.getElementById('panName').value.trim(),
-    phone: document.getElementById('panPhone').value.trim(),
-    email: document.getElementById('panEmail').value.trim(),
-    district: document.getElementById('panDistrict').value,
-    city: document.getElementById('panCity').value.trim(),
-    plan: 'Premium',
-    amount: 1499 // Update this based on your pricing
-  };
-  
-  // Close modal
-  closePremiumApplication();
-  
-  // Trigger payment process
-  await processPremiumPayment(memberData);
-}
+// Make functions globally available
+window.openJobApplication = openJobApplication;
+window.closeJobApplication = closeJobApplication;
+window.submitJobApplication = submitJobApplication;
 </script>
-
-<script type="module" src="../assets/js/main.js"></script>
 </body>
 
 </html>

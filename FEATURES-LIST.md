@@ -456,7 +456,7 @@ const EMAILJS_CONFIG = {
 - EmailJS: https://emailjs.com
 
 **GVCDA Support:**
-- Phone: +91 8978210705
+- Phone: +91 7981660705
 - Email: info@gvcdaservicehub.com
 
 ---

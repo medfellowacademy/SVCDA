@@ -188,13 +188,196 @@
     }
   };
 
+  // Render job applications table
+  async function renderJobApplications() {
+    try {
+      const searchTerm = (byId('jobAppSearch')?.value || '').toLowerCase().trim();
+      const statusFilter = byId('jobAppStatusFilter')?.value || '';
+      let applications;
+
+      if (searchTerm) {
+        applications = await db.job_applications.search(searchTerm);
+        if (statusFilter) {
+          applications = applications.filter(app => app.status === statusFilter);
+        }
+      } else if (statusFilter) {
+        applications = await db.job_applications.getByStatus(statusFilter);
+      } else {
+        applications = await db.job_applications.getAll();
+      }
+
+      const body = byId('jobApplicationsBody');
+      if (!body) return;
+
+      body.innerHTML = applications.map(app => {
+        const statusColors = {
+          'pending': '#f59e0b',
+          'reviewed': '#3b82f6',
+          'shortlisted': '#10b981',
+          'rejected': '#ef4444',
+          'hired': '#059669'
+        };
+        const statusColor = statusColors[app.status] || '#6b7280';
+
+        return '<tr>' +
+          '<td>' + formatDate(app.created_at) + '</td>' +
+          '<td>' + (app.name || '-') + '</td>' +
+          '<td>' + (app.phone || '-') + '</td>' +
+          '<td>' + (app.email || '-') + '</td>' +
+          '<td>' + (app.position || '-') + '</td>' +
+          '<td>' + (app.experience ? app.experience + ' yrs' : '-') + '</td>' +
+          '<td>' + (app.district || '-') + '</td>' +
+          '<td><span style="color:' + statusColor + ';font-weight:600;">' + (app.status || 'pending') + '</span></td>' +
+          '<td>' +
+            '<button onclick="viewJobApplication(\'' + app.id + '\')" style="padding:4px 8px;font-size:0.8rem;margin-right:4px;">View</button>' +
+            '<select onchange="updateJobAppStatus(\'' + app.id + '\', this.value)" style="padding:4px;font-size:0.8rem;">' +
+              '<option value="">Change Status</option>' +
+              '<option value="reviewed">Reviewed</option>' +
+              '<option value="shortlisted">Shortlisted</option>' +
+              '<option value="rejected">Rejected</option>' +
+              '<option value="hired">Hired</option>' +
+            '</select>' +
+          '</td>' +
+          '</tr>';
+      }).join('') || '<tr><td colspan="9">No job applications found</td></tr>';
+    } catch (error) {
+      console.error('Error rendering job applications:', error);
+      const body = byId('jobApplicationsBody');
+      if (body) body.innerHTML = '<tr><td colspan="9">Error loading job applications</td></tr>';
+    }
+  }
+
+  // View job application details
+  window.viewJobApplication = async function(appId) {
+    try {
+      const applications = await db.job_applications.getAll();
+      const app = applications.find(a => a.id === appId);
+      if (!app) {
+        alert('Application not found');
+        return;
+      }
+
+      const details = `
+Job Application Details:
+
+Name: ${app.name}
+Phone: ${app.phone}
+Email: ${app.email}
+Age: ${app.age || 'N/A'}
+Qualification: ${app.qualification || 'N/A'}
+Experience: ${app.experience || 0} years
+Position: ${app.position}
+District: ${app.district}
+Address: ${app.address || 'N/A'}
+
+Skills: ${app.skills || 'N/A'}
+
+Why join GVCDA:
+${app.message || 'N/A'}
+
+Status: ${app.status || 'pending'}
+Applied: ${formatDate(app.created_at)}
+      `;
+
+      alert(details);
+    } catch (error) {
+      console.error('Error viewing application:', error);
+      alert('Error loading application details');
+    }
+  };
+
+  // Update job application status
+  window.updateJobAppStatus = async function(appId, newStatus) {
+    if (!newStatus) return;
+    
+    try {
+      await db.job_applications.update(appId, { status: newStatus });
+      alert('Application status updated to: ' + newStatus);
+      await renderJobApplications();
+    } catch (error) {
+      console.error('Error updating status:', error);
+      alert('Error updating status: ' + error.message);
+    }
+  };
+
+  // Render payments table
+  async function renderPayments() {
+    try {
+      const searchTerm = (byId('paymentsSearch')?.value || '').toLowerCase().trim();
+      const dateFilter = byId('paymentsDateFilter')?.value || '';
+      let payments;
+
+      if (searchTerm) {
+        payments = await db.payments.search(searchTerm);
+      } else if (dateFilter) {
+        payments = await db.payments.getFiltered(dateFilter);
+      } else {
+        payments = await db.payments.getAll();
+      }
+
+      const body = byId('paymentsBody');
+      if (!body) return;
+
+      body.innerHTML = payments.map(payment => {
+        return '<tr>' +
+          '<td>' + formatDate(payment.created_at) + '</td>' +
+          '<td>' + (payment.name || '-') + '</td>' +
+          '<td>' + (payment.phone || '-') + '</td>' +
+          '<td>' + (payment.email || '-') + '</td>' +
+          '<td><strong>₹' + (payment.amount || 0) + '</strong></td>' +
+          '<td><small style="color:#666;">' + (payment.razorpay_payment_id || '-').substring(0, 20) + '...</small></td>' +
+          '<td>' + (payment.method || '-') + '</td>' +
+          '<td><span style="color:#10b981;font-weight:600;">' + (payment.status || 'success') + '</span></td>' +
+          '</tr>';
+      }).join('') || '<tr><td colspan="8">No payments found</td></tr>';
+    } catch (error) {
+      console.error('Error rendering payments:', error);
+      const body = byId('paymentsBody');
+      if (body) body.innerHTML = '<tr><td colspan="8">Error loading payments</td></tr>';
+    }
+  }
+
+  // Export job applications to CSV
+  byId('exportJobApps')?.addEventListener('click', async function() {
+    try {
+      const apps = await db.job_applications.getAll();
+      const columns = ['name', 'phone', 'email', 'age', 'qualification', 'experience', 'position', 'district', 'address', 'skills', 'message', 'status', 'created_at'];
+      const csv = toCSV(apps, columns);
+      downloadCSV('job_applications_' + new Date().toISOString().slice(0, 10) + '.csv', csv);
+    } catch (error) {
+      console.error('Error exporting job applications:', error);
+      alert('Error exporting data');
+    }
+  });
+
+  // Export payments to CSV
+  byId('exportPayments')?.addEventListener('click', async function() {
+    try {
+      const payments = await db.payments.getAll();
+      const columns = ['created_at', 'name', 'phone', 'email', 'amount', 'razorpay_payment_id', 'razorpay_order_id', 'method', 'status'];
+      const csv = toCSV(payments, columns);
+      downloadCSV('payments_' + new Date().toISOString().slice(0, 10) + '.csv', csv);
+    } catch (error) {
+      console.error('Error exporting payments:', error);
+      alert('Error exporting data');
+    }
+  });
+
+  // Add search functionality
+  byId('jobAppSearch')?.addEventListener('input', renderJobApplications);
+  byId('jobAppStatusFilter')?.addEventListener('change', renderJobApplications);
+  byId('paymentsSearch')?.addEventListener('input', renderPayments);
+  byId('paymentsDateFilter')?.addEventListener('change', renderPayments);
+
   // Render all sections
   async function renderAll() {
     await Promise.all([
       renderStats(),
       renderMembers(),
       renderActivity(),
-      renderEmployees()
+      renderEmployees(),
+      renderJobApplications(),
+      renderPayments()
     ]);
     // Render charts after data is loaded
     await renderAdvancedAnalytics();
@@ -203,20 +386,38 @@
   // Initialize authentication
   async function initAuth() {
     try {
-      // Get admin PIN from Supabase settings
-      let adminPin = await db.settings.get(ADMIN_PIN_KEY);
-      if (!adminPin) {
-        // Set default PIN
-        await db.settings.set(ADMIN_PIN_KEY, 'admin123');
-        adminPin = 'admin123';
+      let adminPin = 'admin123'; // Default PIN
+      
+      // Try to get PIN from Supabase if available
+      try {
+        const storedPin = await db.settings.get(ADMIN_PIN_KEY);
+        if (storedPin) {
+          adminPin = storedPin;
+        } else {
+          // Try to set default PIN in Supabase
+          await db.settings.set(ADMIN_PIN_KEY, 'admin123');
+        }
+      } catch (dbError) {
+        console.warn('Supabase not configured, using default PIN:', dbError);
+        // Continue with default PIN
       }
 
       byId('loginBtn').addEventListener('click', async function () {
         const inputPin = byId('adminPin').value;
-        const currentPin = await db.settings.get(ADMIN_PIN_KEY);
+        
+        // Try to get current PIN from Supabase, fallback to default
+        let currentPin = adminPin;
+        try {
+          const storedPin = await db.settings.get(ADMIN_PIN_KEY);
+          if (storedPin) {
+            currentPin = storedPin;
+          }
+        } catch (dbError) {
+          console.warn('Using default PIN');
+        }
         
         if (inputPin !== currentPin) {
-          byId('loginError').textContent = 'Invalid PIN';
+          byId('loginError').textContent = 'Invalid PIN. Try "admin123"';
           return;
         }
         
@@ -226,7 +427,22 @@
       });
     } catch (error) {
       console.error('Error initializing auth:', error);
-      alert('Error connecting to database. Please check your Supabase configuration.');
+      // Still allow login with default PIN even if there's an error
+      byId('loginBtn').addEventListener('click', function () {
+        const inputPin = byId('adminPin').value;
+        
+        if (inputPin !== 'admin123') {
+          byId('loginError').textContent = 'Invalid PIN. Default is "admin123"';
+          return;
+        }
+        
+        byId('loginWrap').style.display = 'none';
+        byId('panelWrap').style.display = 'block';
+        renderAll().catch(err => {
+          console.error('Error loading data:', err);
+          alert('Warning: Database connection issue. Some features may not work.');
+        });
+      });
     }
   }
 

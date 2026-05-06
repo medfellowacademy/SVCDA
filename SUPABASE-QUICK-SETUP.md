@@ -202,7 +202,7 @@ After Supabase setup is complete:
 
 **Can't figure it out?**
 - Email: info@gvcdaservicehub.com
-- Phone: +91 8978210705
+- Phone: +91 7981660705
 
 **Reference Files:**
 - `supabase-tables.sql` - Full SQL to run

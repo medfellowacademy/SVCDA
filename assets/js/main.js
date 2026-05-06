@@ -134,7 +134,8 @@ function askMemberIdentity() {
 function openPremiumApplication() {
   var modal = document.getElementById('premiumApplicationModal');
   if (!modal) {
-    payPremiumCard();
+    console.error('Premium application modal not found');
+    alert('Premium application form is not available. Please refresh the page.');
     return;
   }
   modal.classList.add('show');
@@ -152,16 +153,34 @@ function submitPremiumApplication(e) {
   e.preventDefault();
   var f = e.target;
   var agreed = f.querySelector('#panAgree') ? f.querySelector('#panAgree').checked : true;
+  
+  // Get selected category
+  var category = f.querySelector('#panCategory') ? f.querySelector('#panCategory').value : '';
+  
   var identity = {
     name: f.querySelector('#panName') ? f.querySelector('#panName').value.trim() : '',
     phone: f.querySelector('#panPhone') ? f.querySelector('#panPhone').value.trim() : '',
     email: f.querySelector('#panEmail') ? f.querySelector('#panEmail').value.trim() : '',
     district: f.querySelector('#panDistrict') ? f.querySelector('#panDistrict').value.trim() : '',
-    city: f.querySelector('#panCity') ? f.querySelector('#panCity').value.trim() : ''
+    city: f.querySelector('#panCity') ? f.querySelector('#panCity').value.trim() : '',
+    address: f.querySelector('#panAddress') ? f.querySelector('#panAddress').value.trim() : '',
+    pinCode: f.querySelector('#panPinCode') ? f.querySelector('#panPinCode').value.trim() : '',
+    occupation: f.querySelector('#panOccupation') ? f.querySelector('#panOccupation').value.trim() : '',
+    category: category
   };
 
   if (!identity.name || !phoneDigits(identity.phone)) {
     alert('Please enter valid name and phone number.');
+    return;
+  }
+  
+  if (!identity.address || !identity.pinCode || !identity.occupation) {
+    alert('Please fill in all required fields (Address, Pin Code, Occupation).');
+    return;
+  }
+  
+  if (!category) {
+    alert('Please select a category/service.');
     return;
   }
 
@@ -170,7 +189,14 @@ function submitPremiumApplication(e) {
     return;
   }
 
-  closePremiumApplication();
+  
+  // Call the payment processing function
+  if (typeof window.processPremiumPayment === 'function') {
+    window.processPremiumPayment(identity);
+  } else {
+    console.error('Payment system not loaded');
+    alert('Payment system is not ready. Please refresh the page and try again.');
+  };
   payPremiumCard(identity);
 }
 
@@ -314,7 +340,7 @@ function submitWA(e, sec) {
     }
 
     var t = "Hello GVCDA!\n\n*Name:* " + vn + "\n*Phone:* " + vp + "\n*Sector:* " + sec + "\n*Service:* " + sVal + "\n*Selected Items:* " + items + loc + "\n*Details:* " + msg + "\n\nLooking forward to your response!"; 
-    window.open('https://wa.me/918978210705?text=' + encodeURIComponent(t), '_blank');
+    window.open('https://wa.me/917981660705?text=' + encodeURIComponent(t), '_blank');
 }
 
 // 6. Payment Scripts
@@ -331,7 +357,7 @@ function payGroceryAdvance() {
         image: (location.pathname.includes('/pages/') ? '../assets/images/LOGO.png' : 'assets/images/LOGO.png'),
         handler: function (resp) {
             alert('Payment successful. Payment ID: ' + resp.razorpay_payment_id);
-            window.open('https://wa.me/918978210705?text=' + encodeURIComponent('Hi GVCDA, I paid grocery advance. Payment ID: ' + resp.razorpay_payment_id), '_blank');
+            window.open('https://wa.me/917981660705?text=' + encodeURIComponent('Hi GVCDA, I paid grocery advance. Payment ID: ' + resp.razorpay_payment_id), '_blank');
         },
         prefill: { contact: '' },
         theme: { color: '#0D9488' }
@@ -378,7 +404,7 @@ function payPremiumCard(identityInput) {
 
           sendMembershipNotifications(member, resp.razorpay_payment_id);
             alert('Payment successful. Payment ID: ' + resp.razorpay_payment_id);
-            window.open('https://wa.me/918978210705?text=' + encodeURIComponent('Hi GVCDA, I purchased Premium Card. Payment ID: ' + resp.razorpay_payment_id), '_blank');
+            window.open('https://wa.me/917981660705?text=' + encodeURIComponent('Hi GVCDA, I purchased Premium Card. Payment ID: ' + resp.razorpay_payment_id), '_blank');
         },
         prefill: { name: identity.name, contact: identity.phone },
         theme: { color: '#F97316' }

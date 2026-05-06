@@ -304,7 +304,7 @@ Website Buttons:
 
 How it works:
   1. User clicks button
-  2. Opens wa.me/918978210705
+  2. Opens wa.me/917981660705
   3. Pre-fills message
   4. User sends from their WhatsApp
   └→ 100% FREE, no API needed!
@@ -408,8 +408,8 @@ Total: $0/month
 ### WhatsApp button doesn't work:
 
 **Fix:**
-1. Check phone number format: `918978210705` (no +, no spaces)
-2. Test direct link: `https://wa.me/918978210705`
+1. Check phone number format: `917981660705` (no +, no spaces)
+2. Test direct link: `https://wa.me/917981660705`
 3. Must have WhatsApp installed (mobile) or use web.whatsapp.com
 
 ### Payment not saving:
