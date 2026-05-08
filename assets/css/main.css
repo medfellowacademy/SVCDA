@@ -384,10 +384,10 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
 .vmc-v .vmc-i{background-image:url('https://img.icons8.com/color/96/goal.png')}
 .vmc-m .vmc-i{background-image:url('https://img.icons8.com/color/96/mission-of-a-company.png')}
 .vmck{background-image:url('https://img.icons8.com/ios-filled/50/ffffff/checkmark.png');background-size:12px 12px}
-.popup-perk:nth-child(1) i{background-image:url('https://img.icons8.com/color/96/fast-cart.png')}
-.popup-perk:nth-child(2) i{background-image:url('https://img.icons8.com/color/96/discount--v1.png')}
+.popup-perk:nth-child(1) i{background-image:url('https://img.icons8.com/color/96/insurance.png')}
+.popup-perk:nth-child(2) i{background-image:url('https://img.icons8.com/color/96/delivery.png')}
 .popup-perk:nth-child(3) i{background-image:url('https://img.icons8.com/color/96/online-course.png')}
-.popup-perk:nth-child(4) i{background-image:url('https://img.icons8.com/color/96/heart-with-pulse.png')}
+.popup-perk:nth-child(4) i{background-image:url('https://img.icons8.com/color/96/find-matching-job.png')}
 
 /* ==================== */
 
@@ -823,10 +823,10 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
 .vmc-v .vmc-i{background-image:url('https://img.icons8.com/color/96/goal.png')}
 .vmc-m .vmc-i{background-image:url('https://img.icons8.com/color/96/mission-of-a-company.png')}
 .vmck{background-image:url('https://img.icons8.com/ios-filled/50/ffffff/checkmark.png');background-size:12px 12px}
-.popup-perk:nth-child(1) i{background-image:url('https://img.icons8.com/color/96/fast-cart.png')}
-.popup-perk:nth-child(2) i{background-image:url('https://img.icons8.com/color/96/discount--v1.png')}
+.popup-perk:nth-child(1) i{background-image:url('https://img.icons8.com/color/96/insurance.png')}
+.popup-perk:nth-child(2) i{background-image:url('https://img.icons8.com/color/96/delivery.png')}
 .popup-perk:nth-child(3) i{background-image:url('https://img.icons8.com/color/96/online-course.png')}
-.popup-perk:nth-child(4) i{background-image:url('https://img.icons8.com/color/96/heart-with-pulse.png')}
+.popup-perk:nth-child(4) i{background-image:url('https://img.icons8.com/color/96/find-matching-job.png')}
 
 /* ==================== */
 
@@ -1220,10 +1220,10 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
 .vmc-v .vmc-i{background-image:url('https://img.icons8.com/color/96/goal.png')}
 .vmc-m .vmc-i{background-image:url('https://img.icons8.com/color/96/mission-of-a-company.png')}
 .vmck{background-image:url('https://img.icons8.com/ios-filled/50/ffffff/checkmark.png');background-size:12px 12px}
-.popup-perk:nth-child(1) i{background-image:url('https://img.icons8.com/color/96/fast-cart.png')}
-.popup-perk:nth-child(2) i{background-image:url('https://img.icons8.com/color/96/discount--v1.png')}
+.popup-perk:nth-child(1) i{background-image:url('https://img.icons8.com/color/96/insurance.png')}
+.popup-perk:nth-child(2) i{background-image:url('https://img.icons8.com/color/96/delivery.png')}
 .popup-perk:nth-child(3) i{background-image:url('https://img.icons8.com/color/96/online-course.png')}
-.popup-perk:nth-child(4) i{background-image:url('https://img.icons8.com/color/96/heart-with-pulse.png')}
+.popup-perk:nth-child(4) i{background-image:url('https://img.icons8.com/color/96/find-matching-job.png')}
 
 /* ==================== */
 
@@ -3789,11 +3789,11 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
         }
 
         .popup-perk:nth-child(1) i {
-            background-image: url('https://img.icons8.com/color/96/fast-cart.png')
+            background-image: url('https://img.icons8.com/color/96/insurance.png')
         }
 
         .popup-perk:nth-child(2) i {
-            background-image: url('https://img.icons8.com/color/96/discount--v1.png')
+            background-image: url('https://img.icons8.com/color/96/delivery.png')
         }
 
         .popup-perk:nth-child(3) i {
@@ -3801,7 +3801,7 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
         }
 
         .popup-perk:nth-child(4) i {
-            background-image: url('https://img.icons8.com/color/96/heart-with-pulse.png')
+            background-image: url('https://img.icons8.com/color/96/find-matching-job.png')
         }
 
         .ml-i {
@@ -4011,11 +4011,11 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
         }
 
         .popup-perk:nth-child(1) i {
-            background-image: url('https://img.icons8.com/color/96/fast-cart.png')
+            background-image: url('https://img.icons8.com/color/96/insurance.png')
         }
 
         .popup-perk:nth-child(2) i {
-            background-image: url('https://img.icons8.com/color/96/discount--v1.png')
+            background-image: url('https://img.icons8.com/color/96/delivery.png')
         }
 
         .popup-perk:nth-child(3) i {
@@ -4023,7 +4023,7 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
         }
 
         .popup-perk:nth-child(4) i {
-            background-image: url('https://img.icons8.com/color/96/heart-with-pulse.png')
+            background-image: url('https://img.icons8.com/color/96/find-matching-job.png')
         }
 
 /* ==================== */
@@ -6605,11 +6605,11 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
         }
 
         .popup-perk:nth-child(1) i {
-            background-image: url('https://img.icons8.com/color/96/fast-cart.png')
+            background-image: url('https://img.icons8.com/color/96/insurance.png')
         }
 
         .popup-perk:nth-child(2) i {
-            background-image: url('https://img.icons8.com/color/96/discount--v1.png')
+            background-image: url('https://img.icons8.com/color/96/delivery.png')
         }
 
         .popup-perk:nth-child(3) i {
@@ -6617,7 +6617,7 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
         }
 
         .popup-perk:nth-child(4) i {
-            background-image: url('https://img.icons8.com/color/96/heart-with-pulse.png')
+            background-image: url('https://img.icons8.com/color/96/find-matching-job.png')
         }
 
 /* ==================== */
@@ -6991,11 +6991,11 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
         }
 
         .pf:nth-child(1) .pf-i {
-            background-image: url('https://img.icons8.com/color/96/fast-cart.png')
+            background-image: url('https://img.icons8.com/color/96/insurance.png')
         }
 
         .pf:nth-child(2) .pf-i {
-            background-image: url('https://img.icons8.com/color/96/discount--v1.png')
+            background-image: url('https://img.icons8.com/color/96/delivery.png')
         }
 
         .pf:nth-child(3) .pf-i {
@@ -7003,7 +7003,7 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
         }
 
         .pf:nth-child(4) .pf-i {
-            background-image: url('https://img.icons8.com/color/96/heart-with-pulse.png')
+            background-image: url('https://img.icons8.com/color/96/find-matching-job.png')
         }
 
         .pf:nth-child(5) .pf-i {
@@ -7317,11 +7317,11 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
         }
 
         .popup-perk:nth-child(1) i {
-            background-image: url('https://img.icons8.com/color/96/fast-cart.png')
+            background-image: url('https://img.icons8.com/color/96/insurance.png')
         }
 
         .popup-perk:nth-child(2) i {
-            background-image: url('https://img.icons8.com/color/96/discount--v1.png')
+            background-image: url('https://img.icons8.com/color/96/delivery.png')
         }
 
         .popup-perk:nth-child(3) i {
@@ -7329,7 +7329,7 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
         }
 
         .popup-perk:nth-child(4) i {
-            background-image: url('https://img.icons8.com/color/96/heart-with-pulse.png')
+            background-image: url('https://img.icons8.com/color/96/find-matching-job.png')
         }
 
 /* ==================== */
@@ -7731,10 +7731,10 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
 .vmc-v .vmc-i{background-image:url('https://img.icons8.com/color/96/goal.png')}
 .vmc-m .vmc-i{background-image:url('https://img.icons8.com/color/96/mission-of-a-company.png')}
 .vmck{background-image:url('https://img.icons8.com/ios-filled/50/ffffff/checkmark.png');background-size:12px 12px}
-.popup-perk:nth-child(1) i{background-image:url('https://img.icons8.com/color/96/fast-cart.png')}
-.popup-perk:nth-child(2) i{background-image:url('https://img.icons8.com/color/96/discount--v1.png')}
+.popup-perk:nth-child(1) i{background-image:url('https://img.icons8.com/color/96/insurance.png')}
+.popup-perk:nth-child(2) i{background-image:url('https://img.icons8.com/color/96/delivery.png')}
 .popup-perk:nth-child(3) i{background-image:url('https://img.icons8.com/color/96/online-course.png')}
-.popup-perk:nth-child(4) i{background-image:url('https://img.icons8.com/color/96/heart-with-pulse.png')}
+.popup-perk:nth-child(4) i{background-image:url('https://img.icons8.com/color/96/find-matching-job.png')}
 
 /* ==================== */
 
@@ -8136,10 +8136,10 @@ footer{background:var(--w);border-top:1px solid var(--bdr);padding:52px 28px 22p
 .vmc-v .vmc-i{background-image:url('https://img.icons8.com/color/96/goal.png')}
 .vmc-m .vmc-i{background-image:url('https://img.icons8.com/color/96/mission-of-a-company.png')}
 .vmck{background-image:url('https://img.icons8.com/ios-filled/50/ffffff/checkmark.png');background-size:12px 12px}
-.popup-perk:nth-child(1) i{background-image:url('https://img.icons8.com/color/96/fast-cart.png')}
-.popup-perk:nth-child(2) i{background-image:url('https://img.icons8.com/color/96/discount--v1.png')}
+.popup-perk:nth-child(1) i{background-image:url('https://img.icons8.com/color/96/insurance.png')}
+.popup-perk:nth-child(2) i{background-image:url('https://img.icons8.com/color/96/delivery.png')}
 .popup-perk:nth-child(3) i{background-image:url('https://img.icons8.com/color/96/online-course.png')}
-.popup-perk:nth-child(4) i{background-image:url('https://img.icons8.com/color/96/heart-with-pulse.png')}
+.popup-perk:nth-child(4) i{background-image:url('https://img.icons8.com/color/96/find-matching-job.png')}
 /* --- NEW HERO IMAGES OVERRIDES --- */
 .hsl-village .hero-sl-bg { background: url('https://images.unsplash.com/photo-1708593330411-24d85eff0728?w=1600&auto=format&fit=crop&q=80') no-repeat center 30% / cover !important; filter: brightness(0.98) contrast(1.15) saturate(1.15); image-rendering: -webkit-optimize-contrast; image-rendering: high-quality; }
 .hsl-city .hero-sl-bg { background: url('https://media.gettyimages.com/id/484228451/photo/woman-sewing.jpg?s=612x612&w=0&k=20&c=VvhpdhFasMaKm4t7xkamVz_qtTsQ0s7xUd4hDG5KPTw=') no-repeat center 25% / cover !important; filter: brightness(0.98) contrast(1.15) saturate(1.15); image-rendering: -webkit-optimize-contrast; image-rendering: high-quality; }
