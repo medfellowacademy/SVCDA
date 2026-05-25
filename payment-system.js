@@ -15,35 +15,42 @@
 
 // ==================== CONFIGURATION ====================
 
-// Payment Bypass for Testing (set to true to skip Razorpay)
-const BYPASS_PAYMENT = true; // Set to false for production
+// Payment Bypass — set to false for production; only enable temporarily for testing
+const BYPASS_PAYMENT = false;
 
-// Razorpay Configuration (from environment variables)
+// Razorpay Configuration
+// import.meta.env is not available in static sites; use window overrides or hardcoded key
 const RAZORPAY_CONFIG = {
-  KEY_ID: import.meta.env.VITE_RAZORPAY_KEY || 'rzp_test_xxxxxxxxxxxxxx',
+  KEY_ID: (typeof window !== 'undefined' && window.SVCDA_RAZORPAY_KEY)
+    ? window.SVCDA_RAZORPAY_KEY
+    : (import.meta?.env?.VITE_RAZORPAY_KEY || 'rzp_test_xxxxxxxxxxxxxx'),
   CURRENCY: 'INR',
   COMPANY_NAME: 'GVCDA',
   COMPANY_LOGO: 'https://gvcda.in/assets/images/LOGO.png',
   THEME_COLOR: '#0B1120'
 };
 
-// Validate Razorpay key
-if (!import.meta.env.VITE_RAZORPAY_KEY) {
-  console.warn('⚠️ Using test Razorpay key. Set VITE_RAZORPAY_KEY for production.');
+if (RAZORPAY_CONFIG.KEY_ID === 'rzp_test_xxxxxxxxxxxxxx') {
+  console.warn('⚠️ Using placeholder Razorpay key. Set window.SVCDA_RAZORPAY_KEY or VITE_RAZORPAY_KEY for production.');
 }
 
-// MSG91 Configuration (from environment variables)
+// MSG91 Configuration
 const MSG91_CONFIG = {
-  AUTH_KEY: import.meta.env.VITE_MSG91_AUTH_KEY || 'xxxxxxxxxxxxxxxxxxxxxxxx',
-  SENDER_ID: import.meta.env.VITE_MSG91_SENDER_ID || 'GVCDA',
+  AUTH_KEY: (typeof window !== 'undefined' && window.SVCDA_MSG91_AUTH_KEY)
+    ? window.SVCDA_MSG91_AUTH_KEY
+    : (import.meta?.env?.VITE_MSG91_AUTH_KEY || ''),
+  SENDER_ID: (typeof window !== 'undefined' && window.SVCDA_MSG91_SENDER_ID)
+    ? window.SVCDA_MSG91_SENDER_ID
+    : (import.meta?.env?.VITE_MSG91_SENDER_ID || 'GVCDA'),
   ROUTE: '4', // 4 = Transactional, 1 = Promotional
   COUNTRY_CODE: '91', // India country code
   WHATSAPP_NUMBER: '', // Your MSG91 WhatsApp number (optional)
-  DLT_TE_ID: import.meta.env.VITE_MSG91_DLT_ID || ''
+  DLT_TE_ID: (typeof window !== 'undefined' && window.SVCDA_MSG91_DLT_ID)
+    ? window.SVCDA_MSG91_DLT_ID
+    : (import.meta?.env?.VITE_MSG91_DLT_ID || '')
 };
 
-// Validate MSG91 credentials
-if (!import.meta.env.VITE_MSG91_AUTH_KEY) {
+if (!MSG91_CONFIG.AUTH_KEY) {
   console.warn('⚠️ MSG91 not configured. Set VITE_MSG91_AUTH_KEY, VITE_MSG91_SENDER_ID, and VITE_MSG91_DLT_ID.');
 }
 

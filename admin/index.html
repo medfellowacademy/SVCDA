@@ -45,13 +45,29 @@
 <div class="admin-shell">
   <div id="loginWrap">
     <div class="admin-title">GVCDA Admin Panel</div>
-    <p class="admin-sub">Enter admin PIN to view members and service usage.</p>
-    <div class="admin-row" style="margin-top:14px">
-      <input type="password" id="adminPin" placeholder="Enter admin PIN">
-      <button id="loginBtn">Login</button>
+    <p class="admin-sub">Login with your admin employee account or the admin PIN.</p>
+
+    <!-- Employee (role=admin) Login -->
+    <div style="margin-top:18px;padding-bottom:14px;border-bottom:1px solid var(--bdr)">
+      <p class="admin-sub" style="margin-bottom:8px;font-weight:600">Admin Account Login</p>
+      <div class="admin-row" style="flex-direction:column;align-items:stretch;gap:8px">
+        <input type="email" id="adminEmail" placeholder="Admin email (e.g. admin@gvcda.org)" style="padding:10px 12px;border:1px solid var(--bdr);border-radius:10px;outline:none;width:100%">
+        <input type="password" id="adminPassword" placeholder="Employee password" style="padding:10px 12px;border:1px solid var(--bdr);border-radius:10px;outline:none;width:100%">
+        <button id="adminEmailLoginBtn" style="width:100%">Login with Account</button>
+      </div>
     </div>
+
+    <!-- Fallback PIN Login -->
+    <div style="margin-top:14px">
+      <p class="admin-sub" style="margin-bottom:8px;font-weight:600">OR — Admin PIN</p>
+      <div class="admin-row">
+        <input type="password" id="adminPin" placeholder="Admin PIN">
+        <button id="loginBtn">Login</button>
+      </div>
+    </div>
+
     <div class="err" id="loginError"></div>
-    <p class="admin-sub">Default PIN: admin123 (change after login).</p>
+    <p class="admin-sub" style="margin-top:6px">Default PIN: admin123 • Default account: admin@gvcda.org / emp123</p>
   </div>
 
   <div id="panelWrap">

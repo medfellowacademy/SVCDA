@@ -383,65 +383,87 @@ Applied: ${formatDate(app.created_at)}
     await renderAdvancedAnalytics();
   }
 
+  // Helper: open admin panel after successful auth
+  async function openAdminPanel() {
+    byId('loginWrap').style.display = 'none';
+    byId('panelWrap').style.display = 'block';
+    await renderAll();
+  }
+
   // Initialize authentication
   async function initAuth() {
+    // ── Admin Email / Password login (role-based) ─────────────────
+    const emailLoginBtn = byId('adminEmailLoginBtn');
+    if (emailLoginBtn) {
+      emailLoginBtn.addEventListener('click', async function () {
+        const email    = (byId('adminEmail')?.value || '').trim();
+        const password = (byId('adminPassword')?.value || '').trim();
+        const errEl    = byId('loginError');
+
+        if (!email || !password) {
+          errEl.textContent = 'Please enter email and password.';
+          return;
+        }
+
+        emailLoginBtn.disabled = true;
+        emailLoginBtn.textContent = 'Checking...';
+
+        try {
+          const employee = await db.employees.getByEmail(email);
+          if (!employee) throw new Error('No employee found with this email.');
+          if (employee.password !== password) throw new Error('Incorrect password.');
+          if (employee.role !== 'admin') throw new Error('Access denied — your account does not have admin privileges.');
+
+          // Store session so returning visits work
+          sessionStorage.setItem('currentEmployee', JSON.stringify(employee));
+          await openAdminPanel();
+        } catch (err) {
+          errEl.textContent = '❌ ' + (err.message || 'Login failed');
+          emailLoginBtn.disabled = false;
+          emailLoginBtn.textContent = 'Login with Account';
+        }
+      });
+    }
+
+    // ── PIN fallback login ────────────────────────────────────────
     try {
-      let adminPin = 'admin123'; // Default PIN
-      
-      // Try to get PIN from Supabase if available
+      let adminPin = 'admin123';
       try {
         const storedPin = await db.settings.get(ADMIN_PIN_KEY);
-        if (storedPin) {
-          adminPin = storedPin;
-        } else {
-          // Try to set default PIN in Supabase
-          await db.settings.set(ADMIN_PIN_KEY, 'admin123');
-        }
+        if (storedPin) adminPin = storedPin;
+        else await db.settings.set(ADMIN_PIN_KEY, 'admin123');
       } catch (dbError) {
         console.warn('Supabase not configured, using default PIN:', dbError);
-        // Continue with default PIN
       }
 
       byId('loginBtn').addEventListener('click', async function () {
         const inputPin = byId('adminPin').value;
-        
-        // Try to get current PIN from Supabase, fallback to default
         let currentPin = adminPin;
         try {
           const storedPin = await db.settings.get(ADMIN_PIN_KEY);
-          if (storedPin) {
-            currentPin = storedPin;
-          }
-        } catch (dbError) {
-          console.warn('Using default PIN');
-        }
-        
+          if (storedPin) currentPin = storedPin;
+        } catch (dbError) { /* use default */ }
+
         if (inputPin !== currentPin) {
           byId('loginError').textContent = 'Invalid PIN. Try "admin123"';
           return;
         }
-        
-        byId('loginWrap').style.display = 'none';
-        byId('panelWrap').style.display = 'block';
-        await renderAll();
+        await openAdminPanel();
       });
     } catch (error) {
-      console.error('Error initializing auth:', error);
-      // Still allow login with default PIN even if there's an error
+      console.error('Error initializing PIN auth:', error);
       byId('loginBtn').addEventListener('click', function () {
         const inputPin = byId('adminPin').value;
-        
         if (inputPin !== 'admin123') {
           byId('loginError').textContent = 'Invalid PIN. Default is "admin123"';
           return;
         }
-        
-        byId('loginWrap').style.display = 'none';
-        byId('panelWrap').style.display = 'block';
         renderAll().catch(err => {
           console.error('Error loading data:', err);
           alert('Warning: Database connection issue. Some features may not work.');
         });
+        byId('loginWrap').style.display = 'none';
+        byId('panelWrap').style.display = 'block';
       });
     }
   }

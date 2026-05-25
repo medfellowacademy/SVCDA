@@ -146,52 +146,53 @@
 </div>
 
 <script>
-// Check if already logged in
-if (auth.isLoggedIn()) {
-    window.location.href = 'employee-dashboard.html';
-}
+// Check if already logged in — must run AFTER modules load (auth is set by supabase-config.js module)
+window.addEventListener('load', function () {
+    if (window.auth && window.auth.isLoggedIn()) {
+        const emp = window.auth.getCurrentEmployee();
+        // Redirect admin-role employees to admin panel
+        if (emp && emp.role === 'admin') {
+            window.location.href = '../admin/index.html';
+        } else {
+            window.location.href = 'employee-dashboard.html';
+        }
+    }
+});
 
 // Handle employee login with Supabase
 async function handleEmployeeLogin(e) {
     e.preventDefault();
-    
+
     const email = document.getElementById('empEmail').value.trim();
     const password = document.getElementById('empPassword').value;
     const errorMsg = document.getElementById('empErrorMsg');
     const submitBtn = e.target.querySelector('button[type="submit"]');
-    
-    // Disable submit button during login
+
     submitBtn.disabled = true;
     submitBtn.textContent = 'Logging in...';
-    
+
     try {
-        // Use auth.login from supabase-config.js
-        const employee = await auth.login(email, password);
-        
-        // Redirect to employee dashboard
-        window.location.href = 'employee-dashboard.html';
-        
+        // auth is available on window (set by supabase-config.js module)
+        const employee = await window.auth.login(email, password);
+
+        // Role-based redirect: admin employees go to admin panel
+        if (employee.role === 'admin') {
+            window.location.href = '../admin/index.html';
+        } else {
+            window.location.href = 'employee-dashboard.html';
+        }
+
     } catch (error) {
         console.error('Login error:', error);
         errorMsg.textContent = '❌ ' + (error.message || 'Invalid email or password');
         errorMsg.style.display = 'block';
-        
-        // Re-enable submit button
+
         submitBtn.disabled = false;
         submitBtn.textContent = 'Login to Dashboard';
-        
-        setTimeout(() => {
-            errorMsg.style.display = 'none';
-        }, 3000);
+
+        setTimeout(() => { errorMsg.style.display = 'none'; }, 4000);
     }
 }
-
-// Display test credentials in console (for development)
-window.addEventListener('load', () => {
-    console.log('Test Employee Credentials:');
-    console.log('Email: employee@gvcda.in, Password: emp123');
-    console.log('Email: sarah@gvcda.in, Password: emp123');
-});
 </script>
 
 </body>

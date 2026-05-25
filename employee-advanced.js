@@ -21,8 +21,8 @@
    */
   async function renderEmployeeMetrics(employeeId) {
     try {
-      const members = await db.members.getAll();
-      const myMembers = members.filter(m => m.added_by === employeeId);
+      // Fetch ONLY this employee's members — do not expose all members to employee
+      const myMembers = await db.members.getByEmployee(employeeId);
       
       // Calculate metrics
       const metrics = {
@@ -97,10 +97,11 @@
    */
   async function renderActivityTimeline(employeeId) {
     try {
-      const activity = await db.activity.getAll();
-      const myActivity = activity
+      // Scope activity to this employee only — don't fetch all activity
+      const allActivity = await db.activity.getAll();
+      const myActivity = allActivity
         .filter(a => a.added_by === employeeId)
-        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        .sort((a, b) => new Date(b.timestamp || b.created_at) - new Date(a.timestamp || a.created_at))
         .slice(0, 20); // Last 20 activities
       
       const container = document.getElementById('activityTimeline');
@@ -251,9 +252,7 @@
    */
   async function duplicateLastMember(employeeId) {
     try {
-      const members = await db.members.getAll();
-      const myMembers = members
-        .filter(m => m.added_by === employeeId)
+      const myMembers = (await db.members.getByEmployee(employeeId))
         .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
       
       if (myMembers.length === 0) {

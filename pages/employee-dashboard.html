@@ -476,41 +476,49 @@
 </div>
 
 <script>
-// Check if employee is logged in
+// Check if employee is logged in — use window.auth (set by supabase-config.js module)
+let currentEmployee = null;
+
 function checkLogin() {
-    const currentEmp = auth.getCurrentEmployee();
-    if (!currentEmp) {
+    const emp = window.auth && window.auth.getCurrentEmployee();
+    if (!emp) {
         window.location.href = 'employee-login.html';
         return null;
     }
-    return currentEmp;
+    return emp;
 }
 
-// Initialize page
-const currentEmployee = checkLogin();
-if (currentEmployee) {
-    document.getElementById('empName').textContent = currentEmployee.name;
-    document.getElementById('empWelcome').textContent = 'Welcome back, ' + currentEmployee.name + '!';
-    loadStats();
-    loadMyUsers();
-}
+// Initialize after modules have loaded
+window.addEventListener('load', function () {
+    currentEmployee = checkLogin();
+    if (currentEmployee) {
+        document.getElementById('empName').textContent = currentEmployee.name;
+        document.getElementById('empWelcome').textContent = 'Welcome back, ' + currentEmployee.name + '!';
+        loadStats();
+        loadMyUsers();
+    }
+});
 
 // Switch tabs
 function switchTab(tab) {
     const tabs = document.querySelectorAll('.emp-tab');
     const contents = document.querySelectorAll('.emp-tab-content');
-    
+
     tabs.forEach(t => t.classList.remove('active'));
     contents.forEach(c => c.classList.remove('active'));
-    
-    if (tab === 'add') {
-        tabs[0].classList.add('active');
-        document.getElementById('addTab').classList.add('active');
-    } else {
-        tabs[1].classList.add('active');
-        document.getElementById('usersTab').classList.add('active');
-        loadMyUsers();
-    }
+
+    const tabMap = {
+        'add':        { idx: 0, id: 'addTab',         onShow: null },
+        'users':      { idx: 1, id: 'usersTab',       onShow: loadMyUsers },
+        'timeline':   { idx: 2, id: 'timelineTab',    onShow: () => { if (typeof window.renderActivityTimeline === 'function') window.renderActivityTimeline(currentEmployee.id); } },
+        'leaderboard':{ idx: 3, id: 'leaderboardTab', onShow: () => { if (typeof window.renderLeaderboard === 'function') window.renderLeaderboard(); } }
+    };
+
+    const target = tabMap[tab] || tabMap['add'];
+    if (tabs[target.idx]) tabs[target.idx].classList.add('active');
+    const el = document.getElementById(target.id);
+    if (el) el.classList.add('active');
+    if (target.onShow) target.onShow();
 }
 
 // Add new user with payment
