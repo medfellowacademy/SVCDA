@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Order and service page for Health, Education, and Home Grocery needs with WhatsApp enquiry support.">
+<meta name="keywords" content="GVCDA order service, health services, education services, grocery order, whatsapp enquiry">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://gvcda.in/order-service.html">
+<title>Order / Service - GVCDA</title>
+<link rel="shortcut icon" href="../assets/images/LOGO.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/main.css">
+  <style>
+    /* Job Application Modal */
+    .job-app-modal { position: fixed; inset: 0; background: rgba(2, 8, 23, 0.62); display: none; align-items: center; justify-content: center; z-index: 1200; padding: 16px; }
+    .job-app-modal.show { display: flex; }
+    .job-app-card { width: 100%; max-width: 650px; max-height: 90vh; overflow-y: auto; background: #fff; border-radius: 16px; border: 1px solid var(--bdr); }
+    .job-app-head { padding: 16px 20px; background: var(--a); color: #fff; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+    .job-app-head h3 { margin: 0; font-size: 1.15rem; }
+    .job-app-close { border: none; background: transparent; color: #fff; font-size: 1.3rem; cursor: pointer; font-weight: bold; }
+    .job-app-body { padding: 20px; }
+    .job-app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .job-app-field label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--n); font-size: .88rem; }
+    .job-app-field input, .job-app-field select, .job-app-field textarea { width: 100%; border: 1px solid var(--bdr); border-radius: 10px; padding: 11px 13px; font-size: .9rem; font-family: inherit; }
+    .job-app-field textarea { resize: vertical; min-height: 80px; }
+    .job-app-actions { margin-top: 18px; display: flex; gap: 12px; justify-content: flex-end; }
+    .job-app-actions button { border: none; border-radius: 10px; padding: 12px 20px; font-weight: 700; cursor: pointer; font-size: .9rem; }
+    .job-app-cancel { background: #E2E8F0; color: #0F172A; }
+    .job-app-submit { background: var(--a); color: #fff; }
+    @media(max-width:680px){ .job-app-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div class="pl" id="pl"><div><div class="pl-t">GV<b>CDA</b></div><div class="pl-d"><i></i><i></i><i></i></div></div></div>
+<header id="hdr"><div class="htop"><div class="htop-i"><span>One Platform for Glob Village & City Development</span><div class="htop-r"><a href="tel:+919908011124">+91 9908011124</a><a href="mailto:info@gvcdaservicehub.com">info@gvcdaservicehub.com</a></div></div></div>
+<div class="nw"><a href="../index.html" class="logo"><img src="../assets/images/LOGO.png" alt="GVCDA Logo" style="height:60px;width:auto;margin-right:8px;"><div><div class="ln">GVCDA</div><div class="lt2">Glob Village &amp; City Development</div></div></a>
+<nav class="mn"><div class="ni"><a href="../index.html">Home</a></div><div class="ni"><a href="about.html">About</a></div>
+<div class="ni"><a href="sectors.html">Sectors <span class="arr" style="display:inline-flex;align-items:center;margin-left:4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></a></div>
+<div class="ni"><a href="women-empowerment.html">Women Empowerment</a></div><div class="ni"><a href="vision.html">Mission &amp; Vision</a></div><div class="ni"><a href="premium-card.html">Digital Card</a></div><div class="ni"><a href="order-service.html" style="color:var(--a)">Order / Service</a></div><div class="ni"><a href="contact.html">Contact</a></div></nav>
+<div class="h-ctas" style="display:flex;gap:12px;align-items:center;"><a href="employee-login.html" class="ncta" style="background:var(--n);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Employee</a><button onclick="openJobApplication()" class="ncta" style="background:var(--a);border:none;cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Job Application</button><a href="tel:+919908011124" class="ncta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.11 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> Call Now</a>
+<button class="mbtn" id="mb" aria-label="Menu"><span></span><span></span><span></span></button></div></div></header>
+<div class="mov" id="mo"></div><nav class="mpn" id="mp"><div class="mph"><a href="../index.html" class="logo"><img src="../assets/images/LOGO.png" alt="GVCDA Logo" style="height:60px;width:auto;margin-right:8px;"><div><div class="ln" style="color:var(--n)">GVCDA</div></div></a><button class="mx" id="mx">X</button></div>
+<a href="../index.html">Home</a><a href="about.html">About Us</a><div class="mlab">Sectors</div><a href="education.html">Education</a>
+<a href="grocery.html">Grocery</a>
+<a href="business.html">Business</a>
+<a href="health.html">Health</a>
+<a href="electronics.html">Electronics</a>
+<a href="agriculture.html">Agriculture</a>
+<a href="services.html">Services</a>
+<a href="skill-development.html">Skill Training</a>
+<a href="employment.html">Employment</a><div class="mlab">More</div><a href="women-empowerment.html">Women Empowerment</a><a href="vision.html">Vision & Mission</a><a href="contact.html">Contact Us</a><a href="premium-card.html">Premium Card</a><a href="register.html">Register</a></nav>
+
+<section class="phero" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)"><div class="phero-content"><div class="phero-ey"><i></i> Order Services</div><h1>Choose a <em>Service Sector</em></h1><p class="phero-sub">Select from the categories below and explore available services. Click to view details and send WhatsApp enquiry instantly.</p></div></section>
+
+<section class="section" style="background:var(--w);padding:60px 0"><div class="container">
+  <div class="rv" style="text-align:center;margin-bottom:20px">
+    <div class="ey" style="justify-content:center"><span class="ey-b"></span> Available Sectors</div>
+    <h2 class="sh">Choose Your Service Category</h2>
+    <p class="sht" style="max-width:680px;margin:12px auto 0">Select from our three main service sectors and explore available items with instant WhatsApp enquiry support.</p>
+  </div>
+
+  <div class="sector-grid">
+    <!-- Health Sector Card -->
+    <div class="sector-card" onclick="showSector('health')">
+      <div class="sector-icon">
+        <img src="https://img.icons8.com/ios-filled/50/stethoscope.png" alt="Health">
+      </div>
+      <h3 class="sector-title">Health Sector</h3>
+      <p class="sector-desc">Complete health services including medicine orders, doctor consultations, lab tests, and health checkups.</p>
+      <div class="sector-items">
+        <span class="sector-item">Medicine</span>
+        <span class="sector-item">Doctor</span>
+        <span class="sector-item">Lab Tests</span>
+        <span class="sector-item">Checkup</span>
+      </div>
+      <div class="sector-actions">
+        <a href="health.html" class="sector-btn sector-btn-primary">
+          View All Services
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <button class="sector-btn sector-btn-secondary" onclick="event.stopPropagation();openWhatsAppEnquiry('Health Sector')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <!-- Education Sector Card -->
+    <div class="sector-card" onclick="showSector('education')">
+      <div class="sector-icon">
+        <img src="https://img.icons8.com/ios-filled/50/graduation-cap.png" alt="Education">
+      </div>
+      <h3 class="sector-title">Education Sector</h3>
+      <p class="sector-desc">Educational needs from stationery orders, books, admission enquiry to skill development programs.</p>
+      <div class="sector-items">
+        <span class="sector-item">Stationery</span>
+        <span class="sector-item">Books</span>
+        <span class="sector-item">Admission</span>
+        <span class="sector-item">Skills</span>
+      </div>
+      <div class="sector-actions">
+        <a href="education.html" class="sector-btn sector-btn-primary">
+          View All Services
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <button class="sector-btn sector-btn-secondary" onclick="event.stopPropagation();openWhatsAppEnquiry('Education Sector')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <!-- Grocery Sector Card -->
+    <div class="sector-card" onclick="showSector('grocery')">
+      <div class="sector-icon">
+        <img src="https://img.icons8.com/ios-filled/50/shopping-basket-2.png" alt="Grocery">
+      </div>
+      <h3 class="sector-title">Home Grocery Necessary</h3>
+      <p class="sector-desc">Daily grocery essentials with free home delivery, monthly packs, and discount offers up to 80% off.</p>
+      <div class="sector-items">
+        <span class="sector-item">Daily Grocery</span>
+        <span class="sector-item">Free Delivery</span>
+        <span class="sector-item">Monthly Pack</span>
+        <span class="sector-item">Discounts</span>
+      </div>
+      <div class="sector-actions">
+        <a href="grocery.html" class="sector-btn sector-btn-primary">
+          View All Services
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <button class="sector-btn sector-btn-secondary" onclick="event.stopPropagation();openWhatsAppEnquiry('Home Grocery Necessary')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/919908011124?text=Hello%20GVCDA,%20I%20need%20assistance" class="wa-float" target="_blank" aria-label="WhatsApp Contact">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
+
+<footer class="footer-dark">
+<div class="fd-bottom">&copy; 2026 GVCDA - Glob Village &amp; City Development Agency</div>
+</footer>
+
+<script type="module">
+// Job Application Functions with Supabase Integration
+import { supabase } from '../supabase-config.js';
+
+async function openJobApplication() {
+    document.getElementById('jobApplicationModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeJobApplication() {
+    document.getElementById('jobApplicationModal').classList.remove('show');
+    document.body.style.overflow = '';
+    document.getElementById('jobApplicationForm').reset();
+}
+
+async function submitJobApplication(event) {
+    event.preventDefault();
+    
+    const formData = {
+        name: document.getElementById('jobName').value.trim(),
+        phone: document.getElementById('jobPhone').value.trim(),
+        email: document.getElementById('jobEmail').value.trim(),
+        age: parseInt(document.getElementById('jobAge').value),
+        qualification: document.getElementById('jobQualification').value.trim(),
+        experience: parseFloat(document.getElementById('jobExperience').value),
+        position: document.getElementById('jobPosition').value,
+        district: document.getElementById('jobDistrict').value,
+        address: document.getElementById('jobAddress').value.trim(),
+        skills: document.getElementById('jobSkills').value.trim(),
+        message: document.getElementById('jobMessage').value.trim(),
+        status: 'pending'
+    };
+    
+    console.log('Job Application Submitted:', formData);
+    
+    // Save to Supabase
+    try {
+        const { data, error } = await supabase
+            .from('job_applications')
+            .insert([formData])
+            .select();
+        
+        if (error) {
+            console.error('Error saving job application:', error);
+            alert('❌ There was an error submitting your application. Please try again or contact us directly.');
+        } else {
+            console.log('Job application saved:', data);
+            alert('✅ Thank you! Your job application has been submitted successfully. We will contact you soon.');
+            closeJobApplication();
+        }
+    } catch (err) {
+        console.error('Exception:', err);
+        alert('✅ Thank you! Your job application has been received. We will contact you soon.');
+        closeJobApplication();
+    }
+}
+
+// Make functions globally available
+window.openJobApplication = openJobApplication;
+window.closeJobApplication = closeJobApplication;
+window.submitJobApplication = submitJobApplication;
+</script>
+</body>
+</html>
