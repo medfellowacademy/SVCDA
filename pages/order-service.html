@@ -27,6 +27,7 @@
     .job-app-submit { background: var(--a); color: #fff; }
     @media(max-width:680px){ .job-app-grid { grid-template-columns: 1fr; } }
   </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div class="pl" id="pl"><div><div class="pl-t">GV<b>CDA</b></div><div class="pl-d"><i></i><i></i><i></i></div></div></div>
@@ -598,9 +599,8 @@ async function submitJobApplication(event) {
             closeJobApplication();
         }
     } catch (err) {
-        console.error('Exception:', err);
-        alert('✅ Thank you! Your job application has been received. We will contact you soon.');
-        closeJobApplication();
+        console.error('Exception saving job application:', err);
+        alert('❌ Error submitting application: ' + (err.message || err) + '\nPlease try again or contact us directly.');
     }
 }
 

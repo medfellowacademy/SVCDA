@@ -7,18 +7,15 @@
  * - VITE_SUPABASE_KEY
  */
 
-// Load from environment variables or use placeholder
-let SUPABASE_URL = import.meta?.env?.VITE_SUPABASE_URL || '';
-let SUPABASE_ANON_KEY = import.meta?.env?.VITE_SUPABASE_KEY || '';
+// Supabase credentials — set directly for static hosting (no Vite build)
+// Also supports window.SVCDA_SUPABASE_URL / window.SVCDA_SUPABASE_KEY overrides
+let SUPABASE_URL = (typeof window !== 'undefined' && window.SVCDA_SUPABASE_URL)
+  ? window.SVCDA_SUPABASE_URL
+  : (import.meta?.env?.VITE_SUPABASE_URL || 'https://ugpnumgppmhtnozskxdq.supabase.co');
 
-// Validate credentials
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  console.warn('⚠️ Missing Supabase credentials! Set VITE_SUPABASE_URL and VITE_SUPABASE_KEY in environment variables.');
-  console.warn('⚠️ Admin panel will work with limited functionality (default PIN only).');
-  // Use placeholder values to prevent errors
-  SUPABASE_URL = 'https://placeholder.supabase.co';
-  SUPABASE_ANON_KEY = 'placeholder-key';
-}
+let SUPABASE_ANON_KEY = (typeof window !== 'undefined' && window.SVCDA_SUPABASE_KEY)
+  ? window.SVCDA_SUPABASE_KEY
+  : (import.meta?.env?.VITE_SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVncG51bWdwcG1odG5venNreGRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyMzQyMDMsImV4cCI6MjA5MTgxMDIwM30.K3L88HprTX52J_xK_JmPzKCMQRCW07hhRDOHqNIxPW4');
 
 // Initialize Supabase client
 const supabase = window.supabase?.createClient ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
