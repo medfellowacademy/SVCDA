@@ -1,0 +1,26 @@
+{
+  "name": "gvcda",
+  "version": "1.0.0",
+  "description": "**State Village Community Development Association** - Complete digital platform for member management, services, and premium card system.",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/medfellowacademy/GVCDA.git"
+  },
+  "keywords": ["gvcda", "membership", "payment", "razorpay", "msg91"],
+  "author": "GVCDA",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/medfellowacademy/GVCDA/issues"
+  },
+  "homepage": "https://github.com/medfellowacademy/GVCDA#readme",
+  "devDependencies": {
+    "vite": "^8.0.8"
+  }
+}
