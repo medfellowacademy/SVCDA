@@ -485,43 +485,41 @@ function closeJobApplication() {
 
 async function submitJobApplication(event) {
     event.preventDefault();
-    
-    const formData = {
-        name: document.getElementById('jobName').value.trim(),
-        phone: document.getElementById('jobPhone').value.trim(),
-        email: document.getElementById('jobEmail').value.trim(),
-        age: parseInt(document.getElementById('jobAge').value),
+
+    const submitBtn = event.target.querySelector('button[type="submit"]') || event.submitter;
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Submitting...'; }
+
+    const appData = {
+        name:          document.getElementById('jobName').value.trim(),
+        phone:         document.getElementById('jobPhone').value.trim(),
+        email:         document.getElementById('jobEmail').value.trim(),
+        age:           parseInt(document.getElementById('jobAge').value) || null,
         qualification: document.getElementById('jobQualification').value.trim(),
-        experience: parseFloat(document.getElementById('jobExperience').value),
-        position: document.getElementById('jobPosition').value,
-        district: document.getElementById('jobDistrict').value,
-        address: document.getElementById('jobAddress').value.trim(),
-        skills: document.getElementById('jobSkills').value.trim(),
-        message: document.getElementById('jobMessage').value.trim(),
-        status: 'pending'
+        experience:    parseFloat(document.getElementById('jobExperience').value) || null,
+        position:      document.getElementById('jobPosition').value,
+        district:      document.getElementById('jobDistrict').value,
+        address:       document.getElementById('jobAddress').value.trim(),
+        skills:        document.getElementById('jobSkills').value.trim(),
+        message:       document.getElementById('jobMessage').value.trim(),
+        status:        'pending'
     };
-    
-    console.log('Job Application Submitted:', formData);
-    
-    // Save to Supabase
+
     try {
-        const { data, error } = await supabase
-            .from('job_applications')
-            .insert([formData])
-            .select();
-        
-        if (error) {
-            console.error('Error saving job application:', error);
-            alert('❌ There was an error submitting your application. Please try again or contact us directly.');
+        if (window.db && window.db.job_applications) {
+            await window.db.job_applications.create(appData);
         } else {
-            console.log('Job application saved:', data);
-            alert('✅ Thank you! Your job application has been submitted successfully. We will contact you soon.');
-            closeJobApplication();
+            const entry = Object.assign({ id: 'JA_' + Date.now(), created_at: new Date().toISOString() }, appData);
+            const existing = JSON.parse(localStorage.getItem('gvcda_job_applications') || '[]');
+            existing.unshift(entry);
+            localStorage.setItem('gvcda_job_applications', JSON.stringify(existing));
         }
-    } catch (err) {
-        console.error('Exception:', err);
-        alert('✅ Thank you! Your job application has been received. We will contact you soon.');
+        alert('✅ Thank you! Your job application has been submitted successfully. We will contact you soon.');
         closeJobApplication();
+    } catch (err) {
+        console.error('Job application submit error:', err);
+        alert('❌ Failed to submit application. Please try again.');
+    } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit Application'; }
     }
 }
 
