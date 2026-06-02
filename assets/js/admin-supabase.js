@@ -155,38 +155,90 @@
       const body = byId('employeesBody');
 
       body.innerHTML = employees.map(emp => {
-        const empUsers = members.filter(m => m.added_by === emp.id);
+        const empUsers   = members.filter(m => m.added_by === emp.id);
         const empPremium = empUsers.filter(m => m.plan === 'Premium');
+        const isActive   = (emp.status || 'active') === 'active';
+        const statusBadge = isActive
+          ? '<span style="background:#d1fae5;color:#065f46;padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:600;">Active</span>'
+          : '<span style="background:#fee2e2;color:#991b1b;padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:600;">Inactive</span>';
+
+        const empJson = encodeURIComponent(JSON.stringify({ id: emp.id, name: emp.name || '', email: emp.email || '', status: emp.status || 'active' }));
 
         return '<tr>' +
-          '<td>' + emp.id.substring(0, 8) + '...</td>' +
-          '<td>' + (emp.name || '-') + '</td>' +
+          '<td style="font-family:monospace;font-size:.8rem;">' + emp.id.substring(0, 10) + '…</td>' +
+          '<td><strong>' + (emp.name || '-') + '</strong></td>' +
           '<td>' + (emp.email || '-') + '</td>' +
           '<td><strong>' + empUsers.length + '</strong></td>' +
           '<td><strong>' + empPremium.length + '</strong></td>' +
           '<td>' + formatDate(emp.last_login) + '</td>' +
-          '<td><button onclick="removeEmployee(\'' + emp.id + '\', \'' + emp.email + '\')">Remove</button></td>' +
+          '<td>' + statusBadge + '</td>' +
+          '<td style="white-space:nowrap;">' +
+            '<button onclick="openEditEmpModal(\'' + empJson + '\')" style="padding:5px 12px;border:none;border-radius:6px;background:#667eea;color:#fff;font-weight:600;cursor:pointer;font-size:.82rem;margin-right:6px;">Edit</button>' +
+            '<button onclick="deleteEmployee(\'' + emp.id + '\', \'' + (emp.email || '') + '\')" style="padding:5px 12px;border:none;border-radius:6px;background:#ef4444;color:#fff;font-weight:600;cursor:pointer;font-size:.82rem;">Delete</button>' +
+          '</td>' +
           '</tr>';
-      }).join('') || '<tr><td colspan="7">No employees added yet</td></tr>';
+      }).join('') || '<tr><td colspan="8" style="text-align:center;color:#999;padding:30px;">No employees added yet</td></tr>';
     } catch (error) {
       console.error('Error rendering employees:', error);
-      byId('employeesBody').innerHTML = '<tr><td colspan="7">Error loading employees</td></tr>';
+      byId('employeesBody').innerHTML = '<tr><td colspan="8">Error loading employees</td></tr>';
     }
   }
 
-  // Remove employee
-  window.removeEmployee = async function(employeeId, email) {
-    if (!confirm('Remove employee ' + email + '? Their added users will remain.')) return;
-    
+  // Open edit modal
+  window.openEditEmpModal = function(encodedData) {
+    const emp = JSON.parse(decodeURIComponent(encodedData));
+    byId('editEmpId').value       = emp.id;
+    byId('editEmpName').value     = emp.name;
+    byId('editEmpEmail').value    = emp.email;
+    byId('editEmpPassword').value = '';
+    byId('editEmpStatus').value   = emp.status || 'active';
+    const modal = byId('editEmpModal');
+    modal.style.display = 'flex';
+  };
+
+  window.closeEditEmpModal = function() {
+    byId('editEmpModal').style.display = 'none';
+  };
+
+  // Close modal on backdrop click
+  document.addEventListener('click', function(e) {
+    const modal = byId('editEmpModal');
+    if (modal && e.target === modal) modal.style.display = 'none';
+  });
+
+  window.saveEditEmployee = async function() {
+    const id       = byId('editEmpId').value;
+    const name     = byId('editEmpName').value.trim();
+    const email    = byId('editEmpEmail').value.trim();
+    const password = byId('editEmpPassword').value.trim();
+    const status   = byId('editEmpStatus').value;
+
+    if (!name || !email) { alert('Name and email are required.'); return; }
+
+    const updates = { name, email, status };
+    if (password) updates.password = password;
+
     try {
-      // In production, add a proper delete endpoint or use Supabase delete
-      // For now, we'll update their status
-      await db.employees.update(employeeId, { status: 'inactive' });
-      alert('Employee removed successfully');
-      renderAll();
+      await db.employees.update(id, updates);
+      closeEditEmpModal();
+      await renderEmployees();
+      await renderStats();
     } catch (error) {
-      console.error('Error removing employee:', error);
-      alert('Error removing employee: ' + error.message);
+      console.error('Error updating employee:', error);
+      alert('Error updating employee: ' + error.message);
+    }
+  };
+
+  // Delete employee permanently
+  window.deleteEmployee = async function(employeeId, email) {
+    if (!confirm('Permanently delete employee ' + email + '?\n\nTheir added members will remain in the system.')) return;
+    try {
+      await db.employees.delete(employeeId);
+      await renderEmployees();
+      await renderStats();
+    } catch (error) {
+      console.error('Error deleting employee:', error);
+      alert('Error deleting employee: ' + error.message);
     }
   };
 
