@@ -347,14 +347,43 @@ const db = {
 
     async create(applicationData) {
       const app = Object.assign({ id: 'JA_' + Date.now(), created_at: new Date().toISOString() }, applicationData);
+      // Always save to localStorage first
       const list = this._readLocal();
       list.unshift(app);
       this._writeLocal(list);
       if (supabase) {
         try {
-          const { data, error } = await supabase.from('job_applications').insert([applicationData]).select().single();
-          if (!error && data) return data;
-        } catch(e) {}
+          // Send only schema-valid fields — no local id (Supabase auto-generates UUID)
+          const row = {
+            name:          applicationData.name,
+            phone:         applicationData.phone,
+            email:         applicationData.email         || null,
+            age:           applicationData.age           || null,
+            qualification: applicationData.qualification || null,
+            experience:    applicationData.experience    || null,
+            position:      applicationData.position,
+            district:      applicationData.district,
+            address:       applicationData.address       || null,
+            skills:        applicationData.skills        || null,
+            message:       applicationData.message       || null,
+            status:        applicationData.status        || 'pending'
+          };
+          const { data, error } = await supabase.from('job_applications').insert([row]).select().single();
+          if (error) {
+            console.error('⚠️ Supabase job_applications insert failed:', error.message, '| Code:', error.code);
+          }
+          if (!error && data) {
+            // Update the localStorage entry with the real Supabase id so admin dedup works
+            try {
+              const updated = this._readLocal();
+              const idx = updated.findIndex(a => a.id === app.id);
+              if (idx !== -1) { updated[idx] = Object.assign({}, updated[idx], { id: data.id }); this._writeLocal(updated); }
+            } catch(e) {}
+            return data;
+          }
+        } catch(e) {
+          console.error('⚠️ Supabase job_applications create exception:', e);
+        }
       }
       return app;
     },
@@ -363,7 +392,13 @@ const db = {
       if (supabase) {
         try {
           const { data, error } = await supabase.from('job_applications').select('*').order('created_at', { ascending: false });
-          if (!error) return data || [];
+          if (!error) {
+            // Merge any local-only entries (submitted while offline) into the Supabase result
+            const localList  = this._readLocal();
+            const remoteIds  = new Set(data.map(a => a.id));
+            const localOnly  = localList.filter(a => !remoteIds.has(a.id));
+            return [...data, ...localOnly].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+          }
         } catch(e) {}
       }
       return this._readLocal();
