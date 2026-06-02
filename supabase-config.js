@@ -42,7 +42,7 @@ const db = {
   members: {
     async create(memberData) {
       const m = Object.assign({ id: 'M_' + Date.now(), created_at: new Date().toISOString() }, memberData);
-      // Always persist to localStorage (normalised snake_case)
+      // Always persist to localStorage
       try {
         const list = JSON.parse(localStorage.getItem('gvcda_members') || '[]');
         list.unshift(m);
@@ -50,9 +50,42 @@ const db = {
       } catch(e) {}
       if (!supabase) return m;
       try {
-        const { data, error } = await supabase.from('members').insert([memberData]).select().single();
-        if (!error && data) return data;
-      } catch(e) {}
+        // Explicitly map only columns that exist in the Supabase schema
+        const row = {
+          name:           memberData.name,
+          phone:          memberData.phone,
+          email:          memberData.email          || null,
+          location:       memberData.location       || null,
+          plan:           memberData.plan           || 'Basic',
+          card_number:    memberData.card_number    || null,
+          amount:         memberData.amount         || null,
+          payment_id:     memberData.payment_id     || null,
+          payment_method: memberData.payment_method || null,
+          notes:          memberData.notes          || null,
+          added_by_name:  memberData.added_by_name  || null,
+          status:         memberData.status         || 'Active'
+        };
+        // Only include added_by if it looks like a valid UUID (Supabase-generated)
+        if (memberData.added_by && /^[0-9a-f-]{36}$/i.test(memberData.added_by)) {
+          row.added_by = memberData.added_by;
+        }
+        const { data, error } = await supabase.from('members').insert([row]).select().single();
+        if (error) {
+          console.error('⚠️ Supabase members insert failed:', error.message, '| Code:', error.code);
+          console.info('Tip: Run the migration SQL in supabase-migration.sql to add missing columns.');
+        }
+        if (!error && data) {
+          // Update localStorage entry with the real Supabase id
+          try {
+            const list = JSON.parse(localStorage.getItem('gvcda_members') || '[]');
+            const idx  = list.findIndex(x => x.id === m.id);
+            if (idx !== -1) { list[idx] = Object.assign({}, list[idx], { id: data.id }); localStorage.setItem('gvcda_members', JSON.stringify(list)); }
+          } catch(e) {}
+          return data;
+        }
+      } catch(e) {
+        console.error('⚠️ Supabase members create exception:', e);
+      }
       return m;
     },
     
@@ -227,9 +260,25 @@ const db = {
       } catch(e) {}
       if (!supabase) return entry;
       try {
-        const { data, error } = await supabase.from('activity').insert([activityData]).select().single();
+        // Map only columns that exist in the activity table schema
+        const row = {
+          type:           activityData.type,
+          member_name:    activityData.member_name    || null,
+          phone:          activityData.phone           || null,
+          service:        activityData.service         || null,
+          payment:        activityData.payment         || null,
+          added_by_name:  activityData.added_by_name  || null,
+          timestamp:      activityData.timestamp       || new Date().toISOString()
+        };
+        // Only include UUID FKs if they are valid Supabase UUIDs
+        if (activityData.added_by  && /^[0-9a-f-]{36}$/i.test(activityData.added_by))  row.added_by  = activityData.added_by;
+        if (activityData.member_id && /^[0-9a-f-]{36}$/i.test(activityData.member_id)) row.member_id = activityData.member_id;
+        const { data, error } = await supabase.from('activity').insert([row]).select().single();
+        if (error) console.error('⚠️ Supabase activity insert failed:', error.message);
         if (!error && data) return data;
-      } catch(e) {}
+      } catch(e) {
+        console.error('⚠️ Supabase activity create exception:', e);
+      }
       return entry;
     },
     
