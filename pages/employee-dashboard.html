@@ -1057,10 +1057,11 @@ function downloadMemberImage() {
     a.click();
 }
 
-async function downloadMemberPDF() {
-    if (!currentCardUser) return;
+// Shared PDF builder — returns the jsPDF object (does not save)
+async function buildMemberPDF() {
+    if (!currentCardUser) return null;
     const jspdfLib = window.jspdf;
-    if (!jspdfLib) { alert('PDF library not loaded. Please refresh the page.'); return; }
+    if (!jspdfLib) { alert('PDF library not loaded. Please refresh the page.'); return null; }
     const { jsPDF } = jspdfLib;
     const pdf  = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const PW   = 210, PH = 297;
@@ -1078,7 +1079,7 @@ async function downloadMemberPDF() {
     pdf.text('gvcda.in', PW - 14, 17, { align: 'right' });
 
     // Card image
-    const canvas = document.getElementById('memberCardCanvas');
+    const canvas  = document.getElementById('memberCardCanvas');
     const imgData = canvas.toDataURL('image/png');
     const cardW   = 178, cardH = Math.round(178 * 660 / 1050);
     pdf.addImage(imgData, 'PNG', (PW - cardW) / 2, 32, cardW, cardH);
@@ -1138,10 +1139,34 @@ async function downloadMemberPDF() {
     pdf.text('State Village & City Development Agency  |  +91 7981660705  |  gvcda.in', PW / 2, PH - 12, { align: 'center' });
     pdf.text('Generated on ' + new Date().toLocaleDateString('en-IN'), PW / 2, PH - 5, { align: 'center' });
 
-    pdf.save('GVCDA_Membership_' + (currentCardUser.card_number || name).replace(/\s+/g, '_') + '.pdf');
+    return pdf;
 }
 
-function sendMemberWhatsApp() {
+async function downloadMemberPDF() {
+    const pdf = await buildMemberPDF();
+    if (!pdf) return;
+    pdf.save('GVCDA_Membership_' + (currentCardUser.card_number || currentCardUser.name).replace(/\s+/g, '_') + '.pdf');
+}
+
+function showCardToast(msg, bg) {
+    let t = document.getElementById('cardToast');
+    if (!t) {
+        t = document.createElement('div');
+        t.id = 'cardToast';
+        t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);padding:13px 26px;border-radius:10px;color:#fff;font-weight:700;font-size:14px;z-index:99999;box-shadow:0 6px 20px rgba(0,0,0,0.35);transition:opacity 0.35s;white-space:nowrap;';
+        document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.background = bg || '#25d366';
+    t.style.opacity = '1'; t.style.display = 'block';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => {
+        t.style.opacity = '0';
+        setTimeout(() => { t.style.display = 'none'; }, 360);
+    }, 3600);
+}
+
+async function sendMemberWhatsApp() {
     if (!currentCardUser) return;
     const vt  = getValidTillFull(currentCardUser);
     const msg =
@@ -1161,14 +1186,45 @@ function sendMemberWhatsApp() {
         '• 20% discount on all services\n' +
         '• Free health camps\n' +
         '• Skill development courses\n\n' +
-        '📎 _Your membership card PDF is attached to this message._\n\n' +
+        '📎 _Your membership card PDF is attached._\n\n' +
         'Need help? Call: +91 7981660705\n' +
         'www.gvcda.in\n\n' +
         '*Team GVCDA* 🙏';
 
     const raw   = (currentCardUser.phone || '').replace(/\D/g, '');
     const phone = raw.startsWith('91') ? raw : '91' + raw;
-    window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank');
+    const waURL = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(msg);
+
+    const btn = document.querySelector('.btn-wa');
+    if (btn) { btn.disabled = true; btn.textContent = 'Preparing...'; }
+
+    try {
+        const pdf = await buildMemberPDF();
+        const filename = 'GVCDA_Membership_' + (currentCardUser.card_number || currentCardUser.name).replace(/\s+/g, '_') + '.pdf';
+
+        // ── Mobile: Web Share API — shares PDF file directly to WhatsApp ──
+        if (pdf && navigator.canShare) {
+            try {
+                const blob = pdf.output('blob');
+                const file = new File([blob], filename, { type: 'application/pdf' });
+                if (navigator.canShare({ files: [file] })) {
+                    await navigator.share({ title: 'GVCDA Membership Card - ' + currentCardUser.name, text: msg, files: [file] });
+                    return; // done — native share sheet handled everything
+                }
+            } catch (shareErr) { /* not supported or cancelled — fall through */ }
+        }
+
+        // ── Desktop fallback: auto-download PDF then open WhatsApp ──
+        if (pdf) pdf.save(filename);
+        showCardToast('PDF downloaded — attach it in WhatsApp before sending!', '#f97316');
+        setTimeout(() => window.open(waURL, '_blank'), 1400);
+
+    } catch (e) {
+        console.error('WhatsApp send error:', e);
+        window.open(waURL, '_blank'); // bare fallback
+    } finally {
+        if (btn) { btn.disabled = false; btn.textContent = '💬 Open WhatsApp'; }
+    }
 }
 
 // DOMContentLoaded fires after deferred module scripts complete
