@@ -1036,7 +1036,7 @@ function generateECardCanvas(member, canvas) {
     // ── Footer ──
     ctx.fillStyle = 'rgba(255,255,255,0.45)';
     ctx.font = '15px Arial, sans-serif';
-    ctx.fillText('State Village & City Development Agency  •  +91 7981660705  •  gvcda.in', 62, 582);
+    ctx.fillText('State Village & City Development Agency  •  +91 7981660705  •  www.gvcdaservicehub.com', 62, 582);
 
     // ── Shine overlay ──
     ctx.save();
@@ -1076,7 +1076,7 @@ async function buildMemberPDF() {
     pdf.text('GVCDA', 14, 17);
     pdf.setFontSize(10); pdf.setFont('helvetica', 'normal');
     pdf.text('Official Membership Certificate', 46, 17);
-    pdf.text('gvcda.in', PW - 14, 17, { align: 'right' });
+    pdf.text('www.gvcdaservicehub.com', PW - 14, 17, { align: 'right' });
 
     // Card image
     const canvas  = document.getElementById('memberCardCanvas');
@@ -1136,7 +1136,7 @@ async function buildMemberPDF() {
     pdf.setDrawColor(210, 210, 220);
     pdf.line(0, PH - 20, PW, PH - 20);
     pdf.setFontSize(8); pdf.setTextColor(130, 130, 130);
-    pdf.text('State Village & City Development Agency  |  +91 7981660705  |  gvcda.in', PW / 2, PH - 12, { align: 'center' });
+    pdf.text('State Village & City Development Agency  |  +91 7981660705  |  www.gvcdaservicehub.com', PW / 2, PH - 12, { align: 'center' });
     pdf.text('Generated on ' + new Date().toLocaleDateString('en-IN'), PW / 2, PH - 5, { align: 'center' });
 
     return pdf;
@@ -1188,7 +1188,7 @@ async function sendMemberWhatsApp() {
         '• Skill development courses\n\n' +
         '📎 _Your membership card PDF is attached._\n\n' +
         'Need help? Call: +91 7981660705\n' +
-        'www.gvcda.in\n\n' +
+        'www.gvcdaservicehub.com\n\n' +
         '*Team GVCDA* 🙏';
 
     const raw   = (currentCardUser.phone || '').replace(/\D/g, '');
