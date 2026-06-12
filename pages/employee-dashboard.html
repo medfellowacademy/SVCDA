@@ -1116,21 +1116,21 @@ async function buildMemberPDF() {
         ry += 9;
     });
 
-    // Benefits box
+    // Premium Benefits box
     const benY = detY + 94;
     pdf.setFillColor(240, 245, 255);
     pdf.setDrawColor(200, 215, 250);
-    pdf.roundedRect(14, benY, PW - 28, 44, 3, 3, 'FD');
+    pdf.roundedRect(14, benY, PW - 28, 52, 3, 3, 'FD');
     pdf.setTextColor(102, 126, 234);
     pdf.setFontSize(11); pdf.setFont('helvetica', 'bold');
-    pdf.text('Premium Benefits', 21, benY + 9);
+    pdf.text('Premium Member Benefits', 21, benY + 9);
     pdf.setFontSize(8.5); pdf.setFont('helvetica', 'normal'); pdf.setTextColor(55, 55, 55);
-    ['Priority customer support', '20% discount on all services', 'Free health camps access']
+    ['Priority customer support', '20% discount on all services', 'Free health camps access', 'Special event invitations']
         .forEach((b, i) => pdf.text('• ' + b, 21, benY + 18 + i * 8));
-    ['Skill development courses', 'Fast-track service processing', 'Special event invitations']
+    ['Skill development courses', 'Fast-track service processing', 'Agricultural & business support', 'Exclusive member-only offers']
         .forEach((b, i) => pdf.text('• ' + b, 112, benY + 18 + i * 8));
 
-    // Footer
+    // Page 1 Footer
     pdf.setFillColor(245, 245, 248);
     pdf.rect(0, PH - 20, PW, 20, 'F');
     pdf.setDrawColor(210, 210, 220);
@@ -1138,6 +1138,113 @@ async function buildMemberPDF() {
     pdf.setFontSize(8); pdf.setTextColor(130, 130, 130);
     pdf.text('Globe Village & City Development Agency  |  +91 7981660705  |  www.gvcdaservicehub.com', PW / 2, PH - 12, { align: 'center' });
     pdf.text('Generated on ' + new Date().toLocaleDateString('en-IN'), PW / 2, PH - 5, { align: 'center' });
+
+    // ═══════════════════════════════════════════════════
+    // PAGE 2 — Our Services
+    // ═══════════════════════════════════════════════════
+    pdf.addPage();
+
+    // Page 2 header
+    pdf.setFillColor(102, 126, 234);
+    pdf.rect(0, 0, PW, 26, 'F');
+    pdf.setTextColor(255,255,255);
+    pdf.setFontSize(18); pdf.setFont('helvetica', 'bold');
+    pdf.text('GVCDA', 14, 17);
+    pdf.setFontSize(10); pdf.setFont('helvetica', 'normal');
+    pdf.text('Services & Support Directory', 46, 17);
+    pdf.text('www.gvcdaservicehub.com', PW - 14, 17, { align: 'right' });
+
+    // Title
+    pdf.setTextColor(40, 40, 40);
+    pdf.setFontSize(16); pdf.setFont('helvetica', 'bold');
+    pdf.text('Our Services — Available to Premium Members', PW / 2, 40, { align: 'center' });
+    pdf.setFontSize(9); pdf.setFont('helvetica', 'normal'); pdf.setTextColor(100, 100, 100);
+    pdf.text('As a GVCDA Premium Member, you get priority access and 20% discount on all services below.', PW / 2, 48, { align: 'center' });
+
+    const services = [
+        { icon: '1.', title: 'Agriculture & Farming Support',
+          items: ['Seeds, fertilizers & pesticide guidance', 'Soil testing & crop advisory', 'Irrigation support & water management',
+                  'Crop insurance assistance', 'Govt. scheme enrollment (PM-KISAN etc.)', 'Agricultural loan facilitation'] },
+        { icon: '2.', title: 'Education & Coaching',
+          items: ['School & college admission assistance', 'Scholarship applications & follow-up', 'Online & offline coaching support',
+                  'Exam preparation resources', 'Career counselling & guidance', 'Digital literacy programs'] },
+        { icon: '3.', title: 'Health & Medical Services',
+          items: ['Doctor consultation & referral', 'Free health camps & check-ups', 'Medicine procurement support',
+                  'Health insurance enrollment', 'Ambulance & emergency assistance', 'Mental health & wellness programs'] },
+        { icon: '4.', title: 'Business Support & Loans',
+          items: ['Business registration & licensing', 'Startup funding & loan guidance', 'GST & accounting support',
+                  'Marketing & branding assistance', 'E-commerce onboarding help', 'Govt. business scheme applications'] },
+        { icon: '5.', title: 'Grocery & Daily Essentials',
+          items: ['Ration & daily grocery delivery', 'Bulk purchasing at discounted rates', 'Household essentials supply',
+                  'Fresh vegetables & fruits delivery', 'Packaged food & FMCG items', 'Monthly subscription baskets'] },
+        { icon: '6.', title: 'Employment & Job Placement',
+          items: ['Job placement & recruitment support', 'Resume building & interview prep', 'Govt. job notification alerts',
+                  'Skill-matching to job openings', 'Self-employment guidance', 'Apprenticeship & internship programs'] },
+        { icon: '7.', title: 'Electronics & Technology',
+          items: ['Mobile, laptop & appliance repair', 'Purchase assistance & best deals', 'Software & tech support',
+                  'Internet & broadband setup', 'Online service navigation help', 'Cyber security awareness'] },
+        { icon: '8.', title: 'Women Empowerment',
+          items: ['Self-help group (SHG) formation', 'Microfinance & savings programs', 'Skill training for women entrepreneurs',
+                  'Legal aid & protection awareness', 'Leadership & confidence programs', 'Domestic product marketing support'] },
+        { icon: '9.', title: 'Skill Development & Training',
+          items: ['Vocational & trade training courses', 'Industry certification programs', 'Computer & IT skills training',
+                  'Soft skills & communication courses', 'Entrepreneurship development', 'Government skill scheme enrollment'] },
+        { icon: '10.', title: 'Ayurvedic Products & Wellness',
+          items: ['Natural & herbal health products', 'Ayurvedic consultation', 'Organic skincare & wellness items',
+                  'Immunity booster products', 'Detox & diet planning support', 'Home remedies & health tips'] },
+        { icon: '11.', title: 'Order & Delivery Services',
+          items: ['Doorstep product delivery', 'Custom order placement support', 'Local market price comparison',
+                  'Bulk order discounts', 'Packaging & logistics assistance', 'Return & refund support'] },
+    ];
+
+    let sy = 56;
+    const colW = (PW - 28) / 2;
+
+    services.forEach((svc, idx) => {
+        const col   = idx % 2;
+        const sx    = 14 + col * (colW + 4);
+        const boxH  = 42;
+
+        if (col === 0 && idx > 0) sy += boxH + 4;
+        if (sy + boxH > PH - 24) {
+            // New page if overflow
+            pdf.addPage();
+            pdf.setFillColor(102, 126, 234);
+            pdf.rect(0, 0, PW, 26, 'F');
+            pdf.setTextColor(255,255,255);
+            pdf.setFontSize(14); pdf.setFont('helvetica', 'bold');
+            pdf.text('GVCDA — Services Continued', 14, 17);
+            sy = 32;
+        }
+
+        // Service box
+        pdf.setFillColor(248, 250, 255);
+        pdf.setDrawColor(210, 220, 245);
+        pdf.roundedRect(sx, sy, colW, boxH, 2, 2, 'FD');
+
+        // Service title
+        pdf.setFillColor(102, 126, 234);
+        pdf.roundedRect(sx, sy, colW, 12, 2, 2, 'F');
+        pdf.setTextColor(255,255,255);
+        pdf.setFontSize(8.5); pdf.setFont('helvetica', 'bold');
+        pdf.text(svc.icon + ' ' + svc.title, sx + 4, sy + 8);
+
+        // Service items
+        pdf.setFontSize(7.5); pdf.setFont('helvetica', 'normal'); pdf.setTextColor(50, 50, 50);
+        svc.items.slice(0, 4).forEach((item, i) => {
+            pdf.text('• ' + item, sx + 4, sy + 17 + i * 6.5);
+        });
+    });
+
+    // Page 2 footer
+    const p2H = 297;
+    pdf.setFillColor(245, 245, 248);
+    pdf.rect(0, p2H - 20, PW, 20, 'F');
+    pdf.setDrawColor(210, 210, 220);
+    pdf.line(0, p2H - 20, PW, p2H - 20);
+    pdf.setFontSize(8); pdf.setTextColor(130, 130, 130);
+    pdf.text('Globe Village & City Development Agency  |  +91 7981660705  |  www.gvcdaservicehub.com', PW / 2, p2H - 12, { align: 'center' });
+    pdf.text('For support, contact your GVCDA agent or visit www.gvcdaservicehub.com', PW / 2, p2H - 5, { align: 'center' });
 
     return pdf;
 }
@@ -1182,11 +1289,24 @@ async function sendMemberWhatsApp() {
         'Valid Until: *' + vt + '*\n' +
         '━━━━━━━━━━━━━━━━━━\n\n' +
         '✨ *Premium Benefits:*\n' +
-        '• Priority customer support\n' +
-        '• 20% discount on all services\n' +
-        '• Free health camps\n' +
-        '• Skill development courses\n\n' +
-        '📎 _Your membership card PDF is attached._\n\n' +
+        '• Priority access & 20% discount on all services\n' +
+        '• Free health camps & medical check-ups\n' +
+        '• Skill development & training courses\n' +
+        '• Fast-track service processing\n' +
+        '• Special member-only offers & events\n\n' +
+        '🏪 *Our Services:*\n' +
+        '🌾 Agriculture & Farming Support\n' +
+        '📚 Education & Coaching\n' +
+        '🏥 Health & Medical Services\n' +
+        '💼 Business Support & Loans\n' +
+        '🛒 Grocery & Daily Essentials\n' +
+        '👔 Employment & Job Placement\n' +
+        '📱 Electronics & Tech Support\n' +
+        '👩 Women Empowerment Programs\n' +
+        '🎓 Skill Development & Training\n' +
+        '🌿 Ayurvedic Products & Wellness\n' +
+        '🛍️ Order & Delivery Services\n\n' +
+        '📎 *Membership card & PDF attached*\n\n' +
         'Need help? Call: +91 7981660705\n' +
         'www.gvcdaservicehub.com\n\n' +
         '*Team GVCDA* 🙏';
@@ -1196,34 +1316,43 @@ async function sendMemberWhatsApp() {
     const waURL = 'https://web.whatsapp.com/send?phone=' + phone + '&text=' + encodeURIComponent(msg);
 
     const btn = document.querySelector('.btn-wa');
-    if (btn) { btn.disabled = true; btn.textContent = 'Opening...'; }
+    if (btn) { btn.disabled = true; btn.textContent = 'Preparing files...'; }
+
+    function blobDownload(blobUrl, filename) {
+        const a = document.createElement('a');
+        a.href = blobUrl; a.download = filename;
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
+    }
 
     try {
-        const pdf      = await buildMemberPDF();
-        const filename = 'GVCDA_Membership_' + (currentCardUser.card_number || currentCardUser.name).replace(/\s+/g, '_') + '.pdf';
+        const base = (currentCardUser.card_number || currentCardUser.name).replace(/\s+/g, '_');
 
-        // Download PDF directly to browser Downloads (bypasses Windows Share dialog)
+        // 1. Download e-card PNG
+        const canvas   = document.getElementById('memberCardCanvas');
+        const pngBlob  = await new Promise(res => canvas.toBlob(res, 'image/png'));
+        blobDownload(URL.createObjectURL(pngBlob), 'GVCDA_Card_' + base + '.png');
+
+        // 2. Download PDF (with all services)
+        await new Promise(r => setTimeout(r, 400));
+        const pdf = await buildMemberPDF();
         if (pdf) {
-            const blob    = pdf.output('blob');
-            const blobUrl = URL.createObjectURL(blob);
-            const a       = document.createElement('a');
-            a.href        = blobUrl;
-            a.download    = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
+            const pdfBlob = pdf.output('blob');
+            blobDownload(URL.createObjectURL(pdfBlob), 'GVCDA_Membership_' + base + '.pdf');
         }
 
-        // Open WhatsApp Web after a short delay so download starts first
-        showCardToast('PDF downloading — attach it in WhatsApp before sending!', '#f97316');
-        setTimeout(() => window.open(waURL, '_blank'), 1200);
+        // 3. Open WhatsApp Web after files are downloading
+        showCardToast('✅ Card image + PDF downloaded! In WhatsApp click 📎 → attach both files → Send', '#128c7e');
+        setTimeout(() => window.open(waURL, '_blank'), 1600);
 
     } catch (e) {
         console.error('WhatsApp send error:', e);
         window.open(waURL, '_blank');
     } finally {
-        if (btn) { btn.disabled = false; btn.textContent = '💬 Open WhatsApp'; }
+        setTimeout(() => {
+            if (btn) { btn.disabled = false; btn.textContent = '💬 Open WhatsApp'; }
+        }, 2000);
     }
 }
 
@@ -1261,7 +1390,7 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
 
         <div class="card-tip">
-            💡 <strong>How to send:</strong> Click <em>Download PDF</em> first, then <em>Open WhatsApp</em> and attach the downloaded file before sending.
+            💡 <strong>How to send:</strong> Click <em>Open WhatsApp</em> — it auto-downloads the <strong>Card Image + PDF</strong>, then opens WhatsApp Web. In WhatsApp click <strong>📎</strong> → select both downloaded files → Send.
         </div>
 
         <div class="card-actions">
