@@ -1196,32 +1196,32 @@ async function sendMemberWhatsApp() {
     const waURL = 'https://web.whatsapp.com/send?phone=' + phone + '&text=' + encodeURIComponent(msg);
 
     const btn = document.querySelector('.btn-wa');
-    if (btn) { btn.disabled = true; btn.textContent = 'Preparing...'; }
+    if (btn) { btn.disabled = true; btn.textContent = 'Opening...'; }
 
     try {
-        const pdf = await buildMemberPDF();
+        const pdf      = await buildMemberPDF();
         const filename = 'GVCDA_Membership_' + (currentCardUser.card_number || currentCardUser.name).replace(/\s+/g, '_') + '.pdf';
 
-        // ── Mobile: Web Share API — shares PDF file directly to WhatsApp ──
-        if (pdf && navigator.canShare) {
-            try {
-                const blob = pdf.output('blob');
-                const file = new File([blob], filename, { type: 'application/pdf' });
-                if (navigator.canShare({ files: [file] })) {
-                    await navigator.share({ title: 'GVCDA Membership Card - ' + currentCardUser.name, text: msg, files: [file] });
-                    return; // done — native share sheet handled everything
-                }
-            } catch (shareErr) { /* not supported or cancelled — fall through */ }
+        // Download PDF directly to browser Downloads (bypasses Windows Share dialog)
+        if (pdf) {
+            const blob    = pdf.output('blob');
+            const blobUrl = URL.createObjectURL(blob);
+            const a       = document.createElement('a');
+            a.href        = blobUrl;
+            a.download    = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
         }
 
-        // ── Desktop fallback: auto-download PDF then open WhatsApp ──
-        if (pdf) pdf.save(filename);
-        showCardToast('PDF downloaded — attach it in WhatsApp before sending!', '#f97316');
-        setTimeout(() => window.open(waURL, '_blank'), 1400);
+        // Open WhatsApp Web after a short delay so download starts first
+        showCardToast('PDF downloading — attach it in WhatsApp before sending!', '#f97316');
+        setTimeout(() => window.open(waURL, '_blank'), 1200);
 
     } catch (e) {
         console.error('WhatsApp send error:', e);
-        window.open(waURL, '_blank'); // bare fallback
+        window.open(waURL, '_blank');
     } finally {
         if (btn) { btn.disabled = false; btn.textContent = '💬 Open WhatsApp'; }
     }
