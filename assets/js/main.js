@@ -287,10 +287,10 @@ if(btnTop) {
 })();
 
 // 5. Global WhatsApp Form Submitter
-function submitWA(e, sec) { 
-    e.preventDefault(); 
-    var f = e.target; 
-    
+function submitWA(e, sec) {
+    e.preventDefault();
+    var f = e.target;
+
     // Checkboxes
     var cbElements = document.querySelectorAll(".item-check:checked");
     var items = "Not selected";
@@ -298,24 +298,25 @@ function submitWA(e, sec) {
         var selected = [].slice.call(cbElements).map(function(i){return i.value});
         items = selected.join(", ");
     }
-    
+
     var vn = f.querySelector('#wn') ? f.querySelector('#wn').value : '';
     if (!vn && f.querySelector('[name="name"]')) vn = f.querySelector('[name="name"]').value;
     var vp = f.querySelector('#wp') ? f.querySelector('#wp').value : '';
     if (!vp && f.querySelector('[name="phone"]')) vp = f.querySelector('[name="phone"]').value;
-    
+
     var dist = f.querySelector("#wdist") ? f.querySelector("#wdist").value : "";
     var mand = f.querySelector("#wmand") ? f.querySelector("#wmand").value : "";
     var vill = f.querySelector("#wvill") ? f.querySelector("#wvill").value : "";
     var pin = f.querySelector("#wpin") ? f.querySelector("#wpin").value : "";
-    
+
     var loc = dist ? "\n*Location:* "+vill+", "+mand+", "+dist+" - "+pin : "";
-    
+
     var selServ = f.querySelector("#ws");
     var sVal = selServ ? selServ.value : "General Inquiry";
-    
+
     var msg = f.querySelector("#wm") ? f.querySelector("#wm").value : "";
-    
+    var locationStr = [vill, mand, dist, pin].filter(Boolean).join(', ');
+
     logActivity({
       type: 'service_request',
       memberName: vn,
@@ -323,10 +324,23 @@ function submitWA(e, sec) {
       sector: sec,
       service: sVal,
       selectedItems: items,
-      location: [vill, mand, dist, pin].filter(Boolean).join(', '),
+      location: locationStr,
       details: msg,
       page: location.pathname
     });
+
+    // Save to Supabase activity so admin panel shows this service request
+    if (window.db && window.db.activity) {
+      window.db.activity.create({
+        type: 'Service Request',
+        member_name: vn,
+        phone: vp,
+        service: sec + (sVal && sVal !== 'General Inquiry' ? ' - ' + sVal : ''),
+        payment: null,
+        added_by_name: 'Website',
+        timestamp: new Date().toISOString()
+      }).catch(function(){});
+    }
 
     if (vn || vp) {
       saveMember({
@@ -339,9 +353,11 @@ function submitWA(e, sec) {
       });
     }
 
-    var t = "Hello GVCDA!\n\n*Name:* " + vn + "\n*Phone:* " + vp + "\n*Sector:* " + sec + "\n*Service:* " + sVal + "\n*Selected Items:* " + items + loc + "\n*Details:* " + msg + "\n\nLooking forward to your response!"; 
-    window.open('https://wa.me/917981660705?text=' + encodeURIComponent(t), '_blank');
+    var t = "Hello GVCDA!\n\n*Name:* " + vn + "\n*Phone:* " + vp + "\n*Sector:* " + sec + "\n*Service:* " + sVal + "\n*Selected Items:* " + items + loc + (locationStr ? "\n*Location:* " + locationStr : "") + "\n*Details:* " + msg + "\n\nLooking forward to your response!";
+    window.open('https://wa.me/919908011124?text=' + encodeURIComponent(t), '_blank');
 }
+// Expose for inline HTML event handlers (module scope doesn't reach window automatically)
+window.submitWA = submitWA;
 
 // 6. Payment Scripts
 function payGroceryAdvance() {
@@ -357,7 +373,7 @@ function payGroceryAdvance() {
         image: (location.pathname.includes('/pages/') ? '../assets/images/LOGO.png' : 'assets/images/LOGO.png'),
         handler: function (resp) {
             alert('Payment successful. Payment ID: ' + resp.razorpay_payment_id);
-            window.open('https://wa.me/917981660705?text=' + encodeURIComponent('Hi GVCDA, I paid grocery advance. Payment ID: ' + resp.razorpay_payment_id), '_blank');
+            window.open('https://wa.me/919908011124?text=' + encodeURIComponent('Hi GVCDA, I paid grocery advance. Payment ID: ' + resp.razorpay_payment_id), '_blank');
         },
         prefill: { contact: '' },
         theme: { color: '#0D9488' }
@@ -404,7 +420,7 @@ function payPremiumCard(identityInput) {
 
           sendMembershipNotifications(member, resp.razorpay_payment_id);
             alert('Payment successful. Payment ID: ' + resp.razorpay_payment_id);
-            window.open('https://wa.me/917981660705?text=' + encodeURIComponent('Hi GVCDA, I purchased Premium Card. Payment ID: ' + resp.razorpay_payment_id), '_blank');
+            window.open('https://wa.me/919908011124?text=' + encodeURIComponent('Hi GVCDA, I purchased Premium Card. Payment ID: ' + resp.razorpay_payment_id), '_blank');
         },
         prefill: { name: identity.name, contact: identity.phone },
         theme: { color: '#F97316' }

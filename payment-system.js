@@ -151,7 +151,7 @@ async function sendWhatsApp(phone, message) {
     
     // Option 2: Send via GVCDA WhatsApp number (business account)
     // This sends from your business WhatsApp to the customer
-    const gvcda_whatsapp = '917981660705'; // Your GVCDA WhatsApp number
+    const gvcda_whatsapp = '919908011124'; // Your GVCDA WhatsApp number
     const adminURL = `https://wa.me/${gvcda_whatsapp}?text=${encodeURIComponent(
       `🤖 AUTO-SEND TO: ${phone}\n\n${message}`
     )}`;
@@ -256,7 +256,7 @@ Visit: https://gvcda.in/premium-card.html
 Login with your phone number
 
 Need help? Call: +91 7981660705
-WhatsApp: wa.me/917981660705
+WhatsApp: wa.me/919908011124
 
 Thank you for choosing GVCDA!
 *Team GVCDA* 🙏`;

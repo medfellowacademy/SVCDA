@@ -317,7 +317,7 @@ async function submitServiceRequest(requestData) {
     });
 
     // Send SMS notification to admin
-    const adminPhone = '+917981660705';
+    const adminPhone = '+919908011124';
     const adminMessage = `🔔 New Service Request
 
 Member: ${request.member_name}
