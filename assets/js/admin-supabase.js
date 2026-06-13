@@ -108,7 +108,10 @@
           '<td>' + (m.payment_id ? '<small style="color:#666;">' + m.payment_id.substring(0, 20) + '...</small>' : '-') + '</td>' +
           '<td>' + (m.added_by_name || 'Direct/Website') + '</td>' +
           '<td>' + formatDate(m.created_at) + '</td>' +
-          '<td><button onclick="deleteMember(\'' + mid + '\')" style="padding:4px 10px;font-size:.8rem;background:#dc2626;color:#fff;border:none;border-radius:6px;cursor:pointer;">Delete</button></td>' +
+          '<td style="white-space:nowrap;">' +
+            '<button onclick="adminQuickWA(\'' + (m.phone||'') + '\',\'' + (m.name||'').replace(/'/g,"\\'") + '\')" style="padding:4px 10px;font-size:.8rem;background:#25d366;color:#fff;border:none;border-radius:6px;cursor:pointer;margin-right:5px;">WhatsApp</button>' +
+            '<button onclick="deleteMember(\'' + mid + '\')" style="padding:4px 10px;font-size:.8rem;background:#dc2626;color:#fff;border:none;border-radius:6px;cursor:pointer;">Delete</button>' +
+          '</td>' +
           '</tr>';
       }).join('') || '<tr><td colspan="10">No members found</td></tr>';
     } catch (error) {
@@ -732,6 +735,14 @@ Applied: ${formatDate(app.created_at)}
 
   // Make renderAdvancedAnalytics available globally
   window.renderAdvancedAnalytics = renderAdvancedAnalytics;
+
+  // Quick WhatsApp opener for admin panel
+  window.adminQuickWA = function(phone, name) {
+    const p   = (phone || '').replace(/\D/g, '');
+    const num = p.startsWith('91') ? p : '91' + p;
+    const msg = 'Hello ' + name + ', this is GVCDA. How can we help you today?';
+    window.open('https://web.whatsapp.com/send?phone=' + num + '&text=' + encodeURIComponent(msg), '_blank');
+  };
 
   // Delete a single member
   window.deleteMember = async function(memberId) {
