@@ -13,6 +13,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <!-- jsPDF for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- QR Code generator -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <!-- Razorpay -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <!-- Supabase SDK -->
@@ -269,6 +271,131 @@
             display: none;
             font-size: 14px;
             white-space: pre-line;
+        }
+
+        /* ── UPI QR Payment Section ── */
+        #qrPaymentSection {
+            display: none;
+            margin: 0 0 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 14px;
+            overflow: hidden;
+            background: white;
+        }
+        .qr-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 700;
+        }
+        .qr-body {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0;
+        }
+        .qr-left {
+            padding: 24px;
+            border-right: 1px solid #e8e8e8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            background: #fafafa;
+        }
+        .qr-left #qrCodeCanvas {
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+        .qr-left #qrCodeCanvas img,
+        .qr-left #qrCodeCanvas canvas {
+            border-radius: 10px;
+        }
+        .upi-id-box {
+            background: #f0f4ff;
+            border: 1.5px dashed #667eea;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 12px;
+            color: #333;
+            text-align: center;
+            max-width: 220px;
+            word-break: break-all;
+        }
+        .upi-id-box strong { display: block; color: #667eea; margin-bottom: 2px; font-size: 11px; }
+        .copy-upi-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .copy-upi-btn:hover { opacity: 0.85; }
+        .qr-right {
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .qr-bank-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 12px 16px;
+        }
+        .qr-bank-info p { margin: 0; font-size: 13px; color: #555; line-height: 1.8; }
+        .qr-bank-info strong { color: #222; }
+        .screenshot-upload-area {
+            border: 2px dashed #d0d0d0;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            position: relative;
+        }
+        .screenshot-upload-area:hover { border-color: #667eea; background: #f5f7ff; }
+        .screenshot-upload-area input[type=file] {
+            position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+        }
+        .screenshot-upload-area .upload-icon { font-size: 28px; margin-bottom: 6px; }
+        .screenshot-upload-area p { margin: 0; font-size: 13px; color: #888; }
+        .screenshot-upload-area p strong { color: #667eea; }
+        #screenshotPreview {
+            display: none;
+            margin-top: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        #screenshotPreview img {
+            width: 100%;
+            max-height: 220px;
+            object-fit: contain;
+            background: #f0f0f0;
+            display: block;
+        }
+        .screenshot-remove {
+            display: block;
+            text-align: center;
+            padding: 6px;
+            background: #fee2e2;
+            color: #dc2626;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+        }
+        @media (max-width: 600px) {
+            .qr-body { grid-template-columns: 1fr; }
+            .qr-left { border-right: none; border-bottom: 1px solid #e8e8e8; }
         }
 
         /* ── Member Card Modal ── */
@@ -560,6 +687,47 @@
                     </div>
                 </div>
 
+                <!-- ── UPI QR Payment Section ── -->
+                <div id="qrPaymentSection">
+                    <div class="qr-header">
+                        <span>📱</span> Scan & Pay via UPI
+                    </div>
+                    <div class="qr-body">
+                        <!-- Left: QR code -->
+                        <div class="qr-left">
+                            <div id="qrCodeCanvas"></div>
+                            <div class="upi-id-box">
+                                <strong>UPI ID</strong>
+                                yespay.mabs.0097207wkit1138.ter1@yesbankltd
+                            </div>
+                            <button type="button" class="copy-upi-btn" onclick="copyUpiId()">📋 Copy UPI ID</button>
+                        </div>
+                        <!-- Right: Bank info + screenshot upload -->
+                        <div class="qr-right">
+                            <div class="qr-bank-info">
+                                <p>🏦 <strong>Bank:</strong> YES BANK</p>
+                                <p>🏢 <strong>Account Name:</strong> GLOB VILLAGE AND CITY DEVELOPMENT AGENCY LLP</p>
+                                <p>💳 <strong>UPI ID:</strong> yespay.mabs.0097207wkit1138.ter1@yesbankltd</p>
+                                <p style="margin-top:8px;font-size:12px;color:#888;">Ask member to scan the QR or send to UPI ID above, then upload screenshot below.</p>
+                            </div>
+
+                            <div>
+                                <label style="font-size:13px;font-weight:700;color:#333;display:block;margin-bottom:8px;">📸 Upload Payment Screenshot</label>
+                                <div class="screenshot-upload-area" onclick="document.getElementById('paymentScreenshot').click()">
+                                    <input type="file" id="paymentScreenshot" accept="image/*" onchange="previewScreenshot(event)">
+                                    <div class="upload-icon">🖼️</div>
+                                    <p><strong>Click to upload</strong> payment screenshot</p>
+                                    <p>JPG, PNG, WEBP accepted</p>
+                                </div>
+                                <div id="screenshotPreview">
+                                    <img id="screenshotImg" alt="Payment screenshot">
+                                    <button type="button" class="screenshot-remove" onclick="removeScreenshot()">✕ Remove screenshot</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="emp-form-group">
                     <label for="userNotes">Notes (Optional)</label>
                     <textarea id="userNotes" placeholder="Any additional information..."></textarea>
@@ -655,17 +823,76 @@ function switchTab(tab) {
         window.renderLeaderboard();
 }
 
+let qrGenerated = false;
+
 function togglePaymentRef() {
-    const method = document.getElementById('paymentMethod').value;
-    const refGroup = document.getElementById('paymentRefGroup');
-    const btn = document.getElementById('addMemberBtn');
+    const method    = document.getElementById('paymentMethod').value;
+    const refGroup  = document.getElementById('paymentRefGroup');
+    const qrSection = document.getElementById('qrPaymentSection');
+    const btn       = document.getElementById('addMemberBtn');
+
     if (method === 'razorpay') {
-        refGroup.style.display = 'none';
+        refGroup.style.display  = 'none';
+        qrSection.style.display = 'none';
         btn.textContent = 'Proceed to Payment';
+    } else if (method === 'upi') {
+        refGroup.style.display  = '';
+        qrSection.style.display = 'block';
+        btn.textContent = 'Add Member';
+        generateUpiQR();
     } else {
-        refGroup.style.display = '';
+        refGroup.style.display  = '';
+        qrSection.style.display = 'none';
         btn.textContent = 'Add Member';
     }
+}
+
+function generateUpiQR() {
+    if (qrGenerated) return;
+    const container = document.getElementById('qrCodeCanvas');
+    if (!container || typeof QRCode === 'undefined') return;
+    container.innerHTML = '';
+    new QRCode(container, {
+        text: 'upi://pay?pa=yespay.mabs.0097207wkit1138.ter1@yesbankltd&pn=GLOB+VILLAGE+%26+CITY+DEVELOPMENT+AGENCY+LLP&cu=INR',
+        width:  220,
+        height: 220,
+        colorDark:  '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+    });
+    qrGenerated = true;
+}
+
+function copyUpiId() {
+    const upi = 'yespay.mabs.0097207wkit1138.ter1@yesbankltd';
+    navigator.clipboard.writeText(upi).then(() => {
+        const btn = document.querySelector('.copy-upi-btn');
+        const orig = btn.textContent;
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => { btn.textContent = orig; }, 2000);
+    }).catch(() => {
+        prompt('Copy this UPI ID:', upi);
+    });
+}
+
+function previewScreenshot(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById('screenshotImg').src = e.target.result;
+        document.getElementById('screenshotPreview').style.display = 'block';
+        // Store base64 in hidden notes helper so it can be referenced
+        window._screenshotData = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeScreenshot() {
+    document.getElementById('paymentScreenshot').value = '';
+    document.getElementById('screenshotImg').src = '';
+    document.getElementById('screenshotPreview').style.display = 'none';
+    window._screenshotData = null;
 }
 
 function handleAddUser(e) {
