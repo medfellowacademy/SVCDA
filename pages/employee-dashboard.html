@@ -1483,6 +1483,102 @@ async function buildMemberPDF() {
     pdf.text('Globe Village & City Development Agency  |  +91 7981660705  |  www.gvcdaservicehub.com', PW / 2, p2H - 12, { align: 'center' });
     pdf.text('For support, contact your GVCDA agent or visit www.gvcdaservicehub.com', PW / 2, p2H - 5, { align: 'center' });
 
+    // ===== PAGE 3: SHG Sub-Category Services =====
+    pdf.addPage();
+    // Header
+    pdf.setFillColor(50, 120, 60);
+    pdf.rect(0, 0, PW, 26, 'F');
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(14); pdf.setFont('helvetica', 'bold');
+    pdf.text('SHG Self Help Group — Service Sub-Categories', PW / 2, 11, { align: 'center' });
+    pdf.setFontSize(8); pdf.setFont('helvetica', 'normal');
+    pdf.text('All sub-category services available exclusively for GVCDA Premium Members', PW / 2, 21, { align: 'center' });
+
+    const shgCategories = [
+        { title: 'Agriculture & Farming', color: [34, 139, 34],
+          items: ['Organic Farming', 'Dairy Farming', 'Poultry Farming', 'Goat & Sheep Rearing', 'Fish Farming', 'Vegetable Cultivation', 'Seed Production', 'Vermicompost Production'] },
+        { title: 'Food & Catering', color: [210, 105, 30],
+          items: ['Catering Services', 'Tiffin Services', 'Pickles & Papad Making', 'Bakery Products', 'Millet Foods', 'Snacks Production', 'Homemade Sweets', 'Spice Powder Making'] },
+        { title: 'Tailoring & Fashion', color: [147, 0, 211],
+          items: ['Tailoring Unit', 'Boutique Services', 'Embroidery Work', 'Uniform Stitching', 'Fashion Designing', 'Handloom Products', 'Bag Making', 'Jewellery Making'] },
+        { title: 'Beauty & Wellness', color: [220, 20, 100],
+          items: ['Beauty Parlour', 'Mehendi Services', 'Herbal Products', 'Cosmetics Production', 'Salon Training'] },
+        { title: 'Handicrafts & Home Products', color: [184, 134, 11],
+          items: ['Candle Making', 'Soap Making', 'Agarbatti Making', 'Handicrafts', 'Bamboo Products', 'Paper Bags', 'Eco-Friendly Products', 'Decorative Items'] },
+        { title: 'Retail & Small Business', color: [30, 100, 180],
+          items: ['Kirana Store', 'Mobile Recharge Shop', 'Stationery Shop', 'Fancy Store', 'Vegetable Shop', 'Milk Distribution', 'Online Reselling', 'SHG Product Marketing'] },
+        { title: 'Education & Training', color: [0, 128, 128],
+          items: ['Tuition Center', 'Spoken English', 'Computer Training', 'Skill Development', 'Coaching Classes', 'Digital Literacy', 'Career Guidance'] },
+        { title: 'Health & Care Services', color: [180, 40, 40],
+          items: ['Home Nursing', 'Elderly Care', 'Child Care Center', 'Nutrition Awareness', 'Health Camps', 'Sanitary Napkin Production'] },
+        { title: 'Digital & Online Services', color: [60, 60, 180],
+          items: ['CSC Services', 'Data Entry Services', 'Social Media Marketing', 'Graphic Designing', 'Online Application Center', 'Digital Payments Support'] },
+        { title: 'Financial & Support Services', color: [100, 60, 20],
+          items: ['Micro Finance Activities', 'SHG Bookkeeping', 'Insurance Support', 'Loan Assistance', 'Savings Programs', 'Banking Correspondent Services'] },
+    ];
+
+    const shgColW = (PW - 28) / 2;
+    let shgY = 30;
+    shgCategories.forEach((cat, idx) => {
+        const col = idx % 2;
+        const sx  = 14 + col * (shgColW + 4);
+        const itemRows = cat.items.length;
+        const boxH = 12 + itemRows * 5.8 + 3;
+
+        if (col === 0 && idx > 0) shgY += shgY > 0 ? 0 : 0; // height controlled below
+        if (col === 1) {
+            // right col uses same Y as left
+        }
+        if (col === 0 && idx > 0) {
+            // advance Y by previous pair height — tracked via prevBoxH
+        }
+
+        // Outer box
+        pdf.setFillColor(250, 252, 255);
+        pdf.setDrawColor(cat.color[0], cat.color[1], cat.color[2]);
+        pdf.setLineWidth(0.5);
+        pdf.roundedRect(sx, shgY, shgColW, boxH, 2, 2, 'FD');
+
+        // Title bar
+        pdf.setFillColor(cat.color[0], cat.color[1], cat.color[2]);
+        pdf.roundedRect(sx, shgY, shgColW, 10, 2, 2, 'F');
+        pdf.rect(sx, shgY + 5, shgColW, 5, 'F'); // flatten bottom corners of title
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(7.5); pdf.setFont('helvetica', 'bold');
+        pdf.text(cat.title.toUpperCase(), sx + 3, shgY + 7);
+
+        // Items
+        pdf.setFontSize(6.8); pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(40, 40, 40);
+        cat.items.forEach((item, i) => {
+            const half = Math.ceil(cat.items.length / 2);
+            if (i < half) {
+                pdf.text('• ' + item, sx + 3, shgY + 13 + i * 5.8);
+            } else {
+                pdf.text('• ' + item, sx + shgColW / 2, shgY + 13 + (i - half) * 5.8);
+            }
+        });
+
+        if (col === 1 || idx === shgCategories.length - 1) {
+            // After right col (or last item), advance Y
+            const leftIdx = idx - (col === 1 ? 1 : 0);
+            const leftCat = shgCategories[leftIdx];
+            const leftRows = leftCat ? leftCat.items.length : 0;
+            const leftBoxH = 12 + leftRows * 5.8 + 3;
+            const rightBoxH = col === 1 ? boxH : 0;
+            shgY += Math.max(leftBoxH, rightBoxH) + 4;
+        }
+    });
+
+    // Page 3 footer
+    const p3H = 297;
+    pdf.setFillColor(50, 120, 60);
+    pdf.rect(0, p3H - 16, PW, 16, 'F');
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(7.5); pdf.setFont('helvetica', 'normal');
+    pdf.text('Globe Village & City Development Agency  |  +91 7981660705  |  www.gvcdaservicehub.com', PW / 2, p3H - 8, { align: 'center' });
+    pdf.text('SHG members get priority access, training & business support across all categories', PW / 2, p3H - 2, { align: 'center' });
+
     return pdf;
 }
 
