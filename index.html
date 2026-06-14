@@ -64,7 +64,18 @@
   <link rel="stylesheet" href="assets/css/components.css">
     <style>
     /* Job Application Modal */
-    .job-app-modal { position: fixed; inset: 0; background: rgba(2, 8, 23, 0.62); display: none; align-items: center; justify-content: center; z-index: 1200; padding: 16px; }
+    .job-app-modal { position: fixed; inset: 0; background: rgba(2, 8, 23, 0.62); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 16px; }
+    /* Mobile sticky apply button */
+    .mob-apply-btn { display: none; }
+    @media(max-width:900px){
+      .mob-apply-btn {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+        background: var(--a); color: #fff; border: none; border-radius: 50px;
+        padding: 14px 32px; font-weight: 700; font-size: 1rem; cursor: pointer;
+        z-index: 8000; box-shadow: 0 6px 24px rgba(0,0,0,0.25); white-space: nowrap;
+      }
+    }
     .job-app-modal.show { display: flex; }
     .job-app-card { width: 100%; max-width: 650px; max-height: 90vh; overflow-y: auto; background: #fff; border-radius: 16px; border: 1px solid var(--bdr); }
     .job-app-head { padding: 16px 20px; background: var(--a); color: #fff; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
@@ -214,6 +225,12 @@
                     <div class="ln" style="color:var(--n)">GVCDA</div>
                 </div>
             </a><button class="mx" id="mx">X</button></div>
+        <div style="padding:8px 0 12px;">
+          <button onclick="document.getElementById('mx').click();setTimeout(()=>openJobApplication(),350)" style="width:100%;background:var(--a);color:#fff;border:none;border-radius:10px;padding:14px;font-weight:700;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            Job Application
+          </button>
+        </div>
         <a href="index.html">Home</a><a href="pages/about.html">About Us</a>
         <div class="mlab">Sectors</div><a href="pages/education.html">Education</a>
         <a href="pages/grocery.html">Grocery</a>
@@ -862,6 +879,12 @@
         </div>
     </div>
     
+<!-- Mobile Sticky Job Application Button -->
+<button class="mob-apply-btn" onclick="openJobApplication()">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+  Job Application
+</button>
+
 <!-- Job Application Modal -->
 <div class="job-app-modal" id="jobApplicationModal" onclick="if(event.target===this){closeJobApplication();}">
     <div class="job-app-card">
