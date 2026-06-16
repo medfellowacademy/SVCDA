@@ -1754,8 +1754,21 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!currentEmployee) return;
     document.getElementById('empName').textContent    = currentEmployee.name;
     document.getElementById('empWelcome').textContent = 'Welcome back, ' + currentEmployee.name + '!';
-    loadStats();
-    loadMyUsers();
+
+    // window.db is set by supabase-config.js (module script) — wait for it
+    if (window.db) {
+        loadStats();
+        loadMyUsers();
+    } else {
+        const t = setInterval(() => {
+            if (window.db) {
+                clearInterval(t);
+                loadStats();
+                loadMyUsers();
+            }
+        }, 150);
+        setTimeout(() => clearInterval(t), 8000);
+    }
 });
 </script>
 

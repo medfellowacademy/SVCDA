@@ -109,6 +109,7 @@
           '<td>' + (m.added_by_name || 'Direct/Website') + '</td>' +
           '<td>' + formatDate(m.created_at) + '</td>' +
           '<td style="white-space:nowrap;">' +
+            '<button onclick="adminSendCard(' + JSON.stringify(m).replace(/"/g,"'") + ')" style="padding:4px 10px;font-size:.8rem;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:6px;cursor:pointer;margin-right:5px;">Send Card</button>' +
             '<button onclick="adminQuickWA(\'' + (m.phone||'') + '\',\'' + (m.name||'').replace(/'/g,"\\'") + '\')" style="padding:4px 10px;font-size:.8rem;background:#25d366;color:#fff;border:none;border-radius:6px;cursor:pointer;margin-right:5px;">WhatsApp</button>' +
             '<button onclick="deleteMember(\'' + mid + '\')" style="padding:4px 10px;font-size:.8rem;background:#dc2626;color:#fff;border:none;border-radius:6px;cursor:pointer;">Delete</button>' +
           '</td>' +
@@ -741,6 +742,162 @@ Applied: ${formatDate(app.created_at)}
     const p   = (phone || '').replace(/\D/g, '');
     const num = p.startsWith('91') ? p : '91' + p;
     const msg = 'Hello ' + name + ', this is GVCDA. How can we help you today?';
+    window.open('https://web.whatsapp.com/send?phone=' + num + '&text=' + encodeURIComponent(msg), '_blank');
+  };
+
+  // Send Card + PDF + WhatsApp message from admin panel
+  window.adminSendCard = async function(member) {
+    if (!member || !member.phone) { alert('No phone number for this member.'); return; }
+
+    const jspdfLib = window.jspdf && window.jspdf.jsPDF;
+    if (!jspdfLib) { alert('PDF library not loaded. Please refresh and try again.'); return; }
+
+    // Valid till calculation
+    const validTillFull = (function() {
+      if (member.valid_till) {
+        try { return new Date(member.valid_till).toLocaleDateString('en-IN', { day:'2-digit', month:'long', year:'numeric' }); } catch(e) {}
+      }
+      if (member.created_at) {
+        const d = new Date(member.created_at); d.setFullYear(d.getFullYear() + 1);
+        return d.toLocaleDateString('en-IN', { day:'2-digit', month:'long', year:'numeric' });
+      }
+      return 'Lifetime';
+    })();
+    const validTillShort = (function() {
+      if (member.valid_till) {
+        try { const d = new Date(member.valid_till); return (d.getMonth()+1).toString().padStart(2,'0')+'/'+d.getFullYear(); } catch(e) {}
+      }
+      if (member.created_at) {
+        const d = new Date(member.created_at); d.setFullYear(d.getFullYear() + 1);
+        return (d.getMonth()+1).toString().padStart(2,'0')+'/'+d.getFullYear();
+      }
+      return 'Lifetime';
+    })();
+
+    // ── Build E-Card Canvas ──
+    const canvas = document.createElement('canvas');
+    canvas.width = 900; canvas.height = 560;
+    const ctx = canvas.getContext('2d');
+    const grad = ctx.createLinearGradient(0, 0, 900, 560);
+    grad.addColorStop(0, '#1a1a2e'); grad.addColorStop(0.5, '#16213e'); grad.addColorStop(1, '#0f3460');
+    ctx.fillStyle = grad; ctx.fillRect(0, 0, 900, 560);
+    ctx.fillStyle = 'rgba(102,126,234,0.15)'; ctx.beginPath(); ctx.arc(780, 80, 200, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = 'rgba(118,75,162,0.10)'; ctx.beginPath(); ctx.arc(120, 480, 160, 0, Math.PI*2); ctx.fill();
+    function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
+    ctx.strokeStyle='rgba(102,126,234,0.6)'; ctx.lineWidth=2; rr(18,18,864,524,22); ctx.stroke();
+    ctx.fillStyle='#ffffff'; ctx.font='bold 52px Arial'; ctx.fillText('GVCDA',54,84);
+    ctx.font='14px Arial'; ctx.fillStyle='rgba(255,255,255,0.7)'; ctx.fillText('Glob Village & City Development Agency',54,108);
+    const pg=ctx.createLinearGradient(680,44,820,44); pg.addColorStop(0,'#f6d365'); pg.addColorStop(1,'#fda085');
+    ctx.fillStyle=pg; rr(674,42,148,36,18); ctx.fill();
+    ctx.fillStyle='#fff'; ctx.font='bold 14px Arial'; ctx.fillText('PREMIUM',706,65);
+    ctx.fillStyle='rgba(255,255,255,0.12)'; rr(54,148,88,66,10); ctx.fill();
+    ctx.fillStyle='rgba(255,215,0,0.9)'; ctx.fillRect(64,158,68,46);
+    const cardNum=(member.card_number||'GVCDA000000');
+    const fmt=cardNum.match(/.{1,4}/g)?.join('  ')||cardNum;
+    ctx.font='bold 34px Courier New'; ctx.fillStyle='#ffffff'; ctx.letterSpacing='2px'; ctx.fillText(fmt,54,270);
+    ctx.font='11px Arial'; ctx.fillStyle='rgba(255,255,255,0.6)'; ctx.fillText('MEMBER NAME',54,320);
+    ctx.font='bold 26px Arial'; ctx.fillStyle='#ffffff'; ctx.fillText((member.name||'Member').toUpperCase(),54,352);
+    ctx.font='11px Arial'; ctx.fillStyle='rgba(255,255,255,0.6)'; ctx.fillText('VALID TILL',600,320);
+    ctx.font='bold 22px Arial'; ctx.fillStyle='#ffffff'; ctx.fillText(validTillShort,600,352);
+    const bg2=ctx.createLinearGradient(0,440,900,440); bg2.addColorStop(0,'rgba(102,126,234,0.3)'); bg2.addColorStop(1,'rgba(118,75,162,0.3)');
+    ctx.fillStyle=bg2; ctx.fillRect(0,438,900,122);
+    ctx.font='13px Arial'; ctx.fillStyle='rgba(255,255,255,0.9)'; ctx.fillText('Globe Village & City Development Agency  •  +91 9908011124  •  www.gvcdaservicehub.com',62,472);
+    ctx.font='11px Arial'; ctx.fillStyle='rgba(255,255,255,0.6)'; ctx.fillText('Membership Card  |  Valid for 1 Year from Date of Issue  |  Non-Transferable',62,496);
+
+    // ── Helper: blob download ──
+    function blobDL(url, name) {
+      const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); },400);
+    }
+
+    // ── Download PNG ──
+    const pngBlob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+    blobDL(URL.createObjectURL(pngBlob), 'GVCDA_Card_' + (member.card_number||member.name).replace(/\s+/g,'_') + '.png');
+
+    // ── Build & Download PDF ──
+    await new Promise(r => setTimeout(r, 400));
+    try {
+      const pdf = new jspdfLib({ orientation:'portrait', unit:'mm', format:'a4' });
+      const PW = pdf.internal.pageSize.getWidth(), PH = pdf.internal.pageSize.getHeight();
+      // Page 1
+      pdf.setFillColor(26,26,46); pdf.rect(0,0,PW,36,'F');
+      pdf.setTextColor(255,255,255); pdf.setFontSize(18); pdf.setFont('helvetica','bold');
+      pdf.text('GVCDA Premium Membership Card',PW/2,16,{align:'center'});
+      pdf.setFontSize(9); pdf.setFont('helvetica','normal');
+      pdf.text('Glob Village & City Development Agency  |  www.gvcdaservicehub.com',PW/2,26,{align:'center'});
+      const imgData = canvas.toDataURL('image/png');
+      const cW=PW-28, cH=cW*(560/900);
+      pdf.addImage(imgData,'PNG',14,40,cW,cH);
+      let dy=44+cH;
+      pdf.setFillColor(248,250,255); pdf.setDrawColor(210,220,245); pdf.roundedRect(14,dy,PW-28,52,3,3,'FD');
+      pdf.setFontSize(8); pdf.setFont('helvetica','bold'); pdf.setTextColor(40,40,40);
+      const dets=[['Member Name',member.name||'-'],['Card Number',member.card_number||'-'],['Plan',member.plan||'Premium'],['Amount Paid','Rs.'+(member.amount||'1499')],['Valid Until',validTillFull],['Phone',member.phone||'-']];
+      dets.forEach(([k,v],i)=>{const col=i%2,row=Math.floor(i/2),sx=14+col*(PW-28)/2,sy=dy+8+row*14;pdf.setFont('helvetica','bold');pdf.setTextColor(102,126,234);pdf.text(k+':',sx+3,sy);pdf.setFont('helvetica','normal');pdf.setTextColor(40,40,40);pdf.text(v,sx+3,sy+6);});
+      pdf.setFillColor(102,126,234); pdf.rect(0,PH-16,PW,16,'F');
+      pdf.setTextColor(255,255,255); pdf.setFontSize(8);
+      pdf.text('Globe Village & City Development Agency  |  +91 9908011124  |  www.gvcdaservicehub.com',PW/2,PH-8,{align:'center'});
+      // Page 2 - Services
+      pdf.addPage();
+      pdf.setFillColor(102,126,234); pdf.rect(0,0,PW,26,'F');
+      pdf.setTextColor(255,255,255); pdf.setFontSize(14); pdf.setFont('helvetica','bold');
+      pdf.text('Our Services — Available to Premium Members',PW/2,11,{align:'center'});
+      pdf.setFontSize(8); pdf.setFont('helvetica','normal');
+      pdf.text('As a GVCDA Premium Member, you get priority access and up to 50% discount on all services below.',PW/2,21,{align:'center'});
+      const svcs=[
+        {t:'Health & Medical Services',i:['All medicines up to 50% discount','Free health camps & doctor consultation','Health insurance enrollment','Ambulance by reference']},
+        {t:'Business Sector Support',i:['Local business promotion','Social media & website creation','Labor/Trade/Udyam registration','GST & accounting support']},
+        {t:'Home Needs Services',i:['Home repair & maintenance','Plumbing & electrical help','Water purifier & appliance service','Pest control & cleaning']},
+        {t:'Advertising Services',i:['Local ads across all media','Design, printing & promotions','Social media branding','Video & photography']},
+        {t:'Thrift & Credit Services',i:['SHG savings & thrift programs','Micro-credit & loan facilitation','Banking correspondent services','Financial literacy']},
+        {t:'Employment & Job Placement',i:['Govt. & private job alerts','Resume building & interview prep','Skill-matching to jobs','Self-employment guidance']},
+        {t:'Skill Development & Training',i:['Vocational & trade training','Computer & digital literacy','Tailoring, beauty & food business','Entrepreneurship development']},
+        {t:'Women Empowerment',i:['SHG formation & microfinance','Skill training for women','Legal aid & protection awareness','Domestic product marketing']},
+        {t:'Grocery & Daily Essentials',i:['Ration & grocery delivery','Bulk discounted purchasing','Fresh vegetables & dairy','Monthly subscription baskets']},
+        {t:'Electronics & Technology',i:['Mobile, laptop & appliance repair','Purchase assistance','Internet & broadband setup','Cyber security awareness']},
+        {t:'Education & Coaching',i:['School & college admission guidance','Private hostels & coaching reference','Exam preparation resources','All training references']},
+        {t:'Order & Delivery Services',i:['Doorstep product delivery','Custom order placement','Bulk order discounts','Packaging & logistics']},
+      ];
+      let sy=30, cW2=(PW-28)/2;
+      svcs.forEach((s,i)=>{
+        const col=i%2, sx=14+col*(cW2+4), bH=38;
+        if(col===0&&i>0) sy+=bH+3;
+        if(sy+bH>PH-20){pdf.addPage();pdf.setFillColor(102,126,234);pdf.rect(0,0,PW,26,'F');pdf.setTextColor(255,255,255);pdf.setFontSize(12);pdf.setFont('helvetica','bold');pdf.text('GVCDA — Services Continued',14,17);sy=32;}
+        pdf.setFillColor(248,250,255); pdf.setDrawColor(210,220,245); pdf.roundedRect(sx,sy,cW2,bH,2,2,'FD');
+        pdf.setFillColor(102,126,234); pdf.roundedRect(sx,sy,cW2,10,2,2,'F'); pdf.rect(sx,sy+5,cW2,5,'F');
+        pdf.setTextColor(255,255,255); pdf.setFontSize(7.5); pdf.setFont('helvetica','bold'); pdf.text((i+1)+'. '+s.t,sx+3,sy+7);
+        pdf.setFontSize(6.8); pdf.setFont('helvetica','normal'); pdf.setTextColor(40,40,40);
+        s.i.slice(0,4).forEach((it,j)=>pdf.text('• '+it,sx+3,sy+14+j*6));
+      });
+      pdf.setFillColor(102,126,234); pdf.rect(0,PH-16,PW,16,'F');
+      pdf.setTextColor(255,255,255); pdf.setFontSize(8);
+      pdf.text('Globe Village & City Development Agency  |  +91 9908011124  |  www.gvcdaservicehub.com',PW/2,PH-8,{align:'center'});
+      const pdfBlob = pdf.output('blob');
+      blobDL(URL.createObjectURL(pdfBlob), 'GVCDA_Membership_' + (member.card_number||member.name).replace(/\s+/g,'_') + '.pdf');
+    } catch(e) { console.error('PDF error:',e); }
+
+    // ── Open WhatsApp with message ──
+    await new Promise(r => setTimeout(r, 800));
+    const raw = (member.phone||'').replace(/\D/g,'');
+    const num = raw.startsWith('91') ? raw : '91'+raw;
+    const msg =
+      '🌟 *GVCDA Premium Membership Card*\n\n' +
+      'Dear ' + member.name + ',\n\n' +
+      'Your GVCDA Premium membership is now active!\n\n' +
+      '📧 *Membership Details:*\n' +
+      '━━━━━━━━━━━━━━━━━━\n' +
+      'Card Number: *' + (member.card_number||'-') + '*\n' +
+      'Member Name: ' + member.name + '\n' +
+      'Plan: *Premium Membership*\n' +
+      'Amount Paid: ₹' + (member.amount||'1499') + '\n' +
+      'Valid Until: *' + validTillFull + '*\n' +
+      '━━━━━━━━━━━━━━━━━━\n\n' +
+      '📎 *Membership card & PDF attached*\n\n' +
+      'Need help? Call: +91 9908011124\n' +
+      'www.gvcdaservicehub.com\n\n' +
+      'Thank you for joining GVCDA (Glob Village & City Development Agency) as a valued member.\n\n' +
+      'We are pleased to inform you that your Membership Card has been successfully issued. We warmly welcome you to the GVCDA family and look forward to your active participation in our community development initiatives.\n\n' +
+      'Your membership provides access to various programs, services, training opportunities, and networking platforms offered by GVCDA.\n\n' +
+      'Thank you for your trust and support. Together, let\'s build stronger villages and smarter cities.\n\n' +
+      'Best Regards,\n\nGVCDA\n(Glob Village & City Development Agency LLP)\n\n*Team GVCDA* 🙏';
     window.open('https://web.whatsapp.com/send?phone=' + num + '&text=' + encodeURIComponent(msg), '_blank');
   };
 
