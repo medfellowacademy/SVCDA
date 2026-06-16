@@ -1362,7 +1362,7 @@ async function buildMemberPDF() {
     pdf.setFontSize(11); pdf.setFont('helvetica', 'bold');
     pdf.text('Premium Member Benefits', 21, benY + 9);
     pdf.setFontSize(8.5); pdf.setFont('helvetica', 'normal'); pdf.setTextColor(55, 55, 55);
-    ['Priority customer support', '20% discount on all services', 'Free health camps access', 'Special event invitations']
+    ['Priority customer support', 'Up to 50% discount on services', 'Free health camps access', 'Special event invitations']
         .forEach((b, i) => pdf.text('• ' + b, 21, benY + 18 + i * 8));
     ['Skill development courses', 'Fast-track service processing', 'Agricultural & business support', 'Exclusive member-only offers']
         .forEach((b, i) => pdf.text('• ' + b, 112, benY + 18 + i * 8));
@@ -1396,7 +1396,7 @@ async function buildMemberPDF() {
     pdf.setFontSize(16); pdf.setFont('helvetica', 'bold');
     pdf.text('Our Services — Available to Premium Members', PW / 2, 40, { align: 'center' });
     pdf.setFontSize(9); pdf.setFont('helvetica', 'normal'); pdf.setTextColor(100, 100, 100);
-    pdf.text('As a GVCDA Premium Member, you get priority access and 20% discount on all services below.', PW / 2, 48, { align: 'center' });
+    pdf.text('As a GVCDA Premium Member, you get priority access and up to 50% discount on all services below.', PW / 2, 48, { align: 'center' });
 
     const services = [
         { icon: '1.', title: 'Health & Medical Services',
@@ -1582,6 +1582,73 @@ async function buildMemberPDF() {
     pdf.text('Globe Village & City Development Agency  |  +91 9908011124  |  www.gvcdaservicehub.com', PW / 2, p3H - 8, { align: 'center' });
     pdf.text('SHG members get priority access, training & business support across all categories', PW / 2, p3H - 2, { align: 'center' });
 
+    // ===== PAGE 4: Terms & Conditions =====
+    pdf.addPage();
+    // Header
+    pdf.setFillColor(30, 40, 80);
+    pdf.rect(0, 0, PW, 28, 'F');
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(15); pdf.setFont('helvetica', 'bold');
+    pdf.text('GVCDA Membership Card — Terms & Conditions', PW / 2, 12, { align: 'center' });
+    pdf.setFontSize(8); pdf.setFont('helvetica', 'normal');
+    pdf.text('Global Village and City Development Agency LLP (GVCDA)', PW / 2, 22, { align: 'center' });
+
+    const tnc = [
+        { num: '1.', title: 'Membership Fee', body: 'Rs. 1,499.' },
+        { num: '2.', title: 'Membership Validity', body: 'The membership card is valid for 1 year from the date of activation.' },
+        { num: '3.', title: 'Free Insurance Benefit', body: 'Members are eligible for insurance coverage for 2 years, subject to the insurer\'s terms, conditions, eligibility criteria, exclusions, and claim procedures.' },
+        { num: '4.', title: 'Discount Benefits', body: 'Members may receive discounts of up to 50% from participating partners, merchants, and service providers. Discounts may vary depending on the offer and partner.' },
+        { num: '5.', title: 'Guidance Services', body: 'Members are entitled to guidance and consultation services as offered by GVCDA from time to time.' },
+        { num: '6.', title: 'Career Support', body: 'Members may access career guidance, mentoring, training, and support services provided by GVCDA.' },
+        { num: '7.', title: 'Consultant Services', body: 'Members may avail consultant and advisory services as per GVCDA programs, policies, and service availability.' },
+        { num: '8.', title: 'Non-Transferable Membership', body: 'Membership cards are issued exclusively to the registered member and are non-transferable.' },
+        { num: '9.', title: 'Modification of Benefits', body: 'GVCDA reserves the right to modify, update, suspend, or discontinue membership benefits, offers, services, and partner programs at any time without prior notice.' },
+        { num: '10.', title: 'No Refund Policy', body: 'The membership fee of Rs. 1,499 is non-refundable and non-transferable. Once the membership card has been issued and activated, it cannot be cancelled, exchanged, or refunded, either in full or in part.' },
+        { num: '11.', title: 'Acceptance of Terms', body: 'By purchasing and using the GVCDA Membership Card, the member agrees to abide by all applicable terms and conditions of the membership program.' },
+    ];
+
+    let ty = 36;
+    tnc.forEach((item) => {
+        // Number + Title
+        pdf.setFillColor(30, 40, 80);
+        pdf.roundedRect(14, ty, 6, 6, 1, 1, 'F');
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(6); pdf.setFont('helvetica', 'bold');
+        pdf.text(item.num, 17, ty + 4.2, { align: 'center' });
+
+        pdf.setTextColor(20, 30, 70);
+        pdf.setFontSize(8.5); pdf.setFont('helvetica', 'bold');
+        pdf.text(item.title, 23, ty + 4.5);
+
+        // Body text (wrapped)
+        pdf.setTextColor(50, 50, 50);
+        pdf.setFontSize(7.5); pdf.setFont('helvetica', 'normal');
+        const lines = pdf.splitTextToSize(item.body, PW - 28);
+        pdf.text(lines, 23, ty + 10);
+
+        ty += 10 + lines.length * 4.5 + 3;
+    });
+
+    // Authorized by
+    ty += 4;
+    pdf.setDrawColor(180, 180, 200);
+    pdf.line(14, ty, PW - 14, ty);
+    ty += 6;
+    pdf.setFontSize(8); pdf.setFont('helvetica', 'bold'); pdf.setTextColor(30, 40, 80);
+    pdf.text('Authorized by:', 14, ty);
+    ty += 5;
+    pdf.setFont('helvetica', 'normal'); pdf.setTextColor(50, 50, 50);
+    pdf.text('Global Village and City Development Agency LLP (GVCDA)', 14, ty);
+
+    // Page 4 footer
+    const p4H = 297;
+    pdf.setFillColor(30, 40, 80);
+    pdf.rect(0, p4H - 16, PW, 16, 'F');
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(7.5); pdf.setFont('helvetica', 'normal');
+    pdf.text('Globe Village & City Development Agency  |  +91 9908011124  |  www.gvcdaservicehub.com', PW / 2, p4H - 8, { align: 'center' });
+    pdf.text('This document is system-generated. For queries contact your GVCDA agent.', PW / 2, p4H - 2, { align: 'center' });
+
     return pdf;
 }
 
@@ -1625,7 +1692,7 @@ async function sendMemberWhatsApp() {
         'Valid Until: *' + vt + '*\n' +
         '━━━━━━━━━━━━━━━━━━\n\n' +
         '✨ *Premium Benefits:*\n' +
-        '• Priority access & 20% discount on all services\n' +
+        '• Priority access & up to 50% discount on services\n' +
         '• Free health camps & medical check-ups\n' +
         '• Skill development & training courses\n' +
         '• Fast-track service processing\n' +
