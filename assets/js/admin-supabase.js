@@ -870,6 +870,50 @@ Applied: ${formatDate(app.created_at)}
       pdf.setFillColor(102,126,234); pdf.rect(0,PH-16,PW,16,'F');
       pdf.setTextColor(255,255,255); pdf.setFontSize(8);
       pdf.text('Globe Village & City Development Agency  |  +91 9908011124  |  www.gvcdaservicehub.com',PW/2,PH-8,{align:'center'});
+
+      // ── Page 3: Terms & Conditions ──
+      pdf.addPage();
+      pdf.setFillColor(30,40,80); pdf.rect(0,0,PW,28,'F');
+      pdf.setTextColor(255,255,255); pdf.setFontSize(15); pdf.setFont('helvetica','bold');
+      pdf.text('GVCDA Membership Card — Terms & Conditions',PW/2,12,{align:'center'});
+      pdf.setFontSize(8); pdf.setFont('helvetica','normal');
+      pdf.text('Global Village and City Development Agency LLP (GVCDA)',PW/2,22,{align:'center'});
+      const tnc=[
+        {n:'1.',t:'Membership Fee',b:'Rs. 1,499.'},
+        {n:'2.',t:'Membership Validity',b:'The membership card is valid for 1 year from the date of activation.'},
+        {n:'3.',t:'Free Insurance Benefit',b:'Members are eligible for insurance coverage for 2 years, subject to the insurer\'s terms, conditions, eligibility criteria, exclusions, and claim procedures.'},
+        {n:'4.',t:'Discount Benefits',b:'Members may receive discounts of up to 50% from participating partners, merchants, and service providers. Discounts may vary depending on the offer and partner.'},
+        {n:'5.',t:'Guidance Services',b:'Members are entitled to guidance and consultation services as offered by GVCDA from time to time.'},
+        {n:'6.',t:'Career Support',b:'Members may access career guidance, mentoring, training, and support services provided by GVCDA.'},
+        {n:'7.',t:'Consultant Services',b:'Members may avail consultant and advisory services as per GVCDA programs, policies, and service availability.'},
+        {n:'8.',t:'Non-Transferable Membership',b:'Membership cards are issued exclusively to the registered member and are non-transferable.'},
+        {n:'9.',t:'Modification of Benefits',b:'GVCDA reserves the right to modify, update, suspend, or discontinue membership benefits, offers, services, and partner programs at any time without prior notice.'},
+        {n:'10.',t:'No Refund Policy',b:'The membership fee of Rs. 1,499 is non-refundable and non-transferable. Once the membership card has been issued and activated, it cannot be cancelled, exchanged, or refunded, either in full or in part.'},
+        {n:'11.',t:'Acceptance of Terms',b:'By purchasing and using the GVCDA Membership Card, the member agrees to abide by all applicable terms and conditions of the membership program.'},
+      ];
+      let ty=36;
+      tnc.forEach(item=>{
+        pdf.setFillColor(30,40,80); pdf.roundedRect(14,ty,6,6,1,1,'F');
+        pdf.setTextColor(255,255,255); pdf.setFontSize(6); pdf.setFont('helvetica','bold');
+        pdf.text(item.n,17,ty+4.2,{align:'center'});
+        pdf.setTextColor(20,30,70); pdf.setFontSize(8.5); pdf.setFont('helvetica','bold');
+        pdf.text(item.t,23,ty+4.5);
+        pdf.setTextColor(50,50,50); pdf.setFontSize(7.5); pdf.setFont('helvetica','normal');
+        const lines=pdf.splitTextToSize(item.b,PW-28);
+        pdf.text(lines,23,ty+10);
+        ty+=10+lines.length*4.5+3;
+      });
+      ty+=4;
+      pdf.setDrawColor(180,180,200); pdf.line(14,ty,PW-14,ty); ty+=6;
+      pdf.setFontSize(8); pdf.setFont('helvetica','bold'); pdf.setTextColor(30,40,80);
+      pdf.text('Authorized by:',14,ty); ty+=5;
+      pdf.setFont('helvetica','normal'); pdf.setTextColor(50,50,50);
+      pdf.text('Global Village and City Development Agency LLP (GVCDA)',14,ty);
+      pdf.setFillColor(30,40,80); pdf.rect(0,PH-16,PW,16,'F');
+      pdf.setTextColor(255,255,255); pdf.setFontSize(7.5); pdf.setFont('helvetica','normal');
+      pdf.text('Globe Village & City Development Agency  |  +91 9908011124  |  www.gvcdaservicehub.com',PW/2,PH-8,{align:'center'});
+      pdf.text('This document is system-generated. For queries contact your GVCDA agent.',PW/2,PH-2,{align:'center'});
+
       const pdfBlob = pdf.output('blob');
       blobDL(URL.createObjectURL(pdfBlob), 'GVCDA_Membership_' + (member.card_number||member.name).replace(/\s+/g,'_') + '.pdf');
     } catch(e) { console.error('PDF error:',e); }
