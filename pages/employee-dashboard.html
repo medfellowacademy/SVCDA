@@ -1688,30 +1688,19 @@ async function sendMemberWhatsApp() {
         'Card Number: *' + (currentCardUser.card_number || '-') + '*\n' +
         'Member Name: ' + currentCardUser.name + '\n' +
         'Plan: *Premium Membership*\n' +
-        'Amount Paid: ₹' + (currentCardUser.amount || '-') + '\n' +
+        'Amount Paid: ₹' + (currentCardUser.amount || '1499') + '\n' +
         'Valid Until: *' + vt + '*\n' +
         '━━━━━━━━━━━━━━━━━━\n\n' +
-        '✨ *Premium Benefits:*\n' +
-        '• Priority access & up to 50% discount on services\n' +
-        '• Free health camps & medical check-ups\n' +
-        '• Skill development & training courses\n' +
-        '• Fast-track service processing\n' +
-        '• Special member-only offers & events\n\n' +
-        '🏪 *Our Services:*\n' +
-        '🌾 Agriculture & Farming Support\n' +
-        '📚 Education & Coaching\n' +
-        '🏥 Health & Medical Services\n' +
-        '💼 Business Support & Loans\n' +
-        '🛒 Grocery & Daily Essentials\n' +
-        '👔 Employment & Job Placement\n' +
-        '📱 Electronics & Tech Support\n' +
-        '👩 Women Empowerment Programs\n' +
-        '🎓 Skill Development & Training\n' +
-        '🌿 Ayurvedic Products & Wellness\n' +
-        '🛍️ Order & Delivery Services\n\n' +
         '📎 *Membership card & PDF attached*\n\n' +
         'Need help? Call: +91 9908011124\n' +
         'www.gvcdaservicehub.com\n\n' +
+        'Thank you for joining GVCDA (Glob Village & City Development Agency) as a valued member.\n\n' +
+        'We are pleased to inform you that your Membership Card has been successfully issued. We warmly welcome you to the GVCDA family and look forward to your active participation in our community development initiatives.\n\n' +
+        'Your membership provides access to various programs, services, training opportunities, and networking platforms offered by GVCDA.\n\n' +
+        'Thank you for your trust and support. Together, let\'s build stronger villages and smarter cities.\n\n' +
+        'Best Regards,\n\n' +
+        'GVCDA\n' +
+        '(Glob Village & City Development Agency LLP)\n\n' +
         '*Team GVCDA* 🙏';
 
     const raw   = (currentCardUser.phone || '').replace(/\D/g, '');
