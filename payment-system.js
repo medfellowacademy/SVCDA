@@ -358,20 +358,8 @@ async function processPremiumPayment(memberData) {
         }
       }
 
-      // 5. Generate WhatsApp message
-      console.log('💬 Opening WhatsApp...');
-      const whatsappMessage = createWhatsAppMessage({
-        ...dbMemberData,
-        valid_till: validTillStr
-      });
-      const whatsappResult = await sendWhatsApp(memberData.phone, whatsappMessage);
-      
-      if (whatsappResult.success) {
-        console.log('✅ WhatsApp link opened');
-        setTimeout(() => {
-          showNotification('📱 WhatsApp opened. Please send the message!', 'info');
-        }, 2000);
-      }
+      // 5. WhatsApp card delivery is handled by admin only
+      console.log('ℹ️ Card created. Admin will send WhatsApp card notification.');
 
       // 6. Show success message
       showNotification(
@@ -475,27 +463,12 @@ async function processPremiumPayment(memberData) {
             }
           }
 
-          // 5. Generate WhatsApp message and open link
-          console.log('💬 Opening WhatsApp...');
-          const whatsappMessage = createWhatsAppMessage({
-            ...dbMemberData,
-            valid_till: validTillStr
-          });
-          const whatsappResult = await sendWhatsApp(memberData.phone, whatsappMessage);
-          
-          if (whatsappResult.success) {
-            console.log('✅ WhatsApp link opened');
-            // Show helper notification
-            setTimeout(() => {
-              showNotification('📱 WhatsApp opened in new tab. Please send the message to complete delivery!', 'info');
-            }, 2000);
-          } else {
-            console.warn('⚠️ WhatsApp failed:', whatsappResult.error);
-          }
+          // 5. WhatsApp card delivery is handled by admin only
+          console.log('ℹ️ Card created. Admin will send WhatsApp card notification.');
 
           // 6. Show success message
           showNotification(
-            `🎉 Payment successful! Card Number: ${cardNumber}. Check your messages!`,
+            `🎉 Payment successful! Card Number: ${cardNumber}.`,
             'success'
           );
 

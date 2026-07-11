@@ -97,7 +97,11 @@
 
       const body = byId('membersBody');
       body.innerHTML = members.map(m => {
+        const safePhone = (m.phone || '').replace(/'/g, "\\'");
+        const safeName = (m.name || '').replace(/'/g, "\\'");
+        const safeCard = (m.card_number || '').replace(/'/g, "\\'");
         return '<tr>' +
+          '<td><input type="checkbox" class="member-checkbox" value="' + m.id + '"></td>' +
           '<td>' + (m.name || '-') + '</td>' +
           '<td>' + (m.phone || '-') + '</td>' +
           '<td>' + (m.plan || 'Registered') + '</td>' +
@@ -106,12 +110,15 @@
           '<td>' + (m.payment_id ? '<small style="color:#666;">' + m.payment_id.substring(0, 20) + '...</small>' : '-') + '</td>' +
           '<td>' + (m.added_by_name || 'Direct/Website') + '</td>' +
           '<td>' + formatDate(m.created_at) + '</td>' +
-          '<td>' + formatDate(m.updated_at) + '</td>' +
+          '<td>' +
+            '<button onclick="adminSendCard(\'' + safePhone + '\',\'' + safeName + '\',\'' + safeCard + '\')" ' +
+              'style="padding:4px 10px;font-size:0.8rem;background:#25d366;color:#fff;border:none;border-radius:6px;cursor:pointer;">📤 Send Card</button>' +
+          '</td>' +
           '</tr>';
-      }).join('') || '<tr><td colspan="9">No members found</td></tr>';
+      }).join('') || '<tr><td colspan="10">No members found</td></tr>';
     } catch (error) {
       console.error('Error rendering members:', error);
-      byId('membersBody').innerHTML = '<tr><td colspan="9">Error loading members</td></tr>';
+      byId('membersBody').innerHTML = '<tr><td colspan="10">Error loading members</td></tr>';
     }
   }
 
@@ -806,6 +813,35 @@ Applied: ${formatDate(app.created_at)}
       }
     });
   }
+
+  // Admin-only: send card details to member via WhatsApp
+  window.adminSendCard = function(phone, name, cardNumber) {
+    const cleanPhone = phone.replace(/[^0-9]/g, '');
+    const message = `🌟 *GVCDA Premium Membership Card*
+
+Dear ${name},
+
+Your premium membership card details:
+
+📇 *Card Number:* ${cardNumber}
+👤 *Member Name:* ${name}
+
+✨ *Premium Benefits:*
+• Priority Support
+• 20% Discounts on all services
+• Free Health Camps
+• Exclusive Skill Courses
+
+📱 Access your digital card at:
+https://gvcda.in/pages/member-dashboard.html
+
+Need help? Call: +91 7981660705
+
+*Team GVCDA* 🙏`;
+
+    const url = 'https://wa.me/91' + cleanPhone + '?text=' + encodeURIComponent(message);
+    window.open(url, '_blank');
+  };
 
   // Initialize on DOM ready
   document.addEventListener('DOMContentLoaded', function () {
