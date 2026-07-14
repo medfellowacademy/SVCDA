@@ -14,9 +14,11 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: './index.html',
+        // Admin panel
+        adminPanel: './admin/index.html',
         // Pages
         about: './pages/about.html',
-        admin: './pages/admin.html',
+        advertising: './pages/advertising.html',
         agriculture: './pages/agriculture.html',
         ayurvedic: './pages/ayurvedic-products.html',
         business: './pages/business.html',
