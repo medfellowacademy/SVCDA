@@ -848,7 +848,7 @@ Applied: ${formatDate(app.created_at)}
 
     ctx.fillStyle = '#ffffff';
     ctx.font = '18px Arial';
-    ctx.fillText('Godavari Valley Community Development Association', 50, 120);
+    ctx.fillText('Globe Village and City Development Agency', 50, 120);
 
     // Plan badge
     ctx.fillStyle = '#f5a623';
@@ -958,7 +958,7 @@ https://www.gvcdaservicehub.com/pages/member-dashboard.html
 🌐 *Website:* www.gvcdaservicehub.com
 📞 *Helpline:* +91 7981660705
 
-*Godavari Valley Community Development Association*
+*Globe Village and City Development Agency*
 *Team GVCDA* 🙏`;
 
     const url = 'https://wa.me/91' + cleanPhone + '?text=' + encodeURIComponent(message);
