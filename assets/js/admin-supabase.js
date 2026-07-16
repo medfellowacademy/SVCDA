@@ -100,6 +100,9 @@
         const safePhone = (m.phone || '').replace(/'/g, "\\'");
         const safeName = (m.name || '').replace(/'/g, "\\'");
         const safeCard = (m.card_number || '').replace(/'/g, "\\'");
+        const safeLocation = (m.location || '').replace(/'/g, "\\'");
+        const safePlan = (m.plan || 'Premium').replace(/'/g, "\\'");
+        const safeAmount = String(m.amount || '');
         return '<tr>' +
           '<td><input type="checkbox" class="member-checkbox" value="' + m.id + '"></td>' +
           '<td>' + (m.name || '-') + '</td>' +
@@ -110,9 +113,11 @@
           '<td>' + (m.payment_id ? '<small style="color:#666;">' + m.payment_id.substring(0, 20) + '...</small>' : '-') + '</td>' +
           '<td>' + (m.added_by_name || 'Direct/Website') + '</td>' +
           '<td>' + formatDate(m.created_at) + '</td>' +
-          '<td>' +
+          '<td style="white-space:nowrap;">' +
+            '<button onclick="adminDownloadCard(\'' + safeCard + '\',\'' + safeName + '\',\'' + safePhone + '\',\'' + safeLocation + '\',\'' + safePlan + '\',\'' + safeAmount + '\')" ' +
+              'style="padding:4px 10px;font-size:0.8rem;background:#667eea;color:#fff;border:none;border-radius:6px;cursor:pointer;margin-right:4px;">⬇ Card</button>' +
             '<button onclick="adminSendCard(\'' + safePhone + '\',\'' + safeName + '\',\'' + safeCard + '\')" ' +
-              'style="padding:4px 10px;font-size:0.8rem;background:#25d366;color:#fff;border:none;border-radius:6px;cursor:pointer;">📤 Send Card</button>' +
+              'style="padding:4px 10px;font-size:0.8rem;background:#25d366;color:#fff;border:none;border-radius:6px;cursor:pointer;">📤 WhatsApp</button>' +
           '</td>' +
           '</tr>';
       }).join('') || '<tr><td colspan="10">No members found</td></tr>';
@@ -814,29 +819,146 @@ Applied: ${formatDate(app.created_at)}
     });
   }
 
+  // Admin-only: download premium card as image
+  window.adminDownloadCard = function(cardNumber, name, phone, location, plan, amount) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 900;
+    canvas.height = 500;
+    const ctx = canvas.getContext('2d');
+
+    // Background gradient
+    const grad = ctx.createLinearGradient(0, 0, 900, 500);
+    grad.addColorStop(0, '#1a1a2e');
+    grad.addColorStop(1, '#16213e');
+    ctx.fillStyle = grad;
+    ctx.roundRect(0, 0, 900, 500, 24);
+    ctx.fill();
+
+    // Gold accent bar
+    const gold = ctx.createLinearGradient(0, 0, 900, 0);
+    gold.addColorStop(0, '#f5a623');
+    gold.addColorStop(1, '#f9d36a');
+    ctx.fillStyle = gold;
+    ctx.fillRect(0, 0, 900, 8);
+
+    // GVCDA logo text
+    ctx.fillStyle = '#f5a623';
+    ctx.font = 'bold 48px Arial';
+    ctx.fillText('GVCDA', 50, 90);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '18px Arial';
+    ctx.fillText('Godavari Valley Community Development Association', 50, 120);
+
+    // Plan badge
+    ctx.fillStyle = '#f5a623';
+    ctx.font = 'bold 16px Arial';
+    ctx.fillText('⭐ ' + (plan || 'PREMIUM') + ' MEMBER', 50, 160);
+
+    // Divider
+    ctx.strokeStyle = 'rgba(245,166,35,0.4)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(50, 180);
+    ctx.lineTo(850, 180);
+    ctx.stroke();
+
+    // Member details
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.font = '14px Arial';
+    ctx.fillText('CARD NUMBER', 50, 220);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 22px Arial';
+    ctx.fillText(cardNumber || '-', 50, 250);
+
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.font = '14px Arial';
+    ctx.fillText('MEMBER NAME', 50, 300);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 26px Arial';
+    ctx.fillText(name || '-', 50, 332);
+
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.font = '14px Arial';
+    ctx.fillText('PHONE', 50, 375);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 18px Arial';
+    ctx.fillText(phone || '-', 50, 400);
+
+    if (location) {
+      ctx.fillStyle = 'rgba(255,255,255,0.6)';
+      ctx.font = '14px Arial';
+      ctx.fillText('LOCATION', 300, 375);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 18px Arial';
+      ctx.fillText(location, 300, 400);
+    }
+
+    // Benefits (right side)
+    ctx.fillStyle = 'rgba(255,255,255,0.15)';
+    ctx.roundRect(580, 200, 270, 240, 12);
+    ctx.fill();
+
+    ctx.fillStyle = '#f5a623';
+    ctx.font = 'bold 14px Arial';
+    ctx.fillText('PREMIUM BENEFITS', 600, 230);
+
+    const benefits = ['✓ ₹10 Lakhs Accident Insurance', '✓ 20% Discount on Services', '✓ Free Health Camps', '✓ Skill Development Courses', '✓ Priority Support'];
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '13px Arial';
+    benefits.forEach(function(b, i) { ctx.fillText(b, 600, 260 + i * 28); });
+
+    // Website
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '13px Arial';
+    ctx.fillText('www.gvcdaservicehub.com', 50, 465);
+
+    if (amount) {
+      ctx.fillStyle = '#f5a623';
+      ctx.font = 'bold 16px Arial';
+      ctx.fillText('₹' + amount, 820, 465);
+    }
+
+    // Download
+    const link = document.createElement('a');
+    link.download = 'GVCDA-Card-' + (cardNumber || 'member') + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  };
+
   // Admin-only: send card details to member via WhatsApp
   window.adminSendCard = function(phone, name, cardNumber) {
     const cleanPhone = phone.replace(/[^0-9]/g, '');
     const message = `🌟 *GVCDA Premium Membership Card*
+━━━━━━━━━━━━━━━━━━━━━━
 
-Dear ${name},
+Dear *${name}*,
 
-Your premium membership card details:
+Congratulations! Your GVCDA Premium Membership has been activated. 🎉
 
+━━━━━━━━━━━━━━━━━━━━━━
 📇 *Card Number:* ${cardNumber}
-👤 *Member Name:* ${name}
+👤 *Name:* ${name}
+📞 *Phone:* ${phone}
+🏅 *Plan:* Premium Member
+━━━━━━━━━━━━━━━━━━━━━━
 
-✨ *Premium Benefits:*
-• Priority Support
-• 20% Discounts on all services
-• Free Health Camps
-• Exclusive Skill Courses
+✨ *Your Premium Benefits:*
+🛡️ ₹10 Lakhs Personal Accident Insurance
+💰 20% Discount on All Services
+🏥 Free Health Camps Access
+📚 Skill Development Courses
+🎯 Priority Support
+🤝 Exclusive Member Network
 
-📱 Access your digital card at:
-https://gvcda.in/pages/member-dashboard.html
+━━━━━━━━━━━━━━━━━━━━━━
+📱 *Access your digital card:*
+https://www.gvcdaservicehub.com/pages/member-dashboard.html
 
-Need help? Call: +91 7981660705
+🌐 *Website:* www.gvcdaservicehub.com
+📞 *Helpline:* +91 7981660705
 
+*Godavari Valley Community Development Association*
 *Team GVCDA* 🙏`;
 
     const url = 'https://wa.me/91' + cleanPhone + '?text=' + encodeURIComponent(message);
