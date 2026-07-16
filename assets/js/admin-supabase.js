@@ -962,165 +962,203 @@ Applied: ${formatDate(app.created_at)}
     const validStr = validUntil.toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
     const issueStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
 
-    // --- Dark header band ---
-    doc.setFillColor(26, 33, 81);
-    doc.rect(0, 0, W, 42, 'F');
+    function drawHeader() {
+      doc.setFillColor(26, 33, 81);
+      doc.rect(0, 0, W, 42, 'F');
+      doc.setFillColor(245, 166, 35);
+      doc.rect(0, 0, W, 3, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(26);
+      doc.text('GVCDA', 14, 20);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(200, 210, 255);
+      doc.text('Globe Village & City Development Agency', 14, 29);
+      doc.text('+91 9908011124  |  www.gvcdaservicehub.com', 14, 36);
+      doc.setFillColor(245, 166, 35);
+      doc.roundedRect(152, 11, 44, 13, 3, 3, 'F');
+      doc.setTextColor(26, 33, 81);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.text((plan || 'PREMIUM').toUpperCase(), 174, 19.5, { align: 'center' });
+    }
 
-    // Gold top strip
-    doc.setFillColor(245, 166, 35);
-    doc.rect(0, 0, W, 3, 'F');
+    function drawFooter() {
+      doc.setFillColor(26, 33, 81);
+      doc.rect(0, H - 12, W, 12, 'F');
+      doc.setTextColor(180, 190, 220);
+      doc.setFontSize(7);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Membership Card  |  Valid for 1 Year from Date of Issue  |  Non-Transferable  |  www.gvcdaservicehub.com', W / 2, H - 4, { align: 'center' });
+    }
 
-    // GVCDA title
-    doc.setTextColor(255, 255, 255);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(28);
-    doc.text('GVCDA', 14, 22);
+    // ══════════════════════════════
+    // PAGE 1 — Certificate + Card
+    // ══════════════════════════════
+    drawHeader();
 
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9);
-    doc.setTextColor(200, 210, 255);
-    doc.text('Globe Village & City Development Agency', 14, 30);
-    doc.text('+91 9908011124  |  www.gvcdaservicehub.com', 14, 37);
-
-    // PREMIUM badge (right)
-    doc.setFillColor(245, 166, 35);
-    doc.roundedRect(154, 12, 42, 12, 3, 3, 'F');
     doc.setTextColor(26, 33, 81);
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(9);
-    doc.text((plan || 'PREMIUM').toUpperCase(), 175, 20, { align: 'center' });
-
-    // --- Certificate title ---
-    doc.setTextColor(26, 33, 81);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(16);
-    doc.text('MEMBERSHIP CERTIFICATE', W / 2, 58, { align: 'center' });
-
-    // Gold underline
+    doc.setFontSize(15);
+    doc.text('MEMBERSHIP CERTIFICATE', W / 2, 55, { align: 'center' });
     doc.setDrawColor(245, 166, 35);
-    doc.setLineWidth(1);
-    doc.line(60, 61, 150, 61);
-
-    // Intro text
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(10);
-    doc.setTextColor(80, 80, 80);
-    doc.text('This is to certify that the following individual has been registered as a', W / 2, 70, { align: 'center' });
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(245, 166, 35);
-    doc.text('GVCDA Premium Member', W / 2, 77, { align: 'center' });
-
-    // --- Member details box ---
-    doc.setFillColor(245, 247, 255);
-    doc.setDrawColor(180, 190, 230);
-    doc.setLineWidth(0.5);
-    doc.roundedRect(14, 84, W - 28, 72, 4, 4, 'FD');
-
-    const col1 = 22, col2 = 80, col3 = 120, col4 = 165;
-    let row = 97;
-
-    function detailRow(label1, val1, label2, val2) {
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8.5);
-      doc.setTextColor(120, 120, 140);
-      doc.text(label1, col1, row);
-      if (label2) doc.text(label2, col3, row);
-      row += 6;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.setTextColor(26, 33, 81);
-      doc.text(val1 || '-', col1, row);
-      if (val2) doc.text(val2 || '-', col3, row);
-      row += 10;
-    }
-
-    detailRow('MEMBER NAME', (name || '-').toUpperCase(), 'CARD NUMBER', cardNumber || '-');
-    detailRow('PHONE', phone || '-', 'PLAN', (plan || 'Premium') + ' Membership');
-    detailRow('DATE OF ISSUE', issueStr, 'VALID UNTIL', validStr);
-
-    // --- Card image embedded ---
-    if (cardDataUrl) {
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10);
-      doc.setTextColor(26, 33, 81);
-      doc.text('YOUR MEMBERSHIP CARD', W / 2, 166, { align: 'center' });
-      // Card at 16:9 ratio, centred
-      const cardW = 170, cardH = Math.round(170 * 506 / 900);
-      const cardX = (W - cardW) / 2;
-      doc.addImage(cardDataUrl, 'PNG', cardX, 170, cardW, cardH);
-    }
-
-    // --- Benefits section ---
-    let y = 222;
-    doc.setFillColor(26, 33, 81);
-    doc.rect(14, y, W - 28, 8, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(9);
-    doc.text('PREMIUM MEMBERSHIP BENEFITS', W / 2, y + 5.5, { align: 'center' });
-    y += 12;
-
-    const benefits = [
-      ['Shield Rs.10 Lakhs Personal Accident Insurance', 'Priority access to all GVCDA programs & services'],
-      ['20% Discount on all GVCDA services', 'Free Health Camps & wellness programs'],
-      ['Skill Development & Training Courses', 'Exclusive member networking platform'],
-    ];
-    doc.setTextColor(50, 50, 80);
-    doc.setFontSize(9);
-    benefits.forEach(function(pair) {
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(245, 166, 35);
-      doc.text('•', col1, y);
-      doc.setTextColor(50, 50, 80);
-      doc.text(pair[0], col1 + 5, y);
-      doc.setTextColor(245, 166, 35);
-      doc.text('•', col3, y);
-      doc.setTextColor(50, 50, 80);
-      doc.text(pair[1], col3 + 5, y);
-      y += 8;
-    });
-
-    // --- Welcome message ---
-    y += 4;
-    doc.setDrawColor(220, 220, 235);
-    doc.setLineWidth(0.3);
-    doc.line(14, y, W - 14, y);
-    y += 8;
+    doc.setLineWidth(0.8);
+    doc.line(65, 58, 145, 58);
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9.5);
-    doc.setTextColor(60, 60, 80);
-    const msg = 'Dear ' + (name || 'Member') + ',\n\nWe are pleased to inform you that your Membership Card has been successfully issued. We warmly welcome you to the GVCDA family and look forward to your active participation in our community development initiatives.\n\nYour membership provides access to various programs, services, training opportunities, and networking platforms offered by GVCDA. Together, let\'s build stronger villages and smarter cities.\n\nThank you for your trust and support.';
-    const lines = doc.splitTextToSize(msg, W - 28);
-    doc.text(lines, 14, y);
-    y += lines.length * 5 + 6;
+    doc.setTextColor(80, 80, 90);
+    doc.text('This is to certify that the following individual has been registered as a', W / 2, 66, { align: 'center' });
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(245, 166, 35);
+    doc.text('GVCDA Premium Member', W / 2, 73, { align: 'center' });
 
-    // --- Signature area ---
+    // Member details box
+    doc.setFillColor(245, 247, 255);
+    doc.setDrawColor(180, 190, 230);
+    doc.setLineWidth(0.4);
+    doc.roundedRect(14, 79, W - 28, 66, 4, 4, 'FD');
+
+    var r = 92;
+    function detRow(l1, v1, l2, v2) {
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(130, 130, 155);
+      doc.text(l1, 22, r);
+      if (l2) doc.text(l2, 118, r);
+      r += 5.5;
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10.5);
+      doc.setTextColor(26, 33, 81);
+      doc.text(v1 || '-', 22, r);
+      if (v2) doc.text(v2 || '-', 118, r);
+      r += 9;
+    }
+    detRow('MEMBER NAME', (name || '-').toUpperCase(), 'CARD NUMBER', cardNumber || '-');
+    detRow('PHONE', phone || '-', 'PLAN', (plan || 'Premium') + ' Membership');
+    detRow('DATE OF ISSUE', issueStr, 'VALID UNTIL', validStr);
+
+    // Welcome letter
+    doc.setDrawColor(220, 225, 240);
+    doc.setLineWidth(0.3);
+    doc.line(14, 150, W - 14, 150);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9.5);
+    doc.setTextColor(50, 55, 70);
+    var letter = 'Dear ' + (name || 'Member') + ',\n\nCongratulations and a warm welcome to the GVCDA family!\n\nWe are pleased to inform you that your Membership Card has been successfully issued. We warmly welcome you to the GVCDA family and look forward to your active participation in our community development initiatives.\n\nYour membership provides access to various programs, services, training opportunities, and networking platforms offered by GVCDA. Together, let\'s build stronger villages and smarter cities.\n\nThank you for your trust and support.';
+    var letterLines = doc.splitTextToSize(letter, W - 28);
+    doc.text(letterLines, 14, 158);
+    var afterLetter = 158 + letterLines.length * 4.8;
+
+    // Card image
+    if (cardDataUrl) {
+      afterLetter += 4;
+      var cardW = 175, cardH = Math.round(175 * 506 / 900);
+      doc.addImage(cardDataUrl, 'PNG', (W - cardW) / 2, afterLetter, cardW, cardH);
+      afterLetter += cardH + 8;
+    }
+
+    // Signature
+    var sigY = Math.max(afterLetter, 258);
     doc.setDrawColor(180, 190, 220);
     doc.setLineWidth(0.4);
-    doc.line(14, y + 14, 65, y + 14);
-    doc.line(W - 65, y + 14, W - 14, y + 14);
+    doc.line(14, sigY, 65, sigY);
+    doc.line(W - 65, sigY, W - 14, sigY);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
-    doc.setTextColor(120, 120, 140);
-    doc.text('Member Signature', 14, y + 19);
-    doc.text('Authorized Signatory', W - 14, y + 19, { align: 'right' });
+    doc.setTextColor(130, 130, 155);
+    doc.text('Member Signature', 14, sigY + 5);
+    doc.text('Authorized Signatory', W - 14, sigY + 5, { align: 'right' });
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8.5);
     doc.setTextColor(26, 33, 81);
-    doc.text('GVCDA', W - 14, y + 25, { align: 'right' });
+    doc.text('GVCDA', W - 14, sigY + 11, { align: 'right' });
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.5);
-    doc.setTextColor(120, 120, 140);
-    doc.text('Globe Village & City Development Agency LLP', W - 14, y + 30, { align: 'right' });
+    doc.setTextColor(130, 130, 155);
+    doc.text('Globe Village & City Development Agency LLP', W - 14, sigY + 16, { align: 'right' });
 
-    // --- Footer ---
-    doc.setFillColor(26, 33, 81);
-    doc.rect(0, H - 14, W, 14, 'F');
-    doc.setTextColor(180, 190, 220);
-    doc.setFontSize(7.5);
+    drawFooter();
+
+    // ══════════════════════════════
+    // PAGE 2 — All Services
+    // ══════════════════════════════
+    doc.addPage();
+    drawHeader();
+
+    doc.setFillColor(245, 166, 35);
+    doc.rect(14, 48, W - 28, 10, 'F');
+    doc.setTextColor(26, 33, 81);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('OUR SERVICES — AVAILABLE TO PREMIUM MEMBERS', W / 2, 55.5, { align: 'center' });
+
     doc.setFont('helvetica', 'normal');
-    doc.text('Membership Card  |  Valid for 1 Year from Date of Issue  |  Non-Transferable  |  www.gvcdaservicehub.com', W / 2, H - 5, { align: 'center' });
+    doc.setFontSize(9);
+    doc.setTextColor(60, 65, 80);
+    doc.text('As a GVCDA Premium Member, you get priority access and up to 50% discount on all services below.', W / 2, 66, { align: 'center' });
+
+    var services = [
+      { num: '1', title: 'Health & Medical Services', items: ['All medicines up to 50% discount', 'Free health camps & doctor consultation', 'Health insurance enrollment', 'Ambulance by reference'] },
+      { num: '2', title: 'Business Sector Support', items: ['Local business promotion', 'Social media & website creation', 'Labor/Trade/Udyam registration', 'GST & accounting support'] },
+      { num: '3', title: 'Home Needs Services', items: ['Home repair & maintenance', 'Plumbing & electrical help', 'Water purifier & appliance service', 'Pest control & cleaning'] },
+      { num: '4', title: 'Advertising Services', items: ['Local ads across all media', 'Design, printing & promotions', 'Social media branding', 'Video & photography'] },
+      { num: '5', title: 'Thrift & Credit Services', items: ['SHG savings & thrift programs', 'Micro-credit & loan facilitation', 'Banking correspondent services', 'Financial literacy'] },
+      { num: '6', title: 'Employment & Job Placement', items: ['Govt. & private job alerts', 'Resume building & interview prep', 'Skill-matching to jobs', 'Self-employment guidance'] },
+      { num: '7', title: 'Skill Development & Training', items: ['Vocational & trade training', 'Computer & digital literacy', 'Tailoring, beauty & food business', 'Entrepreneurship development'] },
+      { num: '8', title: 'Women Empowerment', items: ['SHG formation & microfinance', 'Skill training for women', 'Legal aid & protection awareness', 'Domestic product marketing'] },
+      { num: '9', title: 'Grocery & Daily Essentials', items: ['Ration & grocery delivery', 'Bulk discounted purchasing', 'Fresh vegetables & dairy', 'Monthly subscription baskets'] },
+      { num: '10', title: 'Electronics & Technology', items: ['Mobile, laptop & appliance repair', 'Purchase assistance', 'Internet & broadband setup', 'Cyber security awareness'] },
+      { num: '11', title: 'Education & Coaching', items: ['School & college admission guidance', 'Private hostels & coaching reference', 'Exam preparation resources', 'All training references'] },
+      { num: '12', title: 'Order & Delivery Services', items: ['Doorstep product delivery', 'Custom order placement', 'Bulk order discounts', 'Packaging & logistics'] },
+    ];
+
+    var colW = (W - 28) / 2;
+    var svcY = 72;
+    var colors = [[26,33,81],[15,90,60],[120,40,10],[80,20,100],[10,80,100],[100,60,10]];
+
+    services.forEach(function(svc, i) {
+      var col = i % 2 === 0 ? 14 : 14 + colW + 4;
+      if (i % 2 === 0 && i > 0) svcY += 38;
+      var ci = Math.floor(i / 2) % colors.length;
+      var c = colors[ci];
+
+      // Service title bar
+      doc.setFillColor(c[0], c[1], c[2]);
+      doc.roundedRect(col, svcY, colW - 4, 9, 2, 2, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8.5);
+      doc.text(svc.num + '. ' + svc.title, col + 3, svcY + 6.2);
+
+      // Items
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(40, 45, 60);
+      svc.items.forEach(function(item, j) {
+        doc.setTextColor(c[0], c[1], c[2]);
+        doc.text('•', col + 3, svcY + 14 + j * 6);
+        doc.setTextColor(40, 45, 60);
+        doc.text(item, col + 8, svcY + 14 + j * 6);
+      });
+    });
+
+    // Insurance highlight box
+    var boxY = svcY + 42;
+    doc.setFillColor(26, 33, 81);
+    doc.roundedRect(14, boxY, W - 28, 14, 3, 3, 'F');
+    doc.setTextColor(245, 166, 35);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('Rs.10 Lakhs Personal Accident Insurance', W / 2, boxY + 6, { align: 'center' });
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8.5);
+    doc.text('Included FREE with every Premium Membership  |  Coverage for all registered members', W / 2, boxY + 11.5, { align: 'center' });
+
+    drawFooter();
 
     doc.save('GVCDA-Membership-' + (cardNumber || 'member') + '.pdf');
   };
