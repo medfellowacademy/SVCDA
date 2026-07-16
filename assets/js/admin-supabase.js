@@ -929,36 +929,42 @@ Applied: ${formatDate(app.created_at)}
   // Admin-only: send card details to member via WhatsApp
   window.adminSendCard = function(phone, name, cardNumber) {
     const cleanPhone = phone.replace(/[^0-9]/g, '');
+    const validUntil = new Date();
+    validUntil.setFullYear(validUntil.getFullYear() + 1);
+    const validStr = validUntil.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
     const message = `🌟 *GVCDA Premium Membership Card*
-━━━━━━━━━━━━━━━━━━━━━━
 
-Dear *${name}*,
+Dear ${name},
 
-Congratulations! Your GVCDA Premium Membership has been activated. 🎉
+Your GVCDA Premium membership is now active!
 
-━━━━━━━━━━━━━━━━━━━━━━
-📇 *Card Number:* ${cardNumber}
-👤 *Name:* ${name}
-📞 *Phone:* ${phone}
-🏅 *Plan:* Premium Member
-━━━━━━━━━━━━━━━━━━━━━━
+📧 *Membership Details:*
+━━━━━━━━━━━━━━━━━━
+Card Number: *${cardNumber}*
+Member Name: ${name}
+Plan: *Premium Membership*
+Amount Paid: ₹1499
+Valid Until: *${validStr}*
+━━━━━━━━━━━━━━━━━━
 
-✨ *Your Premium Benefits:*
-🛡️ ₹10 Lakhs Personal Accident Insurance
-💰 20% Discount on All Services
-🏥 Free Health Camps Access
-📚 Skill Development Courses
-🎯 Priority Support
-🤝 Exclusive Member Network
+📎 *Membership card & PDF attached*
 
-━━━━━━━━━━━━━━━━━━━━━━
-📱 *Access your digital card:*
-https://www.gvcdaservicehub.com/pages/member-dashboard.html
+Need help? Call: +91 9908011124
+www.gvcdaservicehub.com
 
-🌐 *Website:* www.gvcdaservicehub.com
-📞 *Helpline:* +91 7981660705
+Thank you for joining GVCDA (Globe Village & City Development Agency) as a valued member.
 
-*Globe Village and City Development Agency*
+We are pleased to inform you that your Membership Card has been successfully issued. We warmly welcome you to the GVCDA family and look forward to your active participation in our community development initiatives.
+
+Your membership provides access to various programs, services, training opportunities, and networking platforms offered by GVCDA.
+
+Thank you for your trust and support. Together, let's build stronger villages and smarter cities.
+
+Best Regards,
+
+GVCDA
+(Globe Village & City Development Agency LLP)
+
 *Team GVCDA* 🙏`;
 
     const url = 'https://wa.me/91' + cleanPhone + '?text=' + encodeURIComponent(message);
