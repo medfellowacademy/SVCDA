@@ -821,105 +821,120 @@ Applied: ${formatDate(app.created_at)}
 
   // Admin-only: download premium card as image
   window.adminDownloadCard = function(cardNumber, name, phone, location, plan, amount) {
+    const W = 900, H = 506;
     const canvas = document.createElement('canvas');
-    canvas.width = 900;
-    canvas.height = 500;
+    canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d');
 
-    // Background gradient
-    const grad = ctx.createLinearGradient(0, 0, 900, 500);
-    grad.addColorStop(0, '#1a1a2e');
-    grad.addColorStop(1, '#16213e');
-    ctx.fillStyle = grad;
-    ctx.roundRect(0, 0, 900, 500, 24);
+    // --- Background ---
+    const bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, '#1a2151');
+    bg.addColorStop(1, '#0f1535');
+    ctx.fillStyle = bg;
+    ctx.beginPath();
+    ctx.roundRect(0, 0, W, H, 20);
     ctx.fill();
 
-    // Gold accent bar
-    const gold = ctx.createLinearGradient(0, 0, 900, 0);
-    gold.addColorStop(0, '#f5a623');
-    gold.addColorStop(1, '#f9d36a');
-    ctx.fillStyle = gold;
-    ctx.fillRect(0, 0, 900, 8);
+    // Decorative circles (top right)
+    ctx.save();
+    ctx.globalAlpha = 0.12;
+    ctx.fillStyle = '#4a6cf7';
+    ctx.beginPath(); ctx.arc(760, 80, 140, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(840, 200, 100, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.restore();
 
-    // GVCDA logo text
-    ctx.fillStyle = '#f5a623';
-    ctx.font = 'bold 48px Arial';
-    ctx.fillText('GVCDA', 50, 90);
-
+    // --- GVCDA title top-left ---
     ctx.fillStyle = '#ffffff';
-    ctx.font = '18px Arial';
-    ctx.fillText('Globe Village and City Development Agency', 50, 120);
+    ctx.font = 'bold 52px Arial';
+    ctx.fillText('GVCDA', 48, 82);
 
-    // Plan badge
-    ctx.fillStyle = '#f5a623';
-    ctx.font = 'bold 16px Arial';
-    ctx.fillText('⭐ ' + (plan || 'PREMIUM') + ' MEMBER', 50, 160);
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.font = '17px Arial';
+    ctx.fillText('Glob Village & City Development Agency', 48, 110);
 
-    // Divider
-    ctx.strokeStyle = 'rgba(245,166,35,0.4)';
-    ctx.lineWidth = 1;
+    // --- PREMIUM badge top-right ---
+    const badgeX = 680, badgeY = 40, badgeW = 180, badgeH = 42;
+    const badgeGrad = ctx.createLinearGradient(badgeX, 0, badgeX + badgeW, 0);
+    badgeGrad.addColorStop(0, '#f5a623');
+    badgeGrad.addColorStop(1, '#f9c84a');
+    ctx.fillStyle = badgeGrad;
     ctx.beginPath();
-    ctx.moveTo(50, 180);
-    ctx.lineTo(850, 180);
-    ctx.stroke();
+    ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 21);
+    ctx.fill();
+    ctx.fillStyle = '#1a2151';
+    ctx.font = 'bold 18px Arial';
+    const badgeLabel = (plan || 'PREMIUM').toUpperCase();
+    const labelW = ctx.measureText(badgeLabel).width;
+    ctx.fillText(badgeLabel, badgeX + (badgeW - labelW) / 2, badgeY + 27);
 
-    // Member details
-    ctx.fillStyle = 'rgba(255,255,255,0.6)';
-    ctx.font = '14px Arial';
-    ctx.fillText('CARD NUMBER', 50, 220);
+    // --- Chip (credit-card style) ---
+    const chipX = 48, chipY = 138, chipW = 58, chipH = 44;
+    const chipGrad = ctx.createLinearGradient(chipX, chipY, chipX + chipW, chipY + chipH);
+    chipGrad.addColorStop(0, '#f5c842');
+    chipGrad.addColorStop(1, '#e0a800');
+    ctx.fillStyle = chipGrad;
+    ctx.beginPath();
+    ctx.roundRect(chipX, chipY, chipW, chipH, 6);
+    ctx.fill();
+    // Chip lines
+    ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(chipX + 19, chipY); ctx.lineTo(chipX + 19, chipY + chipH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(chipX + 39, chipY); ctx.lineTo(chipX + 39, chipY + chipH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(chipX, chipY + 16); ctx.lineTo(chipX + chipW, chipY + 16); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(chipX, chipY + 28); ctx.lineTo(chipX + chipW, chipY + 28); ctx.stroke();
+
+    // --- Card number (spaced groups) ---
+    const cn = (cardNumber || 'GVCDA00000000').toUpperCase();
+    // Split into groups of 4 after first 4
+    const part1 = cn.substring(0, 4);
+    const part2 = cn.substring(4, 8);
+    const part3 = cn.substring(8, 12);
+    const part4 = cn.substring(12);
+    const cnDisplay = [part1, part2, part3, part4].filter(Boolean).join('    ');
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 22px Arial';
-    ctx.fillText(cardNumber || '-', 50, 250);
+    ctx.font = 'bold 32px "Courier New", monospace';
+    ctx.letterSpacing = '2px';
+    ctx.fillText(cnDisplay, 48, 278);
+    ctx.letterSpacing = '0px';
 
+    // --- Member Name ---
     ctx.fillStyle = 'rgba(255,255,255,0.6)';
-    ctx.font = '14px Arial';
-    ctx.fillText('MEMBER NAME', 50, 300);
+    ctx.font = '13px Arial';
+    ctx.fillText('MEMBER NAME', 48, 318);
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 26px Arial';
-    ctx.fillText(name || '-', 50, 332);
+    ctx.fillText((name || '-').toUpperCase(), 48, 350);
+
+    // --- Valid Till ---
+    const validUntil = new Date();
+    validUntil.setFullYear(validUntil.getFullYear() + 1);
+    const mm = String(validUntil.getMonth() + 1).padStart(2, '0');
+    const yyyy = validUntil.getFullYear();
+    const validStr = mm + '/' + yyyy;
 
     ctx.fillStyle = 'rgba(255,255,255,0.6)';
-    ctx.font = '14px Arial';
-    ctx.fillText('PHONE', 50, 375);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 18px Arial';
-    ctx.fillText(phone || '-', 50, 400);
-
-    if (location) {
-      ctx.fillStyle = 'rgba(255,255,255,0.6)';
-      ctx.font = '14px Arial';
-      ctx.fillText('LOCATION', 300, 375);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 18px Arial';
-      ctx.fillText(location, 300, 400);
-    }
-
-    // Benefits (right side)
-    ctx.fillStyle = 'rgba(255,255,255,0.15)';
-    ctx.roundRect(580, 200, 270, 240, 12);
-    ctx.fill();
-
-    ctx.fillStyle = '#f5a623';
-    ctx.font = 'bold 14px Arial';
-    ctx.fillText('PREMIUM BENEFITS', 600, 230);
-
-    const benefits = ['✓ ₹10 Lakhs Accident Insurance', '✓ 20% Discount on Services', '✓ Free Health Camps', '✓ Skill Development Courses', '✓ Priority Support'];
-    ctx.fillStyle = '#ffffff';
     ctx.font = '13px Arial';
-    benefits.forEach(function(b, i) { ctx.fillText(b, 600, 260 + i * 28); });
+    ctx.fillText('VALID TILL', 600, 318);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 26px Arial';
+    ctx.fillText(validStr, 600, 350);
 
-    // Website
-    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    // --- Footer bar ---
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.fillRect(0, 390, W, 116);
+
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.font = 'bold 15px Arial';
+    const footerMain = 'Globe Village & City Development Agency  •  +91 9908011124  •  www.gvcdaservicehub.com';
+    ctx.fillText(footerMain, 48, 430);
+
+    ctx.fillStyle = 'rgba(255,255,255,0.45)';
     ctx.font = '13px Arial';
-    ctx.fillText('www.gvcdaservicehub.com', 50, 465);
+    ctx.fillText('Membership Card  |  Valid for 1 Year from Date of Issue  |  Non-Transferable', 48, 460);
 
-    if (amount) {
-      ctx.fillStyle = '#f5a623';
-      ctx.font = 'bold 16px Arial';
-      ctx.fillText('₹' + amount, 820, 465);
-    }
-
-    // Download
+    // --- Download ---
     const link = document.createElement('a');
     link.download = 'GVCDA-Card-' + (cardNumber || 'member') + '.png';
     link.href = canvas.toDataURL('image/png');
