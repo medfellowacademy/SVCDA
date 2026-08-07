@@ -31,9 +31,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://checkout.razorpay.com">
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="https://checkout.razorpay.com">
     
     <!-- Optimized Font Loading with display=swap for instant text render -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
@@ -274,12 +272,7 @@
                     <span class="prem-price-p">/year</span>
                 </div>
                 <div class="prem-cta-row">
-                    <button type="button" onclick="openPremiumApplication()" class="btn btn-a"
-                        style="padding:14px 32px;font-size:.95rem">Pay Now with Razorpay <svg width="14" height="14"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg></button>
-                    <a href="#compare" class="btn btn-g">View Plan Details</a>
+                    <a href="#compare" class="btn btn-a" style="padding:14px 32px;font-size:.95rem;">View Plans &amp; Apply <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
             </div>
             <div class="card-visual">
@@ -381,7 +374,7 @@
         <li><span class="comp-check" style="color:#FBBF24;font-weight:900;font-size:1.1rem">&#10003;</span> 💊 Up to 40% Discount on Medicines</li>
         <li><span class="comp-check" style="color:#FBBF24;font-weight:900;font-size:1.1rem">&#10003;</span> 🪪 Official Digital Membership Card</li>
     </ul>
-    <button type="button" onclick="openPremiumApplication()" class="btn-cta" style="width:100%;justify-content:center;margin-top:28px;font-size:1rem;padding:14px;">Apply Now <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg></button>
+    <button type="button" onclick="openPremiumApplication('Basic Plan', 499)" class="btn-cta" style="width:100%;justify-content:center;margin-top:28px;font-size:1rem;padding:14px;">Apply Now <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg></button>
 </div>
 
 <!-- Plan 2: ₹1,500 -->
@@ -396,7 +389,7 @@
         <li><span class="comp-check" style="color:#FBBF24;font-weight:900;font-size:1.1rem">&#10003;</span> 🔬 Up to 40% Discount on Lab Tests</li>
         <li><span class="comp-check" style="color:#FBBF24;font-weight:900;font-size:1.1rem">&#10003;</span> 🪪 Official Digital Membership Card</li>
     </ul>
-    <button type="button" onclick="openPremiumApplication()" class="btn-cta" style="width:100%;justify-content:center;margin-top:28px;font-size:1rem;padding:14px;">Apply Now <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg></button>
+    <button type="button" onclick="openPremiumApplication('Standard Plan', 1500)" class="btn-cta" style="width:100%;justify-content:center;margin-top:28px;font-size:1rem;padding:14px;">Apply Now <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg></button>
 </div>
 
 <!-- Plan 3: ₹2,500 -->
@@ -416,7 +409,7 @@
         <li style="font-size:12px;opacity:.6;margin-left:24px;">(Blood Pressure, Blood Sugar &amp; Fever)</li>
         <li><span class="comp-check" style="color:#FBBF24;font-weight:900;font-size:1.1rem">&#10003;</span> 🪪 Official Digital Membership Card</li>
     </ul>
-    <button type="button" onclick="openPremiumApplication()" class="btn-cta" style="width:100%;justify-content:center;margin-top:28px;font-size:1.1rem;padding:16px;box-shadow:0 8px 25px rgba(249,115,22,0.4);">Get Premium Now <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg></button>
+    <button type="button" onclick="openPremiumApplication('Premium Plan', 2500)" class="btn-cta" style="width:100%;justify-content:center;margin-top:28px;font-size:1.1rem;padding:16px;box-shadow:0 8px 25px rgba(249,115,22,0.4);">Get Premium Now <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg></button>
 </div>
 
 
@@ -567,11 +560,16 @@
 <div class="pm-app-modal" id="premiumApplicationModal" onclick="if(event.target===this){closePremiumApplication();}">
     <div class="pm-app-card">
         <div class="pm-app-head">
-            <h3>Premium Membership Application</h3>
+            <h3 id="pmModalTitle">Premium Membership Application</h3>
             <button type="button" class="pm-app-close" onclick="closePremiumApplication()">X</button>
         </div>
         <div class="pm-app-body">
-            <form onsubmit="submitPremiumApplication(event)">
+            <div id="pmFormStep">
+            <div id="pmPlanBadge" style="background:#1a2151;border:1px solid #f5a623;border-radius:8px;padding:8px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
+                <span style="color:#ccc;font-size:.85rem;">Selected Plan</span>
+                <span id="pmPlanLabel" style="color:#f5a623;font-weight:700;font-size:1rem;"></span>
+            </div>
+            <form id="pmAppForm" onsubmit="submitPremiumApplication(event)">
                 <div class="pm-app-grid">
                     <div class="pm-app-field">
                         <label for="panName">Full Name *</label>
@@ -666,6 +664,34 @@
                     <button type="submit" class="pm-app-submit">Proceed to Payment</button>
                 </div>
             </form>
+            </div><!-- end pmFormStep -->
+
+            <!-- Payment Step -->
+            <div id="pmPaymentStep" style="display:none;">
+                <div style="background:#1a2151;border:1px solid #f5a623;border-radius:10px;padding:14px 18px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;">
+                    <span style="color:#ccc;font-size:.9rem;">Amount to Pay</span>
+                    <span id="pmPayAmount" style="color:#f5a623;font-weight:800;font-size:1.3rem;"></span>
+                </div>
+                <p style="color:#ccc;font-size:.85rem;margin-bottom:12px;">Scan the QR code or use UPI ID below to complete payment. Upload the payment screenshot to confirm.</p>
+                <div style="text-align:center;margin-bottom:14px;">
+                    <img src="../assets/images/gvcda-qr.png" alt="YES Bank QR" style="width:180px;height:180px;border-radius:12px;border:2px solid #f5a623;">
+                </div>
+                <div style="background:#0f1535;border:1px solid #2a3060;border-radius:8px;padding:10px 14px;text-align:center;margin-bottom:16px;cursor:pointer;" onclick="navigator.clipboard.writeText('yespay.mabs0097207wkit1138@yesbankltb').then(()=>alert('UPI ID copied!'))">
+                    <span style="color:#aaa;font-size:.75rem;display:block;margin-bottom:2px;">UPI ID (tap to copy)</span>
+                    <span style="color:#f5a623;font-weight:700;font-size:.95rem;">yespay.mabs0097207wkit1138@yesbankltb</span>
+                </div>
+                <div style="margin-bottom:18px;">
+                    <label style="color:#ccc;font-size:.85rem;display:block;margin-bottom:6px;">Upload Payment Screenshot <span style="color:#f5a623;">*</span></label>
+                    <input type="file" id="pmScreenshot" accept="image/*" onchange="pmHandleScreenshot(this)" style="width:100%;border:1px dashed #f5a623;border-radius:8px;padding:10px;color:#ccc;background:#0f1535;cursor:pointer;">
+                    <div id="pmScreenshotPreview" style="margin-top:8px;display:none;">
+                        <img id="pmScreenshotImg" style="max-width:100%;border-radius:8px;border:1px solid #2a3060;" alt="Screenshot preview">
+                    </div>
+                </div>
+                <div style="display:flex;gap:12px;">
+                    <button type="button" onclick="pmBackToForm()" style="flex:1;padding:12px;border-radius:10px;border:1px solid #aaa;background:transparent;color:#ccc;cursor:pointer;font-size:.9rem;">Back</button>
+                    <button type="button" onclick="pmConfirmPayment()" style="flex:2;padding:12px;border-radius:10px;background:#f5a623;color:#fff;font-weight:700;font-size:.95rem;border:none;cursor:pointer;">Confirm Payment</button>
+                </div>
+            </div><!-- end pmPaymentStep -->
         </div>
     </div>
 </div>
@@ -674,14 +700,114 @@
 
 <!-- Critical External Libraries - Load First -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
-<!-- Module Scripts - Load After External Libraries -->
+<!-- Module Scripts -->
 <script type="module" src="../assets/js/main.js"></script>
 <script type="module" src="../assets/js/ui-enhancements.js"></script>
 <script type="module" src="../supabase-config.js"></script>
-<script type="module" src="../payment-system.js"></script>
 <script type="module" src="../enhanced-features.js"></script>
+
+<script>
+var _pmPlan = '', _pmAmount = 0, _pmFormData = null, _pmScreenshotDataUrl = '';
+
+window.openPremiumApplication = function(plan, amount) {
+    _pmPlan = plan || 'Basic Plan';
+    _pmAmount = amount || 499;
+    document.getElementById('pmPlanLabel').textContent = _pmPlan + ' – ₹' + _pmAmount;
+    document.getElementById('pmPayAmount').textContent = '₹' + _pmAmount.toLocaleString('en-IN');
+    document.getElementById('pmFormStep').style.display = '';
+    document.getElementById('pmPaymentStep').style.display = 'none';
+    _pmScreenshotDataUrl = '';
+    document.getElementById('pmScreenshot').value = '';
+    document.getElementById('pmScreenshotPreview').style.display = 'none';
+    var modal = document.getElementById('premiumApplicationModal');
+    if (modal) { modal.classList.add('show'); document.body.style.overflow = 'hidden'; }
+};
+
+window.closePremiumApplication = function() {
+    var modal = document.getElementById('premiumApplicationModal');
+    if (modal) { modal.classList.remove('show'); document.body.style.overflow = ''; }
+};
+
+window.submitPremiumApplication = function(e) {
+    e.preventDefault();
+    var f = document.getElementById('pmAppForm');
+    var name = f.querySelector('#panName').value.trim();
+    var phone = f.querySelector('#panPhone').value.trim();
+    var address = f.querySelector('#panAddress').value.trim();
+    var pinCode = f.querySelector('#panPinCode').value.trim();
+    var occupation = f.querySelector('#panOccupation').value.trim();
+    var category = f.querySelector('#panCategory').value;
+    var agreed = f.querySelector('#panAgree').checked;
+    if (!name || !phone) { alert('Please enter valid name and phone number.'); return; }
+    if (!address || !pinCode || !occupation) { alert('Please fill in all required fields.'); return; }
+    if (!category) { alert('Please select a category/service.'); return; }
+    if (!agreed) { alert('Please agree to the membership terms.'); return; }
+    _pmFormData = {
+        name, phone,
+        email: f.querySelector('#panEmail').value.trim(),
+        district: f.querySelector('#panDistrict').value,
+        city: f.querySelector('#panCity').value.trim(),
+        address, pinCode, occupation, category,
+        plan: _pmPlan, amount: _pmAmount
+    };
+    document.getElementById('pmFormStep').style.display = 'none';
+    document.getElementById('pmPaymentStep').style.display = '';
+};
+
+window.pmBackToForm = function() {
+    document.getElementById('pmFormStep').style.display = '';
+    document.getElementById('pmPaymentStep').style.display = 'none';
+};
+
+window.pmHandleScreenshot = function(input) {
+    var file = input.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+        _pmScreenshotDataUrl = ev.target.result;
+        document.getElementById('pmScreenshotImg').src = _pmScreenshotDataUrl;
+        document.getElementById('pmScreenshotPreview').style.display = '';
+    };
+    reader.readAsDataURL(file);
+};
+
+window.pmConfirmPayment = function() {
+    if (!_pmScreenshotDataUrl) { alert('Please upload your payment screenshot before confirming.'); return; }
+    if (!_pmFormData) { alert('Form data missing. Please go back and fill the form.'); return; }
+    // Save to Supabase via supabase-config saveMember
+    var memberData = {
+        name: _pmFormData.name,
+        phone: _pmFormData.phone,
+        email: _pmFormData.email || '',
+        district: _pmFormData.district || '',
+        city: _pmFormData.city || '',
+        address: _pmFormData.address || '',
+        pinCode: _pmFormData.pinCode || '',
+        occupation: _pmFormData.occupation || '',
+        plan: _pmFormData.plan,
+        amount: _pmFormData.amount,
+        category: _pmFormData.category,
+        paymentMethod: 'UPI',
+        paymentScreenshot: _pmScreenshotDataUrl,
+        status: 'pending',
+        source: 'premium-card-page',
+        lastSeenAt: new Date().toISOString()
+    };
+    if (typeof window.saveMember === 'function') {
+        window.saveMember(memberData).then(function() {
+            alert('Payment submitted successfully!\n\nYour membership application has been received. Our team will verify your payment and activate your membership shortly.\n\nName: ' + _pmFormData.name + '\nPlan: ' + _pmFormData.plan + '\nAmount: ₹' + _pmFormData.amount);
+            window.closePremiumApplication();
+        }).catch(function(err) {
+            console.error(err);
+            alert('Application submitted! Our team will contact you shortly.\n\nName: ' + _pmFormData.name + '\nPlan: ' + _pmFormData.plan);
+            window.closePremiumApplication();
+        });
+    } else {
+        alert('Application submitted! Our team will contact you shortly.\n\nName: ' + _pmFormData.name + '\nPlan: ' + _pmFormData.plan + '\nAmount: ₹' + _pmFormData.amount);
+        window.closePremiumApplication();
+    }
+};
+</script>
 
 <!-- EmailJS - Load Async (not critical) -->
 <script async src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
