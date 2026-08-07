@@ -451,37 +451,72 @@
     </div>
 
     <!-- Payment Method Modal -->
-    <div id="paymentModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
-        <div style="background:#fff;border-radius:16px;padding:32px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-            <h3 style="margin:0 0 8px;font-size:20px;color:#1a1a2e;">Select Payment Method</h3>
-            <p id="payModalAmount" style="color:#667eea;font-size:22px;font-weight:700;margin:0 0 24px;"></p>
+    <div id="paymentModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;overflow-y:auto;padding:16px;box-sizing:border-box;">
+        <div style="background:#fff;border-radius:16px;padding:24px;max-width:440px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);margin:auto;">
 
-            <div style="display:flex;gap:12px;margin-bottom:24px;">
+            <!-- Header -->
+            <div style="background:linear-gradient(135deg,#1a2151,#3a4a9f);border-radius:12px;padding:16px;text-align:center;margin-bottom:20px;">
+                <div style="color:#fff;font-size:13px;opacity:.8;margin-bottom:4px;">GLOB VILLAGE AND CITY DEVELOPMENT AGENCY LLP</div>
+                <div style="color:#f5a623;font-size:24px;font-weight:800;" id="payModalAmount"></div>
+                <div style="color:rgba(255,255,255,0.6);font-size:12px;">Select payment method below</div>
+            </div>
+
+            <!-- Tabs -->
+            <div style="display:flex;gap:10px;margin-bottom:18px;">
                 <button onclick="selectPaymentMethod('UPI')" id="btnUPI"
-                    style="flex:1;padding:18px 12px;border:2px solid #e0e0e0;border-radius:12px;background:#fff;cursor:pointer;font-size:15px;font-weight:600;color:#333;transition:all .2s;">
-                    📱 UPI
+                    style="flex:1;padding:14px 10px;border:2px solid #e0e0e0;border-radius:10px;background:#fff;cursor:pointer;font-size:14px;font-weight:600;color:#333;">
+                    📱 UPI / QR
                 </button>
                 <button onclick="selectPaymentMethod('Cash')" id="btnCash"
-                    style="flex:1;padding:18px 12px;border:2px solid #e0e0e0;border-radius:12px;background:#fff;cursor:pointer;font-size:15px;font-weight:600;color:#333;transition:all .2s;">
+                    style="flex:1;padding:14px 10px;border:2px solid #e0e0e0;border-radius:10px;background:#fff;cursor:pointer;font-size:14px;font-weight:600;color:#333;">
                     💵 Cash
                 </button>
             </div>
 
-            <div id="upiDetails" style="display:none;background:#f0f7ff;border-radius:10px;padding:16px;margin-bottom:20px;text-align:center;">
-                <p style="margin:0 0 6px;color:#555;font-size:13px;">Pay to UPI ID</p>
-                <p style="margin:0 0 12px;font-size:18px;font-weight:700;color:#1a1a2e;">gvcda@upi</p>
-                <label style="display:block;text-align:left;margin-bottom:6px;font-size:13px;color:#555;font-weight:600;">UPI Transaction ID *</label>
-                <input id="upiTxnId" type="text" placeholder="Enter UPI transaction ID"
-                    style="width:100%;padding:10px 12px;border:1.5px solid #c0d4f0;border-radius:8px;font-size:14px;box-sizing:border-box;">
+            <!-- UPI Details -->
+            <div id="upiDetails" style="display:none;margin-bottom:16px;">
+                <div style="background:#f0f7ff;border-radius:12px;padding:16px;text-align:center;margin-bottom:12px;">
+                    <!-- YES Bank QR -->
+                    <div style="background:#fff;border-radius:10px;padding:10px;display:inline-block;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi%3A%2F%2Fpay%3Fpa%3Dyespay.mabs0097207wkit1138%40yesbankltb%26pn%3DGLOB%20VILLAGE%20AND%20CITY%20DEVELOPMENT%20AGENCY%20LLP%26cu%3DINR"
+                            alt="Pay QR Code" width="180" height="180" style="display:block;">
+                    </div>
+                    <div style="font-size:11px;color:#888;margin-bottom:8px;">Powered by <strong style="color:#1a4dc0;">YES BANK</strong></div>
+                    <div style="font-size:12px;color:#555;margin-bottom:4px;">UPI ID</div>
+                    <div style="font-size:13px;font-weight:700;color:#1a2151;word-break:break-all;background:#e8f0fe;padding:8px 12px;border-radius:8px;cursor:pointer;" onclick="navigator.clipboard&&navigator.clipboard.writeText('yespay.mabs0097207wkit1138@yesbankltb').then(()=>alert('UPI ID copied!'))">
+                        yespay.mabs0097207wkit1138@yesbankltb
+                        <span style="font-size:11px;color:#667eea;margin-left:6px;">📋 tap to copy</span>
+                    </div>
+                </div>
+                <label style="display:block;margin-bottom:6px;font-size:13px;color:#444;font-weight:600;">UPI Transaction ID *</label>
+                <input id="upiTxnId" type="text" placeholder="Enter UPI transaction ID after payment"
+                    style="width:100%;padding:10px 12px;border:1.5px solid #c0d4f0;border-radius:8px;font-size:14px;box-sizing:border-box;margin-bottom:12px;">
             </div>
 
-            <div id="cashDetails" style="display:none;background:#f0fff4;border-radius:10px;padding:16px;margin-bottom:20px;text-align:center;">
-                <p style="margin:0;font-size:15px;color:#2d7a4f;">✅ Collect cash from member and confirm below.</p>
+            <!-- Cash Details -->
+            <div id="cashDetails" style="display:none;background:#f0fff4;border-radius:10px;padding:14px;margin-bottom:16px;text-align:center;">
+                <p style="margin:0;font-size:14px;color:#2d7a4f;font-weight:600;">💵 Collect cash from member before confirming.</p>
             </div>
 
+            <!-- Screenshot Upload (mandatory for both) -->
+            <div id="screenshotSection" style="display:none;margin-bottom:16px;">
+                <label style="display:block;margin-bottom:6px;font-size:13px;color:#444;font-weight:600;">
+                    Payment Screenshot * <span style="color:#e53e3e;font-size:12px;">(Mandatory)</span>
+                </label>
+                <label for="paymentScreenshot" style="display:flex;align-items:center;gap:10px;padding:12px;border:2px dashed #c0d4f0;border-radius:8px;cursor:pointer;background:#f8faff;">
+                    <span style="font-size:22px;">📎</span>
+                    <span id="screenshotLabel" style="font-size:13px;color:#667eea;font-weight:600;">Tap to upload screenshot</span>
+                </label>
+                <input id="paymentScreenshot" type="file" accept="image/*" capture="environment" style="display:none;" onchange="handleScreenshotUpload(this)">
+                <div id="screenshotPreview" style="display:none;margin-top:8px;text-align:center;">
+                    <img id="screenshotImg" src="" alt="Payment screenshot" style="max-width:100%;border-radius:8px;max-height:150px;object-fit:cover;border:1.5px solid #c0d4f0;">
+                </div>
+            </div>
+
+            <!-- Actions -->
             <div style="display:flex;gap:10px;">
                 <button onclick="closePaymentModal()" style="flex:1;padding:12px;border:1.5px solid #ccc;border-radius:8px;background:#fff;cursor:pointer;font-size:14px;color:#555;">Cancel</button>
-                <button onclick="confirmPayment()" id="confirmPayBtn" style="flex:1;padding:12px;border:none;border-radius:8px;background:#667eea;color:#fff;cursor:pointer;font-size:14px;font-weight:600;">Confirm & Register</button>
+                <button onclick="confirmPayment()" id="confirmPayBtn" style="flex:1;padding:12px;border:none;border-radius:8px;background:#667eea;color:#fff;cursor:pointer;font-size:14px;font-weight:600;">Confirm &amp; Register</button>
             </div>
         </div>
     </div>
@@ -639,6 +674,27 @@ function selectPaymentMethod(method) {
     cashBtn.style.color = method === 'Cash' ? '#fff' : '#333';
     document.getElementById('upiDetails').style.display = method === 'UPI' ? 'block' : 'none';
     document.getElementById('cashDetails').style.display = method === 'Cash' ? 'block' : 'none';
+    document.getElementById('screenshotSection').style.display = 'block';
+    // Reset screenshot on method change
+    document.getElementById('paymentScreenshot').value = '';
+    document.getElementById('screenshotPreview').style.display = 'none';
+    document.getElementById('screenshotLabel').textContent = 'Tap to upload screenshot';
+    _screenshotDataUrl = null;
+}
+
+var _screenshotDataUrl = null;
+
+function handleScreenshotUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        _screenshotDataUrl = e.target.result;
+        document.getElementById('screenshotImg').src = _screenshotDataUrl;
+        document.getElementById('screenshotPreview').style.display = 'block';
+        document.getElementById('screenshotLabel').textContent = '✅ ' + file.name;
+    };
+    reader.readAsDataURL(file);
 }
 
 function confirmPayment() {
@@ -646,19 +702,25 @@ function confirmPayment() {
         alert('Please select a payment method (UPI or Cash).');
         return;
     }
-    let paymentRef = _selectedPayMethod;
     if (_selectedPayMethod === 'UPI') {
         const txnId = document.getElementById('upiTxnId').value.trim();
         if (!txnId) {
             alert('Please enter the UPI Transaction ID.');
             return;
         }
-        paymentRef = 'UPI-' + txnId;
+    }
+    if (!_screenshotDataUrl) {
+        alert('Please upload the payment screenshot. It is mandatory.');
+        return;
+    }
+    let paymentRef;
+    if (_selectedPayMethod === 'UPI') {
+        paymentRef = 'UPI-' + document.getElementById('upiTxnId').value.trim();
     } else {
         paymentRef = 'CASH-' + Date.now();
     }
     document.getElementById('paymentModal').style.display = 'none';
-    saveUserAfterPayment(_pendingUserData, { payment_id: paymentRef, method: _selectedPayMethod });
+    saveUserAfterPayment(_pendingUserData, { payment_id: paymentRef, method: _selectedPayMethod, screenshot: _screenshotDataUrl });
 }
 
 // Save user after successful payment
