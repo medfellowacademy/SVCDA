@@ -772,12 +772,16 @@ Applied: ${formatDate(app.created_at)}
     byId('addEmployee').addEventListener('click', async function () {
       const name = byId('newEmpName').value.trim();
       const email = byId('newEmpEmail').value.trim();
-      const password = byId('newEmpPassword').value.trim() || 'emp123';
 
       if (!name || !email) {
         alert('Please enter employee name and email');
         return;
       }
+
+      // Auto-generate a secure password
+      const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#';
+      let password = '';
+      for (var i = 0; i < 10; i++) password += chars[Math.floor(Math.random() * chars.length)];
 
       try {
         await db.employees.create({
@@ -788,12 +792,12 @@ Applied: ${formatDate(app.created_at)}
           status: 'active'
         });
 
-        alert('Employee added successfully!\n\nEmail: ' + email + '\nPassword: ' + password);
-        
+        // Show credentials once — copy and share with employee
+        alert('✅ Employee added!\n\nShare these login credentials with the employee:\n\n📧 Email: ' + email + '\n🔑 Password: ' + password + '\n\n⚠️ Copy this now — password will not be shown again.');
+
         // Clear form
         byId('newEmpName').value = '';
         byId('newEmpEmail').value = '';
-        byId('newEmpPassword').value = '';
         
         // Refresh employees table
         await renderEmployees();
