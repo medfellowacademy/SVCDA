@@ -455,10 +455,32 @@
         <div style="background:#fff;border-radius:16px;padding:24px;max-width:440px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);margin:auto;">
 
             <!-- Header -->
-            <div style="background:linear-gradient(135deg,#1a2151,#3a4a9f);border-radius:12px;padding:16px;text-align:center;margin-bottom:20px;">
+            <div style="background:linear-gradient(135deg,#1a2151,#3a4a9f);border-radius:12px;padding:16px;text-align:center;margin-bottom:16px;">
                 <div style="color:#fff;font-size:13px;opacity:.8;margin-bottom:4px;">GLOB VILLAGE AND CITY DEVELOPMENT AGENCY LLP</div>
-                <div style="color:#f5a623;font-size:24px;font-weight:800;" id="payModalAmount"></div>
-                <div style="color:rgba(255,255,255,0.6);font-size:12px;">Select payment method below</div>
+                <div style="color:#f5a623;font-size:26px;font-weight:800;" id="payModalAmount"></div>
+                <div style="color:rgba(255,255,255,0.6);font-size:12px;" id="payModalPlanLabel">Select a plan below</div>
+            </div>
+
+            <!-- Plan Selection -->
+            <div style="margin-bottom:16px;">
+                <label style="display:block;font-size:13px;font-weight:700;color:#333;margin-bottom:8px;">Select Membership Plan *</label>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                    <button onclick="selectPlan(499,'Basic Plan')" id="planBtn499"
+                        style="padding:12px 16px;border:2px solid #e0e0e0;border-radius:10px;background:#fff;cursor:pointer;font-size:14px;font-weight:600;color:#333;text-align:left;display:flex;justify-content:space-between;align-items:center;">
+                        <span>₹499 — Basic Plan</span>
+                        <span style="font-size:12px;color:#888;">Insurance + 40% off Groceries &amp; Medicines</span>
+                    </button>
+                    <button onclick="selectPlan(1500,'Standard Plan')" id="planBtn1500"
+                        style="padding:12px 16px;border:2px solid #e0e0e0;border-radius:10px;background:#fff;cursor:pointer;font-size:14px;font-weight:600;color:#333;text-align:left;display:flex;justify-content:space-between;align-items:center;">
+                        <span>₹1,500 — Standard Plan</span>
+                        <span style="font-size:12px;color:#888;">Groceries ₹560 + Insurance + Discounts</span>
+                    </button>
+                    <button onclick="selectPlan(2500,'Premium Plan')" id="planBtn2500"
+                        style="padding:12px 16px;border:2px solid #e0e0e0;border-radius:10px;background:#fff;cursor:pointer;font-size:14px;font-weight:600;color:#333;text-align:left;display:flex;justify-content:space-between;align-items:center;">
+                        <span style="display:flex;align-items:center;gap:8px;">₹2,500 — Premium Plan <span style="background:#f5a623;color:#1a2151;font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;">BEST</span></span>
+                        <span style="font-size:12px;color:#888;">Groceries ₹1,250 + Health Check-up</span>
+                    </button>
+                </div>
             </div>
 
             <!-- Tabs -->
@@ -642,18 +664,42 @@ function handleAddUser(e) {
 
 let _pendingUserData = null;
 let _selectedPayMethod = null;
+let _selectedPlan = null;
 
 function openPaymentModal(userData) {
     _pendingUserData = userData;
     _selectedPayMethod = null;
+    _selectedPlan = null;
+    _screenshotDataUrl = null;
     document.getElementById('upiDetails').style.display = 'none';
     document.getElementById('cashDetails').style.display = 'none';
+    document.getElementById('screenshotSection').style.display = 'none';
     document.getElementById('upiTxnId').value = '';
-    document.getElementById('btnUPI').style.cssText += ';border-color:#e0e0e0;background:#fff;color:#333;';
-    document.getElementById('btnCash').style.cssText += ';border-color:#e0e0e0;background:#fff;color:#333;';
-    document.getElementById('payModalAmount').textContent = '₹' + userData.amount;
-    const modal = document.getElementById('paymentModal');
-    modal.style.display = 'flex';
+    document.getElementById('btnUPI').style.cssText = 'flex:1;padding:14px 10px;border:2px solid #e0e0e0;border-radius:10px;background:#fff;cursor:pointer;font-size:14px;font-weight:600;color:#333;';
+    document.getElementById('btnCash').style.cssText = 'flex:1;padding:14px 10px;border:2px solid #e0e0e0;border-radius:10px;background:#fff;cursor:pointer;font-size:14px;font-weight:600;color:#333;';
+    ['planBtn499','planBtn1500','planBtn2500'].forEach(function(id) {
+        var btn = document.getElementById(id);
+        if (btn) { btn.style.borderColor = '#e0e0e0'; btn.style.background = '#fff'; btn.style.color = '#333'; }
+    });
+    document.getElementById('payModalAmount').textContent = 'Select Plan';
+    document.getElementById('payModalPlanLabel').textContent = 'Select a plan below';
+    document.getElementById('screenshotPreview').style.display = 'none';
+    document.getElementById('screenshotLabel').textContent = 'Tap to upload screenshot';
+    document.getElementById('paymentModal').style.display = 'flex';
+}
+
+function selectPlan(amount, planName) {
+    _selectedPlan = { amount: amount, name: planName };
+    _pendingUserData.amount = amount;
+    document.getElementById('userAmount').value = amount;
+    document.getElementById('payModalAmount').textContent = '₹' + amount.toLocaleString('en-IN');
+    document.getElementById('payModalPlanLabel').textContent = planName + ' — Valid 1 Year';
+    ['planBtn499','planBtn1500','planBtn2500'].forEach(function(id) {
+        var btn = document.getElementById(id);
+        if (btn) { btn.style.borderColor = '#e0e0e0'; btn.style.background = '#fff'; btn.style.color = '#333'; }
+    });
+    var activeBtn = document.getElementById('planBtn' + amount);
+    if (activeBtn) { activeBtn.style.borderColor = '#667eea'; activeBtn.style.background = '#667eea'; activeBtn.style.color = '#fff'; }
 }
 
 function closePaymentModal() {
@@ -698,6 +744,10 @@ function handleScreenshotUpload(input) {
 }
 
 function confirmPayment() {
+    if (!_selectedPlan) {
+        alert('Please select a membership plan.');
+        return;
+    }
     if (!_selectedPayMethod) {
         alert('Please select a payment method (UPI or Cash).');
         return;
@@ -710,7 +760,7 @@ function confirmPayment() {
         }
     }
     if (!_screenshotDataUrl) {
-        alert('Please upload the payment screenshot. It is mandatory.');
+        alert('Payment screenshot is mandatory. Please upload it.');
         return;
     }
     let paymentRef;
@@ -720,7 +770,7 @@ function confirmPayment() {
         paymentRef = 'CASH-' + Date.now();
     }
     document.getElementById('paymentModal').style.display = 'none';
-    saveUserAfterPayment(_pendingUserData, { payment_id: paymentRef, method: _selectedPayMethod, screenshot: _screenshotDataUrl });
+    saveUserAfterPayment(_pendingUserData, { payment_id: paymentRef, method: _selectedPayMethod, plan: _selectedPlan.name, screenshot: _screenshotDataUrl });
 }
 
 // Save user after successful payment
