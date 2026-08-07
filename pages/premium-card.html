@@ -569,7 +569,7 @@
                 <span style="color:#ccc;font-size:.85rem;">Selected Plan</span>
                 <span id="pmPlanLabel" style="color:#f5a623;font-weight:700;font-size:1rem;"></span>
             </div>
-            <form id="pmAppForm" onsubmit="submitPremiumApplication(event)">
+            <form id="pmAppForm" onsubmit="pmSubmitApplication(event)">
                 <div class="pm-app-grid">
                     <div class="pm-app-field">
                         <label for="panName">Full Name *</label>
@@ -728,7 +728,7 @@ window.closePremiumApplication = function() {
     if (modal) { modal.classList.remove('show'); document.body.style.overflow = ''; }
 };
 
-window.submitPremiumApplication = function(e) {
+window.pmSubmitApplication = function(e) {
     e.preventDefault();
     var f = document.getElementById('pmAppForm');
     var name = f.querySelector('#panName').value.trim();
