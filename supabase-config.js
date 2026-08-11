@@ -113,9 +113,24 @@ const db = {
         .eq('id', id)
         .select()
         .single();
-      
       if (error) throw error;
       return data;
+    },
+
+    async delete(id) {
+      const { error } = await supabase
+        .from('members')
+        .delete()
+        .eq('id', id);
+      if (error) throw error;
+    },
+
+    async deleteMany(ids) {
+      const { error } = await supabase
+        .from('members')
+        .delete()
+        .in('id', ids);
+      if (error) throw error;
     }
   },
   
@@ -215,9 +230,35 @@ const db = {
         .or(`type.ilike.%${searchTerm}%,member_name.ilike.%${searchTerm}%,service.ilike.%${searchTerm}%`)
         .order('timestamp', { ascending: false })
         .limit(100);
-      
       if (error) throw error;
       return data || [];
+    },
+
+    async update(id, updates) {
+      const { data, error } = await supabase
+        .from('activity')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+
+    async delete(id) {
+      const { error } = await supabase
+        .from('activity')
+        .delete()
+        .eq('id', id);
+      if (error) throw error;
+    },
+
+    async deleteMany(ids) {
+      const { error } = await supabase
+        .from('activity')
+        .delete()
+        .in('id', ids);
+      if (error) throw error;
     }
   },
   

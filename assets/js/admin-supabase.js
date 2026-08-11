@@ -104,7 +104,7 @@
         const safePlan = (m.plan || 'Premium').replace(/'/g, "\\'");
         const safeAmount = String(m.amount || '');
         return '<tr>' +
-          '<td><input type="checkbox" class="member-checkbox" value="' + m.id + '"></td>' +
+          '<td><input type="checkbox" class="member-checkbox" value="' + m.id + '" onchange="updateMemberBulkBar()"></td>' +
           '<td>' + (m.name || '-') + '</td>' +
           '<td>' + (m.phone || '-') + '</td>' +
           '<td>' + (m.plan || 'Registered') + '</td>' +
@@ -117,7 +117,9 @@
             '<button onclick="adminDownloadCard(\'' + safeCard + '\',\'' + safeName + '\',\'' + safePhone + '\',\'' + safeLocation + '\',\'' + safePlan + '\',\'' + safeAmount + '\')" ' +
               'style="padding:4px 10px;font-size:0.8rem;background:#667eea;color:#fff;border:none;border-radius:6px;cursor:pointer;margin-right:4px;">⬇ Card</button>' +
             '<button onclick="adminSendCard(\'' + safePhone + '\',\'' + safeName + '\',\'' + safeCard + '\')" ' +
-              'style="padding:4px 10px;font-size:0.8rem;background:#25d366;color:#fff;border:none;border-radius:6px;cursor:pointer;">📤 WhatsApp</button>' +
+              'style="padding:4px 10px;font-size:0.8rem;background:#25d366;color:#fff;border:none;border-radius:6px;cursor:pointer;margin-right:4px;">📤 WhatsApp</button>' +
+            '<button onclick="adminDeleteMember(\'' + m.id + '\',\'' + safeName + '\')" ' +
+              'style="padding:4px 10px;font-size:0.8rem;background:#ef4444;color:#fff;border:none;border-radius:6px;cursor:pointer;">🗑 Delete</button>' +
           '</td>' +
           '</tr>';
       }).join('') || '<tr><td colspan="10">No members found</td></tr>';
@@ -142,6 +144,7 @@
       const body = byId('activityBody');
       body.innerHTML = activity.slice(0, 300).map(a => {
         return '<tr>' +
+          '<td><input type="checkbox" class="activity-checkbox" value="' + a.id + '" onchange="updateActivityBulkBar()"></td>' +
           '<td>' + formatDate(a.timestamp) + '</td>' +
           '<td>' + (a.type || '-') + '</td>' +
           '<td>' + (a.member_name || '-') + '</td>' +
@@ -149,8 +152,12 @@
           '<td>' + (a.service || '-') + '</td>' +
           '<td>' + (a.payment || '-') + '</td>' +
           '<td>' + (a.added_by_name || 'Direct/Website') + '</td>' +
+          '<td style="white-space:nowrap;">' +
+            '<button onclick="adminEditActivity(\'' + a.id + '\')" style="padding:4px 8px;font-size:0.8rem;background:#f59e0b;color:#fff;border:none;border-radius:6px;cursor:pointer;margin-right:4px;">✏ Edit</button>' +
+            '<button onclick="adminDeleteActivity(\'' + a.id + '\')" style="padding:4px 8px;font-size:0.8rem;background:#ef4444;color:#fff;border:none;border-radius:6px;cursor:pointer;">🗑</button>' +
+          '</td>' +
           '</tr>';
-      }).join('') || '<tr><td colspan="7">No activity found</td></tr>';
+      }).join('') || '<tr><td colspan="9">No activity found</td></tr>';
     } catch (error) {
       console.error('Error rendering activity:', error);
       byId('activityBody').innerHTML = '<tr><td colspan="7">Error loading activity</td></tr>';
@@ -194,6 +201,109 @@
     } catch (error) {
       console.error('Error removing employee:', error);
       alert('Error removing employee: ' + error.message);
+    }
+  };
+
+  // ── Member delete & bulk ──────────────────────────────────────────
+  window.adminDeleteMember = async function(id, name) {
+    if (!confirm('Delete member "' + name + '"? This cannot be undone.')) return;
+    try {
+      await db.members.delete(id);
+      await renderMembers();
+      await renderStats();
+    } catch (e) {
+      alert('Error deleting member: ' + e.message);
+    }
+  };
+
+  window.updateMemberBulkBar = function() {
+    const checked = document.querySelectorAll('.member-checkbox:checked');
+    const bar = byId('memberBulkBar');
+    if (bar) bar.style.display = checked.length ? 'flex' : 'none';
+    const cnt = byId('memberBulkCount');
+    if (cnt) cnt.textContent = checked.length + ' selected';
+  };
+
+  window.memberSelectAll = function(cb) {
+    document.querySelectorAll('.member-checkbox').forEach(c => { c.checked = cb.checked; });
+    updateMemberBulkBar();
+  };
+
+  window.memberBulkDelete = async function() {
+    const ids = Array.from(document.querySelectorAll('.member-checkbox:checked')).map(c => c.value);
+    if (!ids.length) return;
+    if (!confirm('Delete ' + ids.length + ' member(s)? This cannot be undone.')) return;
+    try {
+      await db.members.deleteMany(ids);
+      await renderMembers();
+      await renderStats();
+      const bar = byId('memberBulkBar');
+      if (bar) bar.style.display = 'none';
+    } catch (e) {
+      alert('Error deleting members: ' + e.message);
+    }
+  };
+
+  // ── Activity edit, delete & bulk ─────────────────────────────────
+  window.adminDeleteActivity = async function(id) {
+    if (!confirm('Delete this activity record?')) return;
+    try {
+      await db.activity.delete(id);
+      await renderActivity();
+    } catch (e) {
+      alert('Error deleting activity: ' + e.message);
+    }
+  };
+
+  window.adminEditActivity = async function(id) {
+    const allActivity = await db.activity.getAll(500);
+    const a = allActivity.find(x => x.id === id);
+    if (!a) { alert('Record not found'); return; }
+    const newType    = prompt('Type:', a.type || '');
+    if (newType === null) return;
+    const newName    = prompt('Member Name:', a.member_name || '');
+    if (newName === null) return;
+    const newPhone   = prompt('Phone:', a.phone || '');
+    if (newPhone === null) return;
+    const newService = prompt('Service:', a.service || '');
+    if (newService === null) return;
+    const newPayment = prompt('Payment:', a.payment || '');
+    if (newPayment === null) return;
+    try {
+      await db.activity.update(id, {
+        type: newType, member_name: newName,
+        phone: newPhone, service: newService, payment: newPayment
+      });
+      await renderActivity();
+    } catch (e) {
+      alert('Error updating activity: ' + e.message);
+    }
+  };
+
+  window.updateActivityBulkBar = function() {
+    const checked = document.querySelectorAll('.activity-checkbox:checked');
+    const bar = byId('activityBulkBar');
+    if (bar) bar.style.display = checked.length ? 'flex' : 'none';
+    const cnt = byId('activityBulkCount');
+    if (cnt) cnt.textContent = checked.length + ' selected';
+  };
+
+  window.activitySelectAll = function(cb) {
+    document.querySelectorAll('.activity-checkbox').forEach(c => { c.checked = cb.checked; });
+    updateActivityBulkBar();
+  };
+
+  window.activityBulkDelete = async function() {
+    const ids = Array.from(document.querySelectorAll('.activity-checkbox:checked')).map(c => c.value);
+    if (!ids.length) return;
+    if (!confirm('Delete ' + ids.length + ' activity record(s)?')) return;
+    try {
+      await db.activity.deleteMany(ids);
+      await renderActivity();
+      const bar = byId('activityBulkBar');
+      if (bar) bar.style.display = 'none';
+    } catch (e) {
+      alert('Error deleting records: ' + e.message);
     }
   };
 
