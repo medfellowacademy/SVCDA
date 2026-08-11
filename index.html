@@ -1015,11 +1015,8 @@
 
 <script type="module" src="assets/js/ui-enhancements.js"></script>
 <script type="module" src="assets/js/main.js"></script>
-<script type="module">
-// Job Application Functions with Supabase Integration
-import { supabase } from './supabase-config.js';
-
-async function openJobApplication() {
+<script>
+function openJobApplication() {
     document.getElementById('jobApplicationModal').classList.add('show');
     document.body.style.overflow = 'hidden';
 }
@@ -1032,8 +1029,8 @@ function closeJobApplication() {
 
 async function submitJobApplication(event) {
     event.preventDefault();
-    
-    const formData = {
+
+    var formData = {
         name: document.getElementById('jobName').value.trim(),
         phone: document.getElementById('jobPhone').value.trim(),
         email: document.getElementById('jobEmail').value.trim(),
@@ -1047,30 +1044,23 @@ async function submitJobApplication(event) {
         message: document.getElementById('jobMessage').value.trim(),
         status: 'pending'
     };
-    
-    console.log('Job Application Submitted:', formData);
-    
-    // Save to Supabase
-    try {
-        const { data, error } = await supabase
-            .from('job_applications')
-            .insert([formData])
-            .select();
 
-        if (error) {
-            console.error('Error saving job application:', error);
-            alert('❌ Error submitting application: ' + error.message + '\n\nPlease contact us at +91 9908011124.');
-            return;
-        }
+    // Use window.db set by supabase-config.js
+    if (!window.db || !window.db.job_applications) {
+        alert('❌ System not ready. Please refresh and try again.');
+        return;
+    }
+
+    try {
+        await window.db.job_applications.create(formData);
         alert('✅ Your job application has been submitted successfully! We will contact you soon.');
         closeJobApplication();
     } catch (err) {
-        console.error('Exception:', err);
-        alert('❌ Could not submit application. Please check your internet connection or contact us at +91 9908011124.');
+        console.error('Job application error:', err);
+        alert('❌ Error submitting application: ' + (err.message || err) + '\n\nContact us at +91 9908011124.');
     }
 }
 
-// Make functions globally available
 window.openJobApplication = openJobApplication;
 window.closeJobApplication = closeJobApplication;
 window.submitJobApplication = submitJobApplication;
