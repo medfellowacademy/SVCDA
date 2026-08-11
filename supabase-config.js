@@ -167,12 +167,20 @@ const db = {
     },
     
     async updateLastLogin(id) {
-      return await this.update(id, { 
-        last_login: new Date().toISOString() 
+      return await this.update(id, {
+        last_login: new Date().toISOString()
       });
+    },
+
+    async delete(id) {
+      const { error } = await supabase
+        .from('employees')
+        .delete()
+        .eq('id', id);
+      if (error) throw error;
     }
   },
-  
+
   // Activity log operations
   activity: {
     async create(activityData) {

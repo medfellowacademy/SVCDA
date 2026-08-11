@@ -186,12 +186,9 @@
 
   // Remove employee
   window.removeEmployee = async function(employeeId, email) {
-    if (!confirm('Remove employee ' + email + '? Their added users will remain.')) return;
-    
+    if (!confirm('Remove employee ' + email + '? Their added members will remain.')) return;
     try {
-      // In production, add a proper delete endpoint or use Supabase delete
-      // For now, we'll update their status
-      await db.employees.update(employeeId, { status: 'inactive' });
+      await db.employees.delete(employeeId);
       alert('Employee removed successfully');
       renderAll();
     } catch (error) {

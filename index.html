@@ -860,41 +860,42 @@
                 <div class="popup-h">GVCDA <em>Membership Card</em> Plans</div>
                 <p class="popup-p" style="margin-bottom:14px;">Choose the plan that suits you best. Valid for 1 year.</p>
 
-                <!-- Plan 1 -->
-                <div style="background:linear-gradient(135deg,#1a2151,#2d3a8c);border-radius:12px;padding:14px 16px;margin-bottom:10px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                        <span style="color:#f5a623;font-weight:800;font-size:1.1rem;">₹2,500</span>
-                        <span style="background:#f5a623;color:#1a2151;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;">BEST VALUE</span>
-                    </div>
-                    <ul style="list-style:none;padding:0;margin:0;color:#fff;font-size:13px;line-height:1.8;">
-                        <li>🛒 Home Groceries Worth ₹1,250</li>
-                        <li>🛡️ Insurance Coverage Up to ₹5 Lakhs</li>
-                        <li>💳 Up to 40% Discount on Groceries, Medicines, Stationery, Hardware &amp; Lab Tests</li>
-                        <li>🩺 Free Health Check-up Every 6 Months</li>
-                    </ul>
-                </div>
+                <!-- Plans horizontal -->
+                <div style="display:flex;gap:8px;margin-bottom:14px;">
 
-                <!-- Plan 2 -->
-                <div style="background:linear-gradient(135deg,#0f3d2e,#1a6645);border-radius:12px;padding:14px 16px;margin-bottom:10px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                        <span style="color:#4ade80;font-weight:800;font-size:1.1rem;">₹1,500</span>
+                    <!-- Plan: ₹2,500 -->
+                    <div style="flex:1;background:linear-gradient(135deg,#1a2151,#2d3a8c);border-radius:12px;padding:12px 10px;position:relative;border:1px solid #f5a623;">
+                        <span style="display:block;background:#f5a623;color:#1a2151;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;text-align:center;margin-bottom:6px;">BEST VALUE</span>
+                        <div style="color:#f5a623;font-weight:800;font-size:1rem;margin-bottom:6px;">₹2,500</div>
+                        <ul style="list-style:none;padding:0;margin:0;color:#ddd;font-size:11px;line-height:1.7;">
+                            <li>🛒 Groceries ₹1,250</li>
+                            <li>🛡️ Insurance ₹5L</li>
+                            <li>💳 40% Discounts</li>
+                            <li>🩺 Health Check-up</li>
+                        </ul>
                     </div>
-                    <ul style="list-style:none;padding:0;margin:0;color:#fff;font-size:13px;line-height:1.8;">
-                        <li>🛒 Home Groceries Worth ₹560</li>
-                        <li>🛡️ Insurance Coverage Up to ₹5 Lakhs</li>
-                        <li>💳 Up to 40% Discount on Groceries, Medicines &amp; Lab Tests</li>
-                    </ul>
-                </div>
 
-                <!-- Plan 3 -->
-                <div style="background:linear-gradient(135deg,#3d1f00,#7a3d00);border-radius:12px;padding:14px 16px;margin-bottom:14px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                        <span style="color:#fb923c;font-weight:800;font-size:1.1rem;">₹499</span>
+                    <!-- Plan: ₹1,500 -->
+                    <div style="flex:1;background:linear-gradient(135deg,#0f3d2e,#1a6645);border-radius:12px;padding:12px 10px;">
+                        <div style="color:#4ade80;font-weight:800;font-size:1rem;margin-bottom:6px;">₹1,500</div>
+                        <ul style="list-style:none;padding:0;margin:0;color:#ddd;font-size:11px;line-height:1.7;">
+                            <li>🛒 Groceries ₹560</li>
+                            <li>🛡️ Insurance ₹5L</li>
+                            <li>💳 40% Discounts</li>
+                            <li>🔬 Lab Tests</li>
+                        </ul>
                     </div>
-                    <ul style="list-style:none;padding:0;margin:0;color:#fff;font-size:13px;line-height:1.8;">
-                        <li>🛡️ Insurance Coverage Up to ₹5 Lakhs</li>
-                        <li>💳 Up to 40% Discount on Groceries &amp; Medicines</li>
-                    </ul>
+
+                    <!-- Plan: ₹499 -->
+                    <div style="flex:1;background:linear-gradient(135deg,#3d1f00,#7a3d00);border-radius:12px;padding:12px 10px;">
+                        <div style="color:#fb923c;font-weight:800;font-size:1rem;margin-bottom:6px;">₹499</div>
+                        <ul style="list-style:none;padding:0;margin:0;color:#ddd;font-size:11px;line-height:1.7;">
+                            <li>🛡️ Insurance ₹5L</li>
+                            <li>💳 40% Discounts</li>
+                            <li>🪪 Digital Card</li>
+                        </ul>
+                    </div>
+
                 </div>
 
                 <p style="color:rgba(255,255,255,0.45);font-size:11px;text-align:center;margin-bottom:12px;">Valid for 1 year only. Terms &amp; Conditions apply.</p>
@@ -1055,19 +1056,17 @@ async function submitJobApplication(event) {
             .from('job_applications')
             .insert([formData])
             .select();
-        
+
         if (error) {
             console.error('Error saving job application:', error);
-            alert('❌ There was an error submitting your application. Please try again or contact us directly.');
-        } else {
-            console.log('Job application saved:', data);
-            alert('✅ Thank you! Your job application has been submitted successfully. We will contact you soon.');
-            closeJobApplication();
+            alert('❌ Error submitting application: ' + error.message + '\n\nPlease contact us at +91 9908011124.');
+            return;
         }
+        alert('✅ Your job application has been submitted successfully! We will contact you soon.');
+        closeJobApplication();
     } catch (err) {
         console.error('Exception:', err);
-        alert('✅ Thank you! Your job application has been received. We will contact you soon.');
-        closeJobApplication();
+        alert('❌ Could not submit application. Please check your internet connection or contact us at +91 9908011124.');
     }
 }
 
