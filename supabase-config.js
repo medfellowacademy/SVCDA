@@ -162,10 +162,11 @@ const db = {
       const { data, error } = await supabase
         .from('employees')
         .select('*')
-        .eq('email', email)
-        .single();
-      
-      if (error) throw error;
+        .eq('email', email.toLowerCase().trim())
+        .maybeSingle();
+
+      if (error) throw new Error('Database error: ' + error.message);
+      if (!data) throw new Error('No employee found with email: ' + email);
       return data;
     },
     
