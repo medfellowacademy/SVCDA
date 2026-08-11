@@ -880,15 +880,25 @@ Applied: ${formatDate(app.created_at)}
       const name = byId('newEmpName').value.trim();
       const email = byId('newEmpEmail').value.trim();
 
+      const enteredPassword = byId('newEmpPassword') ? byId('newEmpPassword').value.trim() : '';
+
       if (!name || !email) {
         alert('Please enter employee name and email');
         return;
       }
 
-      // Auto-generate a secure password
-      const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#';
-      let password = '';
-      for (var i = 0; i < 10; i++) password += chars[Math.floor(Math.random() * chars.length)];
+      if (enteredPassword && enteredPassword.length < 8) {
+        alert('Password must be at least 8 characters.');
+        return;
+      }
+
+      // Use entered password or auto-generate
+      let password = enteredPassword;
+      if (!password) {
+        const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#';
+        password = '';
+        for (var i = 0; i < 10; i++) password += chars[Math.floor(Math.random() * chars.length)];
+      }
 
       try {
         await db.employees.create({
@@ -899,14 +909,12 @@ Applied: ${formatDate(app.created_at)}
           status: 'active'
         });
 
-        // Show credentials once — copy and share with employee
         alert('✅ Employee added!\n\nShare these login credentials with the employee:\n\n📧 Email: ' + email + '\n🔑 Password: ' + password + '\n\n⚠️ Copy this now — password will not be shown again.');
 
-        // Clear form
         byId('newEmpName').value = '';
         byId('newEmpEmail').value = '';
-        
-        // Refresh employees table
+        if (byId('newEmpPassword')) byId('newEmpPassword').value = '';
+
         await renderEmployees();
         await renderStats();
       } catch (error) {
