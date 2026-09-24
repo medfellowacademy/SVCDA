@@ -412,17 +412,7 @@ function payPremiumCard(identityInput) {
     new Razorpay(opts).open();
 }
 
-// 7. Premium popup
-(function () {
-    var pp = document.getElementById('premPopup'); if (!pp) return;
-    var closed = sessionStorage.getItem('vcda_popup_closed');
-    if (closed) return;
-    setTimeout(function () { pp.classList.add('show') }, 4000);
-    function closePopup() { pp.classList.remove('show'); sessionStorage.setItem('vcda_popup_closed', '1') }
-    var closeBtn = pp.querySelector('.popup-close'); if (closeBtn) closeBtn.onclick = closePopup;
-    var skipBtn = pp.querySelector('.popup-skip'); if (skipBtn) skipBtn.onclick = closePopup;
-    pp.addEventListener('click', function (e) { if (e.target === pp) closePopup() });
-})();
+// 7. Premium popup — disabled (auto-open removed)
 
 // 8. Sector Layout Hydration
 (function(){
